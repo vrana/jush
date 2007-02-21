@@ -22,7 +22,7 @@ var jush = {
 		for (var i=0; i < pre.length; i++) {
 			if (/(^|\s)jush($|\s)/.test(pre[i].className)) {
 				var match = /(^|\s)jush-(\S+)/.exec(pre[i].className);
-				pre[i].innerHTML = this.highlight((match ? match[1] : 'htm'), this.html_entity_decode(pre[i].innerHTML).replace(/<br(\s+[^>]*)?>/gi, '\n')).replace(/\n/g, '<br />');
+				pre[i].innerHTML = this.highlight((match ? match[2] : 'htm'), this.html_entity_decode(pre[i].innerHTML).replace(/<br(\s+[^>]*)?>/gi, '\n')).replace(/\n/g, '<br />');
 			}
 		}
 	},
