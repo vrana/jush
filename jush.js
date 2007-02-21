@@ -60,7 +60,7 @@ var jush = {
 			att_apo: { php: php, 2: /'/ },
 			att_val: { php: php, 2: /\s|(?=>)|$/ },
 			
-			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
+			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /{/, 1: /;/ },
 			css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
 			css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([^:\s]+)(\s*:)/, 1: /}/ },
@@ -227,6 +227,7 @@ jush.urls = {
 	att_css: 'http://www.w3.org/TR/html4/$key.html#adef-$&',
 	att_js: 'http://www.w3.org/TR/html4/$key.html#adef-$&',
 	css_val: 'http://www.w3.org/TR/CSS21/$key.html#propdef-$&',
+	css_at: 'http://www.w3.org/TR/CSS21/$key',
 	php_sql: 'http://www.php.net/$key.$&',
 	php_echo: 'http://www.php.net/$key.$&',
 	php_halt: 'http://www.php.net/$key.halt-compiler',
@@ -280,6 +281,11 @@ jush.links = {
 		'visudet': /^(height|line-height|max-height|max-width|min-height|min-width|vertical-align|width)$/i,
 		'visufx': /^(clip|overflow|visibility)$/i,
 		'visuren': /^(bottom|clear|direction|display|float|left|position|right|top|unicode-bidi|z-index)$/i
+	},
+	css_at: {
+		'page.html#page-box': /^page$/i,
+		'media.html#at-media-rule': /^media$/i,
+		'cascade.html#at-import': /^import$/i
 	},
 	php_sql: { 'function': new RegExp('^' + jush.sql_function + '$', 'i') },
 	php_echo: { 'function': /^echo$/i },
