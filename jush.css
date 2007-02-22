@@ -1,5 +1,5 @@
 .jush { color: Black; background-color: White; }
-.jush A { color: inherit; color: expression(parentNode.currentStyle.color); }
+.jush A, .jush A:visited { color: inherit; color: expression(parentNode.currentStyle.color); }
 .jush B { font-weight: normal; }
 .jush .htm_com, .jush .com, .jush .one, .jush .php_com, .jush .php_one { color: Gray; }
 .jush .php { color: #000033; background-color: #FFF0F0; }
