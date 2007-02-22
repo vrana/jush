@@ -16,3 +16,4 @@
 .jush .ent { color: #800080; }
 .jush .js_reg { color: Navy; }
 .jush .php_sql .php_quo, .jush .php_sql .php_apo { background-color: #FFBBB0; }
+.jush .bac, .jush .php_bac { color: Red; }
