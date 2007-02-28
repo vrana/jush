@@ -7,12 +7,12 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 
 var jush = {
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
-	highlight: function (language, text) { return this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm'))[0]; },
+	highlight: function (language, text) { return this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0]; },
 	htmlspecialchars: function (string) {  return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); },
 	htmlspecialchars_quo: function (string) { return jush.htmlspecialchars(string).replace(/"/g, '&quot;'); }, // jush - this.htmlspecialchars_quo is passed as reference
 	htmlspecialchars_apo: function (string) { return jush.htmlspecialchars(string).replace(/'/g, '&#39;'); },
 	htmlspecialchars_quo_apo: function (string) { return jush.htmlspecialchars_quo(string).replace(/'/g, '&#39;'); },
-	html_entity_decode: function (string) { return string.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#(?:([0-9]+)|x([0-9a-f]+));/gi, function (str, p1, p2) { return String.fromCharCode(p1 ? p1 : parseInt(p2, 16)); }); }, //! named entities
+	html_entity_decode: function (string) { return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#(?:([0-9]+)|x([0-9a-f]+));/gi, function (str, p1, p2) { return String.fromCharCode(p1 ? p1 : parseInt(p2, 16)); }).replace(/&amp;/g, '&'); }, //! named entities
 	addslashes_apo: function (string) { return string.replace(/[\\']/g, '\\$&'); },
 	addslashes_quo: function (string) { return string.replace(/[\\"]/g, '\\$&'); },
 	stripslashes: function (string) { return string.replace(/\\([\\"'])/g, '$1'); },
