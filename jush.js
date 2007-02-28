@@ -17,12 +17,16 @@ var jush = {
 	addslashes_quo: function (string) { return string.replace(/[\\"]/g, '\\$&'); },
 	stripslashes: function (string) { return string.replace(/\\([\\"'])/g, '$1'); },
 	
-	highlight_tag: function (tag) {
+	highlight_tag: function (tag, tab_width) {
 		var pre = document.getElementsByTagName(tag);
+		var tab = '';
+		for (var i = (tab_width != undefined ? tab_width : 4); i--; ) {
+			tab += ' ';
+		}
 		for (var i=0; i < pre.length; i++) {
 			if (/(^|\s)jush($|\s)/.test(pre[i].className)) {
 				var match = /(^|\s)jush-(\S+)/.exec(pre[i].className);
-				pre[i].innerHTML = this.highlight((match ? match[2] : 'htm'), this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n'))).replace(/\t/g, '&nbsp; &nbsp; ').replace(/\n/g, '<br />').replace(/(^|\n| )/g, '$1&nbsp;');
+				pre[i].innerHTML = this.highlight((match ? match[2] : 'htm'), this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n'))).replace(/\t/g, tab.length ? tab : '\t').replace(/\n/g, '<br />').replace(/(^|\n| ) /g, '$1&nbsp;');
 			}
 		}
 	},
