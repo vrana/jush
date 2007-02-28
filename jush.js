@@ -45,7 +45,7 @@ var jush = {
 	},
 
 	highlight_states: function (states, text, in_php, escape) {
-		var php = /<\?php|<script language="php">/i; // asp_tags=0, short_open_tag=0
+		var php = /<\?(?:php)?|<script language="php">/i; // asp_tags=0, short_open_tag=1
 		var tr = { // transitions
 			htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, 0: /(<!)([^>]*)(>)/, tag: /(<)([^<>\s]+)/, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
