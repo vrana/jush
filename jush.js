@@ -100,18 +100,17 @@ var jush = {
 		};
 		var regexps = { };
 		for (var key in tr) {
-			var re = [ ];
+			var re = '';
 			for (var k in tr[key]) {
 				var s = tr[key][k].toString().replace(/^\/(.*)\/.*$/, '$1');
 				if ((!in_php || k != 'php') && (states[0] == 'htm' || (s != '(<)(\\/script)(>)' && s != '(<)(\\/style)(>)'))) {
-					re.push(s);
+					re += '|' + s;
 				} else {
 					delete tr[key][k];
 				}
 			}
-			regexps[key] = new RegExp(re.join('|'), 'i');
+			regexps[key] = new RegExp(re.substring(1), 'i');
 		}
-		//! initialization could be separated
 		var ret = ''; // return
 		for (var i=1; i < states.length; i++) {
 			ret += '<span class="' + states[i] + '">';
