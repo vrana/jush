@@ -7,7 +7,7 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 
 var jush = {
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
-	highlight: function (language, text) { return this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0]; },
+	highlight: function (language, text) { this.last_tag = ''; return this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0]; },
 	htmlspecialchars: function (string) {  return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); },
 	htmlspecialchars_quo: function (string) { return jush.htmlspecialchars(string).replace(/"/g, '&quot;'); }, // jush - this.htmlspecialchars_quo is passed as reference
 	htmlspecialchars_apo: function (string) { return jush.htmlspecialchars(string).replace(/'/g, '&#39;'); },
@@ -62,7 +62,7 @@ var jush = {
 			att_js: { php: php, att_quo: /^"/, att_apo: /^'/, att_val: /^\s*/ },
 			att_quo: { php: php, 2: /"/ },
 			att_apo: { php: php, 2: /'/ },
-			att_val: { php: php, 2: /\s|(?=>)|$/ },
+			att_val: { php: php, 2: /(?=>|\s)|$/ },
 			
 			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /{/, 1: /;/ },
@@ -116,7 +116,6 @@ var jush = {
 			ret += '<span class="' + states[i] + '">';
 		}
 		var state = states[states.length - 1];
-		var last_tag = '';
 		var match;
 		var child_states = [ ];
 		var s_states;
@@ -174,19 +173,24 @@ var jush = {
 					if (isNaN(parseInt(key))) {
 						if (this.links && this.links[key]) {
 							if (key == 'tag' || key == 'tag_css' || key == 'tag_js') {
-								last_tag = m[2].toUpperCase();
+								this.last_tag = m[2].toUpperCase();
 							}
+							var link = '';
 							for (var k in this.links[key]) {
-								var link;
-								if (this.links[key][k].test(link = m[2]) || (key == 'att' && this.links[key][k].test(link = m[2] + '-' + last_tag))) {
-									if (key == 'tag' && m[2] != 'ins' && m[2] != 'del') {
-										link = link.toUpperCase();
-									}
-									s = (m[1] ? '<b>' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</b>' : '');
-									s += '<a href="' + link.replace(/.*/, this.urls[key]).replace(/\$key/, k) + '">' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
-									s += (m[3] ? '<b>' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</b>' : '');
+								if (key == 'att' && this.links[key][k].test(m[2] + '-' + this.last_tag)) {
+									link = m[2] + '-' + this.last_tag;
 									break;
+								} else if (this.links[key][k].test(m[2])) {
+									link = (key == 'tag' && m[2] != 'ins' && m[2] != 'del' ? m[2].toUpperCase() : m[2]);
+									if (key != 'att') {
+										break;
+									}
 								}
+							}
+							if (link) {
+								s = (m[1] ? '<b>' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</b>' : '');
+								s += '<a href="' + link.replace(/.*/, this.urls[key]).replace(/\$key/, k) + '">' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
+								s += (m[3] ? '<b>' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</b>' : '');
 							}
 						}
 						ret += '<span class="' + key + '">';
