@@ -1,19 +1,24 @@
 .jush { color: Black; background-color: White; }
-.jush A, .jush A:visited { color: inherit; color: expression(parentNode.currentStyle.color); }
-.jush B { font-weight: normal; }
-.jush .htm_com, .jush .com, .jush .one, .jush .php_com, .jush .php_one { color: Gray; }
-.jush .php { color: #000033; background-color: #FFF0F0; }
-.jush .php_quo, .jush .quo, .jush .php_eot, .jush .apo { color: #007F00; }
-.jush .php_apo { color: #009F00; }
-.jush .php_quo_var, .jush .php_var { font-style: italic; }
-.jush .php_halt2 { background-color: White; color: Black; }
-.jush .php_bac { color: Red; }
-.jush .tag_css, .jush .att_css .att_quo, .jush .att_css .att_apo, .jush .att_css .att_val { color: Black; background-color: #FFFFE0; }
-.jush .tag_js, .jush .att_js .att_quo, .jush .att_js .att_apo, .jush .att_js .att_val { color: Black; background-color: #F0F0FF; }
-.jush .tag { color: #000080; }
-.jush .att, .jush .att_js, .jush .att_css { color: #008080; }
-.jush .att_quo, .jush .att_apo, .jush .att_val { color: #7F007F; }
-.jush .ent { color: #800080; }
-.jush .js_reg { color: Navy; }
-.jush .php_sql .php_quo, .jush .php_sql .php_apo { background-color: #FFBBB0; }
-.jush .bac, .jush .php_bac { color: Red; }
+.jush-kwd { color: Navy; }
+.jush-htm_com, .jush-com, .jush-one, .jush-php_com, .jush-php_one { color: Gray; }
+.jush-php { color: #000033; background-color: #FFF0F0; }
+.jush-php_quo, .jush-quo, .jush-php_eot, .jush-apo { color: Green; }
+.jush-php_apo { color: #009F00; }
+.jush-php_quo_var, .jush-php_var { font-style: italic; }
+.jush-php_halt2 { background-color: White; color: Black; }
+.jush-php_bac { color: Red; }
+.jush-tag_css, .jush-att_css .jush-att_quo, .jush-att_css .jush-att_apo, .jush-att_css .jush-att_val { color: Black; background-color: #FFFFE0; }
+.jush-tag_js, .jush-att_js .jush-att_quo, .jush-att_js .jush-att_apo, .jush-att_js .jush-att_val, .jush-css_js { color: Black; background-color: #F0F0FF; }
+.jush-tag { color: Navy; }
+.jush-att, .jush-att_js, .jush-att_css { color: Teal; }
+.jush-att_quo, .jush-att_apo, .jush-att_val { color: Purple; }
+.jush-ent { color: Purple; }
+.jush-js_reg { color: Navy; }
+.jush-php_sql .jush-php_quo, .jush-php_sql .jush-php_apo { background-color: #FFBBB0; }
+.jush-bac, .jush-php_bac { color: Red; }
+
+.jush A:link, .jush A:visited { color: Navy; }
+.jush-tag A:link, .jush-tag A:visited,
+.jush-php_sql .jush-php_apo A:link, .jush-php_sql .jush-php_apo A:visited,
+.jush-php_sql .jush-php_quo A:link, .jush-php_sql .jush-php_quo A:visited
+{ color: inherit; color: expression(parentNode.currentStyle.color); }
