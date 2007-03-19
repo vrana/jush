@@ -7,12 +7,12 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 
 var jush = {
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
-	
+
 	highlight: function (language, text) {
 		this.last_tag = '';
 		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0] + '</span>';
 	},
-	
+
 	highlight_tag: function (tag, tab_width) {
 		var pre = document.getElementsByTagName(tag);
 		var tab = '';
@@ -26,7 +26,7 @@ var jush = {
 			}
 		}
 	},
-	
+
 	keywords_links: function (state, s) {
 		if (state == 'php_quo_var' || state == 'php_sql' || state == 'php_echo') {
 			state = 'php';
@@ -220,7 +220,7 @@ var jush = {
 		states.shift();
 		return [ ret, states ];
 	},
-	
+
 	htmlspecialchars: function (string) {
 		return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	},
@@ -242,7 +242,7 @@ var jush = {
 			return String.fromCharCode(p1 ? p1 : parseInt(p2, 16));
 		}).replace(/&amp;/g, '&');
 	},
-		
+	
 	addslashes_apo: function (string) {
 		return string.replace(/[\\']/g, '\\$&');
 	},
