@@ -7,15 +7,11 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 
 var jush = {
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
-	highlight: function (language, text) { this.last_tag = ''; return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0] + '</span>'; },
-	htmlspecialchars: function (string) {  return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); },
-	htmlspecialchars_quo: function (string) { return jush.htmlspecialchars(string).replace(/"/g, '&quot;'); }, // jush - this.htmlspecialchars_quo is passed as reference
-	htmlspecialchars_apo: function (string) { return jush.htmlspecialchars(string).replace(/'/g, '&#39;'); },
-	htmlspecialchars_quo_apo: function (string) { return jush.htmlspecialchars_quo(string).replace(/'/g, '&#39;'); },
-	html_entity_decode: function (string) { return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#(?:([0-9]+)|x([0-9a-f]+));/gi, function (str, p1, p2) { return String.fromCharCode(p1 ? p1 : parseInt(p2, 16)); }).replace(/&amp;/g, '&'); }, //! named entities
-	addslashes_apo: function (string) { return string.replace(/[\\']/g, '\\$&'); },
-	addslashes_quo: function (string) { return string.replace(/[\\"]/g, '\\$&'); },
-	stripslashes: function (string) { return string.replace(/\\([\\"'])/g, '$1'); },
+	
+	highlight: function (language, text) {
+		this.last_tag = '';
+		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0] + '</span>';
+	},
 	
 	highlight_tag: function (tag, tab_width) {
 		var pre = document.getElementsByTagName(tag);
@@ -161,7 +157,7 @@ var jush = {
 						}
 					} else {
 						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (isNaN(parseInt(key)) || !/^(att_js|att_css|css_js|php_sql|php_echo)$/.test(state) || /^(php_echo|php_sql|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
+						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|php_sql|php_echo)$/.test(state) || /^(php_echo|php_sql|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
 					}
 					s = s_states[0];
 					child_states = s_states[1];
@@ -170,7 +166,7 @@ var jush = {
 					
 					s = text.substring(division, match.index + match[0].length);
 					s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
-					if (isNaN(parseInt(key))) {
+					if (isNaN(+key)) {
 						if (this.links && this.links[key]) {
 							if (key == 'tag' || key == 'tag_css' || key == 'tag_js') {
 								this.last_tag = m[2].toUpperCase();
@@ -223,6 +219,40 @@ var jush = {
 		}
 		states.shift();
 		return [ ret, states ];
+	},
+	
+	htmlspecialchars: function (string) {
+		return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	},
+	
+	htmlspecialchars_quo: function (string) {
+		return jush.htmlspecialchars(string).replace(/"/g, '&quot;'); // jush - this.htmlspecialchars_quo is passed as reference
+	},
+	
+	htmlspecialchars_apo: function (string) {
+		return jush.htmlspecialchars(string).replace(/'/g, '&#39;');
+	},
+	
+	htmlspecialchars_quo_apo: function (string) {
+		return jush.htmlspecialchars_quo(string).replace(/'/g, '&#39;');
+	},
+	
+	html_entity_decode: function (string) {
+		return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#(?:([0-9]+)|x([0-9a-f]+));/gi, function (str, p1, p2) { //! named entities
+			return String.fromCharCode(p1 ? p1 : parseInt(p2, 16));
+		}).replace(/&amp;/g, '&');
+	},
+		
+	addslashes_apo: function (string) {
+		return string.replace(/[\\']/g, '\\$&');
+	},
+	
+	addslashes_quo: function (string) {
+		return string.replace(/[\\"]/g, '\\$&');
+	},
+	
+	stripslashes: function (string) {
+		return string.replace(/\\([\\"'])/g, '$1');
 	}
 };
 
