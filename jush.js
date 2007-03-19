@@ -16,7 +16,7 @@ var jush = {
 	highlight_tag: function (tag, tab_width) {
 		var pre = document.getElementsByTagName(tag);
 		var tab = '';
-		for (var i = (tab_width != undefined ? tab_width : 4); i--; ) {
+		for (var i = (tab_width !== undefined ? tab_width : 4); i--; ) {
 			tab += ' ';
 		}
 		for (var i=0; i < pre.length; i++) {
@@ -36,7 +36,7 @@ var jush = {
 			s = s.replace(this.links2[state], function (str) {
 				for (var i=arguments.length - 4; i > 0; i--) {
 					if (arguments[i]) {
-						return '<a href="' + url[0].replace(/\$key/, url[i]).replace(/\$1/, (state != 'sql' ? arguments[i] : arguments[i].toLowerCase().replace(/\s+|_/, '-'))) + (state == 'sql' && i == 1 ? '.html' : '') + '">' + arguments[i] + '</a>' + (arguments[arguments.length - 3] != undefined ? arguments[arguments.length - 3] : '');
+						return '<a href="' + url[0].replace(/\$key/, url[i]).replace(/\$1/, (state != 'sql' ? arguments[i] : arguments[i].toLowerCase().replace(/\s+|_/, '-'))) + (state == 'sql' && i == 1 ? '.html' : '') + '">' + arguments[i] + '</a>' + (arguments[arguments.length - 3] !== undefined ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
@@ -194,8 +194,8 @@ var jush = {
 						states.push(key);
 						if (state == 'php_eot') {
 							var eot = text.substring(0, match.index) + ';?\n';
-							tr['php_eot2'][2] = new RegExp('\n' + eot + '|^' + eot);
-							regexps['php_eot2'] = tr['php_eot2'][2];
+							tr.php_eot2[2] = new RegExp('\n' + eot + '|^' + eot);
+							regexps.php_eot2 = tr.php_eot2[2];
 						}
 					} else if (states.length <= key) {
 						return [ 'out of states' ];
