@@ -14,11 +14,13 @@
 .jush-att_quo, .jush-att_apo, .jush-att_val { color: Purple; }
 .jush-ent { color: Purple; }
 .jush-js_reg { color: Navy; }
-.jush-php_sql .jush-php_quo, .jush-php_sql .jush-php_apo { background-color: #FFBBB0; }
-.jush-bac, .jush-php_bac { color: Red; }
+.jush-php_sql .jush-php_quo, .jush-php_sql .jush-php_apo, .jush-php_sqlite .jush-php_quo, .jush-php_sqlite .jush-php_apo { background-color: #FFBBB0; }
+.jush-bac, .jush-php_bac, .jush-bra { color: Red; }
 
 .jush A:link, .jush A:visited { color: Navy; }
 .jush-tag A:link, .jush-tag A:visited,
 .jush-php_sql .jush-php_apo A:link, .jush-php_sql .jush-php_apo A:visited,
-.jush-php_sql .jush-php_quo A:link, .jush-php_sql .jush-php_quo A:visited
+.jush-php_sql .jush-php_quo A:link, .jush-php_sql .jush-php_quo A:visited,
+.jush-php_sqlite .jush-php_apo A:link, .jush-php_sqlite .jush-php_apo A:visited,
+.jush-php_sqlite .jush-php_quo A:link, .jush-php_sqlite .jush-php_quo A:visited
 { color: inherit; color: expression(parentNode.currentStyle.color); }
