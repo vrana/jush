@@ -148,7 +148,7 @@ var jush = {
 					} else if (key == 'php_halt2') {
 						child_states.unshift('htm');
 						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'php_quo' || state == 'php_apo' || state == 'php_eot2') && prev_state == 'php_echo') {
+					} else if (((state == 'php_quo' || state == 'php_apo') && prev_state == 'php_echo') || (state == 'php_eot2' && states[states.length - 3] == 'php_echo')) {
 						var i;
 						for (i=states.length; i--; ) {
 							prev_state = states[i];
