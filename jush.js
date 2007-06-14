@@ -41,6 +41,7 @@ var jush = {
 						var link = url[0].replace(/\$key/g, url[i]);
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
+							case 'phpini': link = link.replace(/\$1/g, arguments[i].replace(/_/, '-')); break;
 							case 'sql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+|_/, '-')); break;
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/, '')); break;
 							case 'pgsql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/, (i == 1 ? '-' : ''))); break;
