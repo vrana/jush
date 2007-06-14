@@ -21,10 +21,8 @@
 
 .jush A:link, .jush A:visited { color: Navy; }
 .jush-tag A:link, .jush-tag A:visited,
-.jush-php_sql .jush-php_apo A:link, .jush-php_sql .jush-php_apo A:visited,
-.jush-php_sql .jush-php_quo A:link, .jush-php_sql .jush-php_quo A:visited,
-.jush-php_sqlite .jush-php_apo A:link, .jush-php_sqlite .jush-php_apo A:visited,
-.jush-php_sqlite .jush-php_quo A:link, .jush-php_sqlite .jush-php_quo A:visited,
-.jush-php_pgsql .jush-php_apo A:link, .jush-php_pgsql .jush-php_apo A:visited,
-.jush-php_pgsql .jush-php_quo A:link, .jush-php_pgsql .jush-php_quo A:visited
+.jush-php_phpini .jush-php_apo A:link, .jush-php_phpini .jush-php_apo A:visited, .jush-php_phpini .jush-php_quo A:link, .jush-php_phpini .jush-php_quo A:visited,
+.jush-php_sql .jush-php_apo A:link, .jush-php_sql .jush-php_apo A:visited, .jush-php_sql .jush-php_quo A:link, .jush-php_sql .jush-php_quo A:visited,
+.jush-php_sqlite .jush-php_apo A:link, .jush-php_sqlite .jush-php_apo A:visited, .jush-php_sqlite .jush-php_quo A:link, .jush-php_sqlite .jush-php_quo A:visited,
+.jush-php_pgsql .jush-php_apo A:link, .jush-php_pgsql .jush-php_apo A:visited, .jush-php_pgsql .jush-php_quo A:link, .jush-php_pgsql .jush-php_quo A:visited
 { color: inherit; color: expression(parentNode.currentStyle.color); }
