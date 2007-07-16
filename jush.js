@@ -82,8 +82,8 @@ var jush = {
 			com: { php: php, 1: /\*\// },
 			esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
 			
-			js: { php: php, quo: /"/, apo: /'/, one: /\/\//, com: /\/\*/, 2: /(<)(\/script)(>)/i, js_reg: /\// },
-			one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
+			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, 2: /(<)(\/script)(>)/i, js_reg: /\// },
+			js_one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
 			php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /()(__halt_compiler)(\s*\(\s*\))/i, php_var: /\$/, php_phpini: /()(ini_get|ini_set)(\s*\()/, 1: /\?>|<\/script>/i }, //! matches ::echo
@@ -119,6 +119,7 @@ var jush = {
 			sql_eot: { sql_eot2: /\$/ },
 			sql_eot2: { }, // sql_eot2[2] to be set in sql_eot handler
 			com_nest: { com_nest: /\/\*/, 1: /\*\// },
+			one: { 1: /\n/ },
 			bac: { 1: /`/ },
 			bra: { 1: /]/ }
 		};
