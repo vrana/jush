@@ -108,7 +108,7 @@ var jush = {
 			
 			phpini: { 0: /$/ },
 			
-			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#/, com: /\/\*/, sql_var: /@/ },
+			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#/, com: /\/\*/, sql_var: /\B@/ },
 			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/ },
 			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/ }, // standard_conforming_strings=off
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
