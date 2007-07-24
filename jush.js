@@ -30,7 +30,10 @@ var jush = {
 	},
 
 	keywords_links: function (state, s) {
-		if (state == 'php_quo_var' || state == 'php_sql' || state == 'php_sqlite' || state == 'php_pgsql' || state == 'php_echo' || state == 'php_phpini') {
+		if (state == 'js_write') {
+			state = 'js';
+		}
+		if (/^(php_quo_var|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state)) {
 			state = 'php';
 		}
 		if (this.links2 && this.links2[state]) {
@@ -82,7 +85,8 @@ var jush = {
 			com: { php: php, 1: /\*\// },
 			esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
 			
-			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, 2: /(<)(\/script)(>)/i, js_reg: /\// },
+			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
+			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
 			js_one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
@@ -166,6 +170,9 @@ var jush = {
 					} else if (key == 'php_halt2') {
 						child_states.unshift('htm');
 						s_states = this.highlight_states(child_states, s, true);
+					} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_write') {
+						child_states.unshift('htm');
+						s_states = this.highlight_states(child_states, s, true);
 					} else if (((state == 'php_quo' || state == 'php_apo') && prev_state == 'php_echo') || (state == 'php_eot2' && states[states.length - 3] == 'php_echo')) {
 						var i;
 						for (i=states.length; i--; ) {
@@ -186,7 +193,7 @@ var jush = {
 						}
 					} else {
 						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
+						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|js_write|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(js_write|php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
 					}
 					s = s_states[0];
 					child_states = s_states[1];
@@ -301,6 +308,7 @@ jush.urls = {
 	att_js: 'http://www.w3.org/TR/html4/$key.html#adef-$val',
 	css_val: 'http://www.w3.org/TR/CSS21/$key.html#propdef-$val',
 	css_at: 'http://www.w3.org/TR/CSS21/$key',
+	js_write: 'http://developer.mozilla.org/en/docs/DOM:$key.$val',
 	php_new: 'http://www.php.net/$key.$val',
 	php_sql: 'http://www.php.net/$key.$val',
 	php_sqlite: 'http://www.php.net/$key.$val',
@@ -396,11 +404,12 @@ jush.links = {
 		'media.html#at-media-rule': /^media$/i,
 		'cascade.html#at-import': /^import$/i
 	},
+	js_write: { 'document': /^(write|writeln)$/ },
 	php_new: { 'language.oop5.basic#language.oop5.basic': /^new$/i },
 	php_sql: { 'function': new RegExp('^' + jush.sql_function + '$', 'i') },
 	php_sqlite: { 'function': new RegExp('^' + jush.sqlite_function + '$', 'i') },
 	php_pgsql: { 'function': new RegExp('^' + jush.pgsql_function + '$', 'i') },
-	php_phpini: { 'function': /^ini_get|ini_set$/i },
+	php_phpini: { 'function': /^(ini_get|ini_set)$/i },
 	php_echo: { 'function': /^(echo|print)$/i },
 	php_halt: { 'function': /^__halt_compiler$/i }
 };
