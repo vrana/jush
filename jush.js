@@ -10,6 +10,14 @@ var jush = {
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
 	pgsql_function: 'pg_prepare|pg_query|pg_query_params|pg_send_prepare|pg_send_query|pg_send_query_params',
 
+	style: function (href) {
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = href;
+		document.getElementsByTagName('head')[0].appendChild(link);
+	},
+
 	highlight: function (language, text) {
 		this.last_tag = '';
 		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0] + '</span>';
