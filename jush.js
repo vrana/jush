@@ -32,7 +32,12 @@ var jush = {
 		for (var i=0; i < pre.length; i++) {
 			var match = /(^|\s)jush($|\s|-(\S+))/.exec(pre[i].className);
 			if (match) {
-				pre[i].innerHTML = this.highlight(match[3] ? match[3] : 'htm', this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;').replace(/\n/g, '<br />');
+				var s = this.highlight(match[3] ? match[3] : 'htm', this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;');
+				if (pre[i].outerHTML && /^pre$/i.test(tag)) {
+					pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+/)[0] + s + '</' + tag + '>';
+				} else {
+					pre[i].innerHTML = s.replace(/\n/g, '<br />');
+				}
 			}
 		}
 	},
