@@ -34,7 +34,7 @@ var jush = {
 			if (match) {
 				var s = this.highlight(match[3] ? match[3] : 'htm', this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;');
 				if (pre[i].outerHTML && /^pre$/i.test(tag)) {
-					pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+/)[0] + s + '</' + tag + '>';
+					pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+>/)[0] + s + '</' + tag + '>';
 				} else {
 					pre[i].innerHTML = s.replace(/\n/g, '<br />');
 				}
@@ -240,7 +240,7 @@ var jush = {
 										break;
 									}
 								} else if (this.links[key][k].test(m[2])) {
-									link = (/^tag/.test(key) && m[2] != 'ins' && m[2] != 'del' ? m[2].toUpperCase() : m[2]);
+									link = (/^tag/.test(key) ? (m[2] != 'ins' && m[2] != 'del' ? m[2].toUpperCase() : m[2].toLowerCase()) : m[2]);
 								}
 							}
 							if (link) {
