@@ -228,24 +228,27 @@ var jush = {
 					s = text.substring(division, match.index + match[0].length);
 					s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
 					if (isNaN(+key)) {
-						if (this.links && this.links[key]) {
+						if (this.links && this.links[key] && m[2]) {
 							if (/^tag/.test(key)) {
 								this.last_tag = m[2].toUpperCase();
 							}
-							var link = '';
+							var link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m[2]) ? m[2].toUpperCase() : m[2].toLowerCase());
+							var k_link = '';
 							for (var k in this.links[key]) {
-								if (key == 'att') {
-									if (this.links[key][k].test(m[2] + '-' + this.last_tag)) {
-										link = m[2].toLowerCase() + '-' + this.last_tag;
+								if (key == 'att' && this.links[key][k].test(link + '-' + this.last_tag)) {
+									link += '-' + this.last_tag;
+									k_link = k;
+									break;
+								} else if (this.links[key][k].test(m[2])) {
+									k_link = k;
+									if (key != 'att') {
 										break;
 									}
-								} else if (this.links[key][k].test(m[2])) {
-									link = (/^tag/.test(key) ? (m[2] != 'ins' && m[2] != 'del' ? m[2].toUpperCase() : m[2].toLowerCase()) : m[2]);
 								}
 							}
-							if (link) {
+							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += '<a href="' + this.urls[key].replace(/\$key/, k).replace(/\$val/, link) + '">' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
+								s += '<a href="' + this.urls[key].replace(/\$key/, k_link).replace(/\$val/, link) + '">' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
@@ -332,7 +335,7 @@ jush.urls = {
 	att_js: 'http://www.w3.org/TR/html4/$key.html#adef-$val',
 	css_val: 'http://www.w3.org/TR/CSS21/$key.html#propdef-$val',
 	css_at: 'http://www.w3.org/TR/CSS21/$key',
-	js_write: 'http://developer.mozilla.org/en/docs/DOM:$key.$val',
+	js_write: 'http://developer.mozilla.org/En/docs/DOM/$key.$val',
 	php_new: 'http://www.php.net/$key.$val',
 	php_sql: 'http://www.php.net/$key.$val',
 	php_sqlite: 'http://www.php.net/$key.$val',
@@ -367,7 +370,7 @@ jush.urls = {
 		'functions-datetime.html', 'functions-info.html', 'functions-logical.html', 'functions-comparison.html', 'functions-matching.html', 'functions-conditional.html', 'functions-subquery.html',
 		'functions-math.html', 'functions-string.html', 'functions-binarystring.html', 'functions-formatting.html', 'functions-datetime.html', 'functions-geometry.html', 'functions-net.html', 'functions-sequence.html', 'functions-array.html', 'functions-aggregate.html', 'functions-srf.html', 'functions-info.html', 'functions-admin.html'
 	],
-	js: [ 'http://developer.mozilla.org/en/$key',
+	js: [ 'http://developer.mozilla.org/En/$key',
 		'Core_JavaScript_1.5_Reference/Global_Objects/$1',
 		'Core_JavaScript_1.5_Reference/Global_Properties/$1',
 		'Core_JavaScript_1.5_Reference/Global_Functions/$1',
