@@ -234,9 +234,29 @@ var jush = {
 							}
 							var link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m[2]) ? m[2].toUpperCase() : m[2].toLowerCase());
 							var k_link = '';
+							var att_mapping = {
+								'align-APPLET': 'IMG', 'align-IFRAME': 'IMG', 'align-INPUT': 'IMG', 'align-OBJECT': 'IMG',
+								'align-COL': 'TD', 'align-COLGROUP': 'TD', 'align-TBODY': 'TD', 'align-TFOOT': 'TD', 'align-TH': 'TD', 'align-THEAD': 'TD', 'align-TR': 'TD',
+								'border-OBJECT': 'IMG',
+								'cite-BLOCKQUOTE': 'Q',
+								'cite-DEL': 'INS',
+								'color-BASEFONT': 'FONT',
+								'face-BASEFONT': 'FONT',
+								'height-TD': 'TH',
+								'height-OBJECT': 'IMG',
+								'longdesc-IFRAME': 'FRAME',
+								'name-TEXTAREA': 'BUTTON',
+								'name-IFRAME': 'FRAME',
+								'name-OBJECT': 'INPUT',
+								'src-IFRAME': 'FRAME',
+								'type-LINK': 'A',
+								'width-OBJECT': 'IMG',
+								'width-TD': 'TH'
+							};
+							var att_tag = (att_mapping[link + '-' + this.last_tag] ? att_mapping[link + '-' + this.last_tag] : this.last_tag);
 							for (var k in this.links[key]) {
-								if (key == 'att' && this.links[key][k].test(link + '-' + this.last_tag)) {
-									link += '-' + this.last_tag;
+								if (key == 'att' && this.links[key][k].test(link + '-' + att_tag)) {
+									link += '-' + att_tag;
 									k_link = k;
 									break;
 								} else if (this.links[key][k].test(m[2])) {
