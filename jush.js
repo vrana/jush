@@ -98,13 +98,14 @@ var jush = {
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
 			css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
 			css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([^:\s]+)(\s*:)/, 1: /}/ },
-			css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, num: /[0-9]*\.?[0-9]+/, 1: /;|$/, 2: /}/ },
+			css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, 1: /;|$/, 2: /}/ },
 			css_js: { php: php, css_js: /\(/, 1: /\)/ },
 			quo: { php: php, esc: /\\/, 1: /"/ },
 			apo: { php: php, esc: /\\/, 1: /'/ },
 			com: { php: php, 1: /\*\// },
 			esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}, Python allows newline, octal, hexa and Unicode
 			one: { 1: /\n/ },
+			clr: { 1: /(?=[^a-fA-F0-9])|$/ },
 			num: { 1: /^/ },
 			
 			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
@@ -445,7 +446,7 @@ jush.links = {
 	},
 	css_val: {
 		'aural': /^(azimuth|cue-after|cue-before|cue|elevation|pause-after|pause-before|pause|pitch-range|pitch|play-during|richness|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|voice-family|volume)$/i,
-		'box': /^(border-color|border-style|border-top|border-top-color|border-top-style|border-top-width|border-width|border|margin-right|margin-top|margin|padding-top|padding)$/i,
+		'box': /^(border(?:-top|-right|-bottom|-left)?(?:-color|-style|-width)?|margin(?:-top|-right|-bottom|-left)?|padding(?:-top|-right|-bottom|-left)?)$/i,
 		'colors': /^(background-attachment|background-color|background-image|background-position|background-repeat|background|color)$/i,
 		'fonts': /^(font-family|font-size|font-style|font-variant|font-weight|font)$/i,
 		'generate': /^(content|counter-increment|counter-reset|list-style-image|list-style-position|list-style-type|list-style|quotes)$/i,
