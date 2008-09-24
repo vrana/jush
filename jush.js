@@ -79,6 +79,7 @@ var jush = {
 
 	highlight_states: function (states, text, in_php, escape) {
 		var php = /<\?(?:php)?|<script language="php">/i; // asp_tags=0, short_open_tag=1
+		var num = /(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
 		var tr = { // transitions
 			htm: { tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, 0: /(<!)([^>]*)(>)/, tag: /(<)([^<>?\s]+|\?xml)/, php: php, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
@@ -97,26 +98,27 @@ var jush = {
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
 			css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
 			css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([^:\s]+)(\s*:)/, 1: /}/ },
-			css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, 1: /;|$/, 2: /}/ },
+			css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, num: /[0-9]*\.?[0-9]+/, 1: /;|$/, 2: /}/ },
 			css_js: { php: php, css_js: /\(/, 1: /\)/ },
 			quo: { php: php, esc: /\\/, 1: /"/ },
 			apo: { php: php, esc: /\\/, 1: /'/ },
 			com: { php: php, 1: /\*\// },
 			esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}, Python allows newline, octal, hexa and Unicode
 			one: { 1: /\n/ },
+			num: { 1: /^/ },
 			
-			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
-			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
+			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
+			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
 			js_one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
-			php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /()(__halt_compiler)(\s*\(\s*\))/i, php_var: /\$/, php_phpini: /()(ini_get|ini_set)(\s*\()/i, 1: /\?>|<\/script>/i }, //! matches ::echo
+			php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /()(__halt_compiler)(\s*\(\s*\))/i, php_var: /\$/, num: num, php_phpini: /()(ini_get|ini_set)(\s*\()/i, 1: /\?>|<\/script>/i }, //! matches ::echo
 			php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), 1: /}/ },
-			php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /\(/, php_var: /\$/, php_phpini: /()(ini_get|ini_set)(\s*\()/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
-			php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /\$/, 1: /\)/ },
-			php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /\$/, 1: /\)/ },
-			php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /\$/, 1: /\)/ },
-			php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /\$/, 1: /[,)]/ },
+			php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /\(/, php_var: /\$/, num: num, php_phpini: /()(ini_get|ini_set)(\s*\()/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
+			php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /\$/, num: num, 1: /\)/ },
+			php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /\$/, num: num, 1: /\)/ },
+			php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /\$/, num: num, 1: /\)/ },
+			php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /\$/, num: num, 1: /[,)]/ },
 			php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /[_a-zA-Z0-9\x7F-\xFF]+/ },
 			php_one: { 1: /\n/, 2: /\?>/ },
 			php_eot: { php_eot2: /\n/ },
@@ -132,7 +134,7 @@ var jush = {
 			
 			phpini: { 0: /$/ },
 			
-			py: { one: /#/, py_rlapo: /u?r'''/i, py_rlquo: /u?r"""/i, py_rapo: /u?r'/i, py_rquo: /u?r"/i, py_lapo: /u?'''/i, py_lquo: /u?"""/i, apo: /u?'/i, quo: /u?"/i },
+			py: { one: /#/, py_rlapo: /u?r'''/i, py_rlquo: /u?r"""/i, py_rapo: /u?r'/i, py_rquo: /u?r"/i, py_lapo: /u?'''/i, py_lquo: /u?"""/i, apo: /u?'/i, quo: /u?"/i, num: num },
 			py_rlapo: { 1: /'''/ },
 			py_rlquo: { 1: /"""/ },
 			py_rapo: { 1: /'/ },
@@ -140,9 +142,9 @@ var jush = {
 			py_lapo: { esc: /\\/, 1: /'''/ },
 			py_lquo: { esc: /\\/, 1: /"""/ },
 			
-			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#/, com: /\/\*/, sql_var: /\B@/ },
-			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/ },
-			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/ }, // standard_conforming_strings=off
+			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#/, com: /\/\*/, sql_var: /\B@/, num: num },
+			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
+			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num }, // standard_conforming_strings=off
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
 			sql_quo: { esc: /\\/, 0: /""/, 1: /"/ },
 			sql_var: { 1: /(?=[^_.$a-zA-Z0-9])|$/ },
