@@ -79,7 +79,7 @@ var jush = {
 
 	highlight_states: function (states, text, in_php, escape) {
 		var php = /<\?(?:php)?|<script language="php">/i; // asp_tags=0, short_open_tag=1
-		var num = /(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
+		var num = /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
 		var tr = { // transitions
 			htm: { tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, 0: /(<!)([^>]*)(>)/, tag: /(<)([^<>?\s]+|\?xml)/, php: php, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
