@@ -1,4 +1,9 @@
-// Copyright 2007 Jakub Vrana http://jush.sourceforge.net, licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+/** JUSH - JavaScript Syntax Highlighter
+* @link http://jush.sourceforge.net
+* @author Jakub Vrana, http://php.vrana.cz
+* @copyright 2007 Jakub Vrana
+* @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+*/
 
 /* Limitations:
 <style> and <script> supposes CDATA or HTML comments
