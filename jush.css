@@ -1,5 +1,4 @@
 .jush { color: Black; }
-.jush-kwd { color: Navy; }
 .jush-htm_com, .jush-com, .jush-one, .jush-php_com, .jush-php_one, .jush-js_one { color: Gray; }
 .jush-php { color: #000033; background-color: #FFF0F0; }
 .jush-php_quo, .jush-quo, .jush-php_eot, .jush-apo, .jush-py_rlapo, .jush-py_rlquo, .jush-py_rapo, .jush-py_rquo, .jush-py_lapo, .jush-py_lquo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sqlite_quo, .jush-sql_eot { color: Green; }
@@ -18,7 +17,7 @@
 .jush-php_pgsql .jush-php_quo, .jush-php_pgsql .jush-php_apo
 { background-color: #FFBBB0; }
 .jush-bac, .jush-php_bac, .jush-bra, .jush-pgsql .jush-sqlite_quo { color: Red; }
-.jush-num { color: #007f7f; }
+.jush-num, .jush-clr { color: #007f7f; }
 
 .jush A:link, .jush A:visited { color: Navy; }
 .jush-tag A:link, .jush-tag A:visited,
