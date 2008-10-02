@@ -143,7 +143,7 @@ var jush = {
 			py_lapo: { esc: /\\/, 1: /'''/ },
 			py_lquo: { esc: /\\/, 1: /"""/ },
 			
-			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#/, com: /\/\*/, sql_var: /\B@/, num: num },
+			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, sql_var: /\B@/, num: num },
 			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
 			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num }, // standard_conforming_strings=off
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
