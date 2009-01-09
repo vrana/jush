@@ -3,7 +3,7 @@
 * @author Jakub Vrana, http://php.vrana.cz
 * @copyright 2007 Jakub Vrana
 * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
-* @version $Date$
+* @version $Date::                           $
 */
 
 /* Limitations:
