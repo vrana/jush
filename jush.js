@@ -193,7 +193,7 @@ var jush = {
 		loop: while (start < text.length && (match = regexps[state].exec(text))) {
 			for (var key in tr[state]) {
 				var m;
-				if ((m = tr[state][key].exec(match[0])) && !m[0].index) { // check index to allow '/' before '</script>'
+				if ((m = tr[state][key].exec(match[0])) && !m[0].index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
 					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 					var s = text.substring(start, division);
