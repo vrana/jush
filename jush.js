@@ -181,9 +181,9 @@ var jush = {
 		for (var key in tr) {
 			regexps[key] = this.build_regexp(tr[key], in_php, states[0]);
 		}
-		var ret = ''; // return
+		var ret = []; // return
 		for (var i=1; i < states.length; i++) {
-			ret += '<span class="jush-' + states[i] + '">';
+			ret.push('<span class="jush-' + states[i] + '">');
 		}
 		var state = states[states.length - 1];
 		var match;
@@ -244,7 +244,7 @@ var jush = {
 					s = s_states[0];
 					child_states = s_states[1];
 					s = this.keywords_links(state, s);
-					ret += s;
+					ret.push(s);
 					
 					s = text.substring(division, match.index + match[0].length);
 					s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
@@ -293,8 +293,8 @@ var jush = {
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
-						ret += '<span class="jush-' + key + '">';
-						ret += s;
+						ret.push('<span class="jush-' + key + '">');
+						ret.push(s);
 						states.push(key);
 						if (state == 'php_eot') {
 							tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
@@ -306,9 +306,9 @@ var jush = {
 					} else if (states.length <= key) {
 						return [ 'out of states' ];
 					} else {
-						ret += s;
+						ret.push(s);
 						for (var i=0; i < key; i++) {
-							ret += '</span>';
+							ret.push('</span>');
 							states.pop();
 						}
 					}
@@ -320,12 +320,12 @@ var jush = {
 			}
 			return [ 'regexp not found' ];
 		}
-		ret += this.keywords_links(state, this.htmlspecialchars(text.substring(start)));
+		ret.push(this.keywords_links(state, this.htmlspecialchars(text.substring(start))));
 		for (var i=1; i < states.length; i++) {
-			ret += '</span>';
+			ret.push('</span>');
 		}
 		states.shift();
-		return [ ret, states ];
+		return [ ret.join(''), states ];
 	},
 
 	htmlspecialchars: function (string) {
