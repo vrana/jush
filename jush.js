@@ -293,8 +293,7 @@ var jush = {
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
-						ret.push('<span class="jush-' + key + '">');
-						ret.push(s);
+						ret.push('<span class="jush-' + key + '">', s);
 						states.push(key);
 						if (state == 'php_eot') {
 							tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
