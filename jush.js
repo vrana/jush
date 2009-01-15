@@ -79,6 +79,19 @@ var jush = {
 		return s;
 	},
 
+	build_regexp: function (tr1, in_php, state) {
+		var re = [];
+		for (var k in tr1) {
+			var s = tr1[k].toString().replace(/^\/|\/[^\/]*$/g, '');
+			if ((!in_php || k != 'php') && (state == 'htm' || (s != '(<)(\\/script)(>)' && s != '(<)(\\/style)(>)'))) {
+				re.push(s);
+			} else {
+				delete tr1[k];
+			}
+		}
+		return new RegExp(re.join('|'), 'gi');
+	},
+	
 	highlight_states: function (states, text, in_php, escape) {
 		var php = /<\?(?:php)?|<script language="php">/i; // asp_tags=0, short_open_tag=1
 		var num = /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
@@ -86,12 +99,12 @@ var jush = {
 			htm: { tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, 0: /(<!)([^>]*)(>)/, tag: /(<)([^<>?\s]+|\?xml)/, php: php, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
 			ent: { php: php, 1: /;/ },
-			tag: { php: php, att_css: /^(\s+)(style)(\s*=\s*)/i, att_js: /^(\s+)(on[^=<>\s]+)(\s*=\s*)/i, att: /(\s+)([^=<>\s]*)(\s*)/, 1: />/ },
+			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[^=<>\s]+)(\s*=\s*)/i, att: /(\s+)([^=<>\s]*)(\s*)/, 1: />/ },
 			tag_css: { php: php, att: /(\s+)([^=<>\s]*)(\s*)/, css: />/ },
 			tag_js: { php: php, att: /(\s+)([^=<>\s]*)(\s*)/, js: />/ },
-			att: { php: php, att_quo: /^=\s*"/, att_apo: /^=\s*'/, att_val: /^=\s*/, 1: /\s/, 2: />/ },
-			att_css: { php: php, att_quo: /^"/, att_apo: /^'/, att_val: /^\s*/ },
-			att_js: { php: php, att_quo: /^"/, att_apo: /^'/, att_val: /^\s*/ },
+			att: { php: php, att_quo: /=\s*"/, att_apo: /=\s*'/, att_val: /=\s*/, 1: /\s/, 2: />/ },
+			att_css: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
+			att_js: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 			att_quo: { php: php, 2: /"/ },
 			att_apo: { php: php, 2: /'/ },
 			att_val: { php: php, 2: /(?=>|\s)|$/ },
@@ -108,7 +121,7 @@ var jush = {
 			esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}, Python allows newline, octal, hexa and Unicode
 			one: { 1: /\n/ },
 			clr: { 1: /(?=[^a-fA-F0-9])|$/ },
-			num: { 1: /^/ },
+			num: { 1: /()/ },
 			
 			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
 			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
@@ -124,7 +137,7 @@ var jush = {
 			php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /\$/, num: num, 1: /[,)]/ },
 			php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /[_a-zA-Z0-9\x7F-\xFF]+/ },
 			php_one: { 1: /\n/, 2: /\?>/ },
-			php_eot: { php_eot2: /\n/ },
+			php_eot: { php_eot2: /(.+)/ },
 			php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /\$/ }, // php_eot2[2] to be set in php_eot handler
 			php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /\$/, esc: /\\/, 1: /"/ },
 			php_bac: { php_quo_var: /\$\{|\{\$/, php_var: /\$/, esc: /\\/, 1: /`/ }, //! highlight shell
@@ -160,22 +173,13 @@ var jush = {
 			bra: { 1: /]/ },
 			
 			cnf: { quo: /"/, one: /#/, cnf_php: /(\b)(PHPIniDir)([ \t]+)/i, cnf_phpini: /(\b)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+)/i },
-			cnf_php: { 1: /^/ },
+			cnf_php: { 1: /()/ },
 			cnf_phpini: { cnf_phpini_val: /[ \t]/ },
 			cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|\n)/ }
 		};
 		var regexps = { };
 		for (var key in tr) {
-			var re = [];
-			for (var k in tr[key]) {
-				var s = tr[key][k].toString().replace(/^\/(.*)\/.*$/, '$1');
-				if ((!in_php || k != 'php') && (states[0] == 'htm' || (s != '(<)(\\/script)(>)' && s != '(<)(\\/style)(>)'))) {
-					re.push(s);
-				} else {
-					delete tr[key][k];
-				}
-			}
-			regexps[key] = new RegExp(re.join('|'), 'i');
+			regexps[key] = this.build_regexp(tr[key], in_php, states[0]);
 		}
 		var ret = ''; // return
 		for (var i=1; i < states.length; i++) {
@@ -185,13 +189,14 @@ var jush = {
 		var match;
 		var child_states = [ ];
 		var s_states;
-		loop: while (text.length && (match = regexps[state].exec(text))) {
+		var start = 0;
+		loop: while (start < text.length && (match = regexps[state].exec(text))) {
 			for (var key in tr[state]) {
 				var m;
-				if ((m = tr[state][key].exec(match[0])) && m[0].length == match[0].length) { // compare lengths to allow '/' before '</script>'
-					//~ console.log(states + ' (' + key + '): ' + text.replace(/\n/g, '\\n'));
+				if ((m = tr[state][key].exec(match[0])) && !m[0].index) { // check index to allow '/' before '</script>'
+					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
-					var s = text.substring(0, division);
+					var s = text.substring(start, division);
 					
 					// highlight children
 					var prev_state = states[states.length - 2];
@@ -292,11 +297,11 @@ var jush = {
 						ret += s;
 						states.push(key);
 						if (state == 'php_eot') {
-							tr.php_eot2[2] = new RegExp('(^|\n)(' + text.substring(0, match.index) + ')(;?\n)');
-							regexps.php_eot2 = tr.php_eot2[2];
+							tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
+							regexps.php_eot2 = this.build_regexp(tr.php_eot2, in_php, states[0]);
 						} else if (state == 'sql_eot') {
-							tr.sql_eot2[2] = new RegExp('\\$' + text.substring(0, match.index) + '\\$');
-							regexps.sql_eot2 = tr.sql_eot2[2];
+							tr.sql_eot2[2] = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
+							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2, in_php, states[0]);
 						}
 					} else if (states.length <= key) {
 						return [ 'out of states' ];
@@ -307,14 +312,15 @@ var jush = {
 							states.pop();
 						}
 					}
-					text = text.substring(match.index + match[0].length); // JS regexp doesn't support (?< or \G
+					start = regexps[state].lastIndex;
 					state = states[states.length - 1];
+					regexps[state].lastIndex = start;
 					continue loop;
 				}
 			}
 			return [ 'regexp not found' ];
 		}
-		ret += this.keywords_links(state, this.htmlspecialchars(text));
+		ret += this.keywords_links(state, this.htmlspecialchars(text.substring(start)));
 		for (var i=1; i < states.length; i++) {
 			ret += '</span>';
 		}
