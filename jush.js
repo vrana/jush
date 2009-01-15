@@ -137,7 +137,7 @@ var jush = {
 			php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /\$/, num: num, 1: /[,)]/ },
 			php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /[_a-zA-Z0-9\x7F-\xFF]+/ },
 			php_one: { 1: /\n/, 2: /\?>/ },
-			php_eot: { php_eot2: /(.+)/ },
+			php_eot: { php_eot2: /([^'"]+)(['"]?)/ },
 			php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /\$/ }, // php_eot2[2] to be set in php_eot handler
 			php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /\$/, esc: /\\/, 1: /"/ },
 			php_bac: { php_quo_var: /\$\{|\{\$/, php_var: /\$/, esc: /\\/, 1: /`/ }, //! highlight shell
@@ -298,10 +298,10 @@ var jush = {
 						states.push(key);
 						if (state == 'php_eot') {
 							tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
-							regexps.php_eot2 = this.build_regexp(tr.php_eot2, in_php, states[0]);
+							regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { 2: tr.php_eot2[2] } : tr.php_eot2));
 						} else if (state == 'sql_eot') {
 							tr.sql_eot2[2] = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
-							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2, in_php, states[0]);
+							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2);
 						}
 					} else if (states.length <= key) {
 						return [ 'out of states' ];
