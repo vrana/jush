@@ -123,8 +123,8 @@ var jush = {
 			clr: { 1: /(?=[^a-fA-F0-9])|$/ },
 			num: { 1: /()/ },
 			
-			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
-			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /\//, num: num, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
+			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /(^|[\n(=:,])\s*\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
+			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /(^|[\n(=:,])\s*\//, num: num, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
 			js_one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
