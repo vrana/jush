@@ -123,9 +123,11 @@ var jush = {
 			clr: { 1: /(?=[^a-fA-F0-9])|$/ },
 			num: { 1: /()/ },
 			
-			js: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /(^|[\n(=:,])\s*\//, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 2: /(<)(\/script)(>)/i },
-			js_write: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, js_reg: /(^|[\n(=:,])\s*\//, num: num, js_write: /\(/, 1: /\)/, 3: /(<)(\/script)(>)/i },
-			js_one: { php: php, 1: /\n/, 2: /(<)(\/script)(>)/i },
+			js: { php: php, js_reg: /\s*\/(?![\/*])/, js_code: /()/ },
+			js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\w\d\s]/ },
+			js_write: { php: php, js_reg: /\s*\/(?![\/*])/, js_write_code: /()/ },
+			js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\w\d\s]/ },
+			js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
 			php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new)\b/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\()', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\()', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\()', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\))/i, php_var: /\$/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\()/i, 1: /\?>|<\/script>/i }, //! matches ::echo
