@@ -114,7 +114,7 @@ var jush = {
 			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
 			css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
-			css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([^:\s]+)(\s*:)/, 1: /}/ },
+			css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w\d]+)(\s*:)/, 1: /}/ }, //! misses e.g. margin/*-left*/:
 			css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, 1: /;|$/, 2: /}/ },
 			css_js: { php: php, css_js: /\(/, 1: /\)/ },
 			quo: { php: php, esc: /\\/, 1: /"/ },
