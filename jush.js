@@ -98,12 +98,12 @@ var jush = {
 		var php = /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i; // asp_tags=0, short_open_tag=1
 		var num = /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
 		var tr = { // transitions
-			htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, 0: /(<!)([^>]*)(>)/, tag: /(<\/?)([^<>\s\/]+)/, ent: /&/ },
+			htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<\/?)([-\w\d]+)/, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
 			ent: { php: php, 1: /;/ },
-			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[^=<>\s]+)(\s*=\s*)/i, att: /(\s+)([^=<>\s]*)(\s*)/, 1: />/ },
-			tag_css: { php: php, att: /(\s+)([^=<>\s]*)(\s*)/, css: />/ },
-			tag_js: { php: php, att: /(\s+)([^=<>\s]*)(\s*)/, js: />/ },
+			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[-\w\d]+)(\s*=\s*)/i, att: /(\s+)([-\w\d]+)(\s*)/, 1: />/ },
+			tag_css: { php: php, att: /(\s+)([-\w\d]+)(\s*)/, css: />/ },
+			tag_js: { php: php, att: /(\s+)([-\w\d]+)(\s*)/, js: />/ },
 			att: { php: php, att_quo: /=\s*"/, att_apo: /=\s*'/, att_val: /=\s*/, 1: /\s/, 2: />/ },
 			att_css: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 			att_js: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
