@@ -12,6 +12,8 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 */
 
 var jush = {
+	create_links: true,
+	
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
 	pgsql_function: 'pg_prepare|pg_query|pg_query_params|pg_send_prepare|pg_send_query|pg_send_query_params',
@@ -71,7 +73,7 @@ var jush = {
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
 							default: link = link.replace(/\$1/g, arguments[i]);
 						}
-						return '<a' + (url[i] ? ' href="' + link + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						return '<a' + (this.create_links && url[i] ? ' href="' + link + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
@@ -291,7 +293,7 @@ var jush = {
 							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += '<a href="' + this.urls[key].replace(/\$key/, k_link).replace(/\$val/, link) + '">' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
+								s += '<a' + (this.create_links ? ' href="' + this.urls[key].replace(/\$key/, k_link).replace(/\$val/, link) + '"' : '') + '>' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
