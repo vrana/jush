@@ -216,7 +216,7 @@ var jush = {
 					} else if (key == 'php_halt2') {
 						child_states.unshift('htm');
 						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_write') {
+					} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_write_code') {
 						child_states.unshift('htm');
 						s_states = this.highlight_states(child_states, s, true);
 					} else if (((state == 'php_quo' || state == 'php_apo') && prev_state == 'php_echo') || (state == 'php_eot2' && states[states.length - 3] == 'php_echo')) {
@@ -239,11 +239,11 @@ var jush = {
 							s_states = this.highlight_states(child_states, s, true, f);
 						} else {
 							s = this.htmlspecialchars(s);
-							s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|js_write|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(js_write|php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ];
+							s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|js_write_code|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(js_write_code|php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ];
 						}
 					} else {
 						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|js_write|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(js_write|php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
+						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|css_js|js_write_code|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state) || /^(js_write_code|php_echo|php_sql|php_sqlite|php_pgsql|php_phpini|css_js)$/.test(prev_state) ? child_states : [ ]) ]; // reset child states when escaping construct
 					}
 					s = s_states[0];
 					child_states = s_states[1];
@@ -371,7 +371,7 @@ var jush = {
 };
 
 jush.urls = {
-	// $key stands for key in jush.links.class, $val stands for found string
+	// $key stands for key in jush.links class, $val stands for found string
 	tag: 'http://www.w3.org/TR/html4/$key.html#edef-$val',
 	tag_css: 'http://www.w3.org/TR/html4/$key.html#edef-$val',
 	tag_js: 'http://www.w3.org/TR/html4/$key.html#edef-$val',
