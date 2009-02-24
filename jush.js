@@ -51,7 +51,7 @@ var jush = {
 	},
 
 	keywords_links: function (state, s) {
-		if (state == 'js_write') {
+		if (/^js(_write|_code)+$/.test(state)) {
 			state = 'js';
 		}
 		if (/^(php_quo_var|php_sql|php_sqlite|php_pgsql|php_echo|php_phpini)$/.test(state)) {
@@ -73,7 +73,7 @@ var jush = {
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
 							default: link = link.replace(/\$1/g, arguments[i]);
 						}
-						return '<a' + (this.create_links && url[i] ? ' href="' + link + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
