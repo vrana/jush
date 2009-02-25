@@ -101,10 +101,10 @@ var jush = {
 			htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w\d]+)/, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
 			ent: { php: php, 1: /;/ },
-			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[-\w\d]+)(\s*=\s*)/i, att: /(\s+)([-\w\d]+)(\s*)/, 1: />/ },
-			tag_css: { php: php, att: /(\s+)([-\w\d]+)(\s*)/, css: />/ },
-			tag_js: { php: php, att: /(\s+)([-\w\d]+)(\s*)/, js: />/ },
-			att: { php: php, att_quo: /=\s*"/, att_apo: /=\s*'/, att_val: /=\s*/, 1: /\s/, 2: />/ },
+			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[-\w\d]+)(\s*=\s*)/i, att: /(\s+)([-\w\d]+)()/, 1: />/ },
+			tag_css: { php: php, att: /(\s+)([-\w\d]+)()/, css: />/ },
+			tag_js: { php: php, att: /(\s+)([-\w\d]+)()/, js: />/ },
+			att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
 			att_css: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 			att_js: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 			att_quo: { php: php, 2: /"/ },
@@ -140,7 +140,7 @@ var jush = {
 			php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /\$/, num: num, 1: /\)/ },
 			php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /\$/, num: num, 1: /[,)]/ },
 			php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /[_a-zA-Z0-9\x7F-\xFF]+/ },
-			php_one: { 1: /\n/, 2: /\?>/ },
+			php_one: { 1: /\n|(?=\?>)|$/ },
 			php_eot: { php_eot2: /([^'"]+)(['"]?)/ },
 			php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /\$/ }, // php_eot2[2] to be set in php_eot handler
 			php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /\$/, esc: /\\/, 1: /"/ },
@@ -149,7 +149,7 @@ var jush = {
 			php_apo: { esc: /\\/, 1: /'/ },
 			php_com: { 1: /\*\// },
 			php_halt: { php_halt_one: /\/\/|#/, php_com: /\/\*/, php_halt2: /;|\?>\n?/ },
-			php_halt_one: { 1: /\n/, php_halt2: /\?>\n?/ },
+			php_halt_one: { 1: /\n|(?=\?>)|$/ },
 			php_halt2: { 3: /$/ },
 			
 			phpini: { 0: /$/ },
@@ -196,8 +196,8 @@ var jush = {
 		var start = 0;
 		loop: while (start < text.length && (match = regexps[state].exec(text))) {
 			for (var key in tr[state]) {
-				var m;
-				if ((m = tr[state][key].exec(match[0])) && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
+				var m = tr[state][key].exec(match[0]);
+				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
 					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 					var s = text.substring(start, division);
