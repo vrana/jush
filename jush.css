@@ -23,6 +23,7 @@
 .jush-sql a { font-weight: bold; }
 .jush-tag a,
 .jush-php_phpini .jush-php_apo a, .jush-php_phpini .jush-php_quo a,
+.jush-php_header .jush-php_apo a, .jush-php_header .jush-php_quo a,
 .jush-php_sql .jush-php_apo a, .jush-php_sql .jush-php_quo a,
 .jush-php_sqlite .jush-php_apo a, .jush-php_sqlite .jush-php_quo a,
 .jush-php_pgsql .jush-php_apo a, .jush-php_pgsql .jush-php_quo a
