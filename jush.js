@@ -318,7 +318,7 @@ var jush = {
 							states.pop();
 						}
 					}
-					start = regexps[state].lastIndex;
+					start = match.index + match[0].length;
 					state = states[states.length - 1];
 					regexps[state].lastIndex = start;
 					continue loop;
