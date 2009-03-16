@@ -3,7 +3,7 @@ Performance optimizations
 Link HTTP headers
 Highlight variables inside heredoc
 Parse nowdoc (PHP 5.3)
-JS regexp only after operator
+Parse JS regexp only after operator
 Highlight <br/>
 Option to not create links - jush.create_links
 Fix CSS comments
@@ -27,7 +27,9 @@ JUSH 1.2.3:
 Bug fixes from Kajman
 
 JUSH 1.2.2:
+Highlight Python
 Added jush.style()
+Highlight HTML in document.write
 
 JUSH 1.2.1:
 php.ini highlighting
@@ -77,3 +79,7 @@ Uses <br /> in highlight_tag
 More MySQL commands, links CSS at-rules
 Adds A:hover style
 Updates installation instructions
+
+JUSH 1.0.0:
+Highlight HTML, CSS, JS, PHP and SQL code embedded into each other
+Provide links to the documentation for all supported languages
