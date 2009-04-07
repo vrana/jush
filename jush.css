@@ -1,7 +1,7 @@
 .jush { color: black; }
 .jush-htm_com, .jush-com, .jush-one, .jush-php_com, .jush-php_one, .jush-js_one { color: gray; }
 .jush-php { color: #000033; background-color: #FFF0F0; }
-.jush-php_quo, .jush-quo, .jush-php_eot, .jush-apo, .jush-py_rlapo, .jush-py_rlquo, .jush-py_rapo, .jush-py_rquo, .jush-py_lapo, .jush-py_lquo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sqlite_quo, .jush-sql_eot { color: green; }
+.jush-php_quo, .jush-quo, .jush-php_eot, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sqlite_quo, .jush-sql_eot { color: green; }
 .jush-php_apo { color: #009F00; }
 .jush-php_quo_var, .jush-php_var, .jush-sql_var { font-style: italic; }
 .jush-php_halt2 { background-color: white; color: black; }

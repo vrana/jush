@@ -1,3 +1,6 @@
+JUSH 1.6.0:
+Remove Python (orthogonal)
+
 JUSH 1.5.0:
 Performance optimizations
 Link HTTP headers
