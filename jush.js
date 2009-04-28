@@ -73,7 +73,7 @@ var jush = {
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
 							default: link = link.replace(/\$1/g, arguments[i]);
 						}
-						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' + (typeof jush.create_links == 'string' ? jush.create_links : '') : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
@@ -288,7 +288,7 @@ var jush = {
 							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += '<a' + (this.create_links ? ' href="' + this.urls[key].replace(/\$key/, k_link).replace(/\$val/, link) + '"' : '') + '>' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
+								s += '<a' + (this.create_links ? ' href="' + this.urls[key].replace(/\$key/, k_link).replace(/\$val/, link) + '"' + (typeof this.create_links == 'string' ? this.create_links : '') : '') + '>' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
