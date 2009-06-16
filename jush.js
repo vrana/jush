@@ -160,7 +160,7 @@ var jush = {
 			http: { 0: /$/ },
 			
 			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, sql_var: /\B@/, sql_set: /(\b)(SET)(\s+)/i, num: num },
-			sql_set: { 1: /(?=[^-_a-zA-Z0-9])|$/ },
+			sql_set: { 0: /$/, 1: /(?=[^-_a-zA-Z0-9])/ },
 			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
 			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num }, // standard_conforming_strings=off
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
