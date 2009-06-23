@@ -306,7 +306,7 @@ var jush = {
 							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2);
 						}
 					} else if (states.length <= key) {
-						return [ 'out of states' ];
+						return [ text ]; // out of states
 					} else {
 						ret.push(s);
 						for (var i=0; i < key; i++) {
