@@ -84,7 +84,7 @@ var jush = {
 	},
 
 	build_regexp: function (tr1, in_php, state) {
-		var re = [];
+		var re = [ ];
 		for (var k in tr1) {
 			var s = tr1[k].toString().replace(/^\/|\/[^\/]*$/g, '');
 			if ((!in_php || k != 'php') && (state == 'htm' || (s != '(<)(\\/script)(>)' && s != '(<)(\\/style)(>)'))) {
@@ -184,7 +184,7 @@ var jush = {
 		for (var key in tr) {
 			regexps[key] = this.build_regexp(tr[key], in_php, states[0]);
 		}
-		var ret = []; // return
+		var ret = [ ]; // return
 		for (var i=1; i < states.length; i++) {
 			ret.push('<span class="jush-' + states[i] + '">');
 		}
@@ -306,7 +306,7 @@ var jush = {
 							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2);
 						}
 					} else if (states.length <= key) {
-						return [ this.htmlspecialchars(text) ]; // out of states
+						return [ this.htmlspecialchars(text), [ ] ]; // out of states
 					} else {
 						ret.push(s);
 						for (var i=0; i < key; i++) {
@@ -320,7 +320,7 @@ var jush = {
 					continue loop;
 				}
 			}
-			return [ 'regexp not found' ];
+			return [ 'regexp not found', [ ] ];
 		}
 		ret.push(this.keywords_links(state, this.htmlspecialchars(text.substring(start))));
 		for (var i=1; i < states.length; i++) {
