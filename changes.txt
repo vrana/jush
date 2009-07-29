@@ -1,6 +1,7 @@
 JUSH 1.6.0:
 Remove Python (orthogonal)
 Option to customize links - e.g. jush.create_links = ' target="_blank"'
+Option to highlight only part of document - jush.highlight_tag(dom_elements)
 
 JUSH 1.5.0:
 Performance optimizations

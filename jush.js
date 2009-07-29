@@ -32,7 +32,7 @@ var jush = {
 	},
 
 	highlight_tag: function (tag, tab_width) {
-		var pre = document.getElementsByTagName(tag);
+		var pre = (typeof tag == 'string' ? document.getElementsByTagName(tag) : tag);
 		var tab = '';
 		for (var i = (tab_width !== undefined ? tab_width : 4); i--; ) {
 			tab += ' ';
