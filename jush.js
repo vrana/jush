@@ -204,7 +204,7 @@ var jush = {
 					// highlight children
 					var prev_state = states[states.length - 2];
 					if (/^(att_quo|att_apo|att_val)$/.test(state) && (/^(att_js|att_css|att_http)$/.test(prev_state) || /^\s*javascript:/i.test(s))) { // javascript: - easy but without own state //! should be checked only in %URI;
-						child_states.unshift(prev_state == 'att_css' ? 'css_pro' : prev_state.substr(4));
+						child_states.unshift(prev_state == 'att_css' ? 'css_pro' : (prev_state == 'att_http' ? 'http' : 'js'));
 						s_states = this.highlight_states(child_states, this.html_entity_decode(s), true, (state == 'att_apo' ? this.htmlspecialchars_apo : (state == 'att_quo' ? this.htmlspecialchars_quo : this.htmlspecialchars_quo_apo)));
 					} else if (state == 'css_js' || state == 'cnf_phpini' || state == 'sql_sqlset') {
 						child_states.unshift(state.substr(4));
