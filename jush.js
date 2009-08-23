@@ -102,7 +102,7 @@ var jush = {
 		var tr = { // transitions
 			htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w\d]+)/, ent: /&/ },
 			htm_com: { php: php, 1: /-->/ },
-			ent: { php: php, 1: /;/ },
+			ent: { php: php, 1: /[;\s]/ },
 			tag: { php: php, att_css: /(\s+)(style)(\s*=\s*)/i, att_js: /(\s+)(on[-\w\d]+)(\s*=\s*)/i, att_http: /(\s+)(http-equiv)(\s*=\s*)/i, att: /(\s+)([-\w\d]+)()/, 1: />/ },
 			tag_css: { php: php, att: /(\s+)([-\w\d]+)()/, css: />/ },
 			tag_js: { php: php, att: /(\s+)([-\w\d]+)()/, js: />/ },
@@ -193,7 +193,7 @@ var jush = {
 		var child_states = [ ];
 		var s_states;
 		var start = 0;
-		loop: while (start < text.length && (match = regexps[state].exec(text))) {
+		loop: while (start < text.length && regexps[state] && (match = regexps[state].exec(text))) {
 			for (var key in tr[state]) {
 				var m = tr[state][key].exec(match[0]);
 				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
