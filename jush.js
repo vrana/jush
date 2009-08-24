@@ -193,7 +193,7 @@ var jush = {
 		var child_states = [ ];
 		var s_states;
 		var start = 0;
-		loop: while (start < text.length && regexps[state] && (match = regexps[state].exec(text))) {
+		loop: while (start < text.length && (match = regexps[state].exec(text))) {
 			for (var key in tr[state]) {
 				var m = tr[state][key].exec(match[0]);
 				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
