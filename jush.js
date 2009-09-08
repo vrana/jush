@@ -129,9 +129,9 @@ var jush = {
 			num: { 1: /()/ },
 			
 			js: { php: php, js_reg: /\s*\/(?![\/*])/, js_code: /()/ },
-			js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\w\d\s]/ },
+			js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\])}$\w\d\s]/ },
 			js_write: { php: php, js_reg: /\s*\/(?![\/*])/, js_write_code: /()/ },
-			js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\w\d\s]/ },
+			js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\])}$\w\d\s]/ },
 			js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
 			js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 			
