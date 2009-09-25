@@ -159,9 +159,10 @@ var jush = {
 			phpini: { 0: /$/ },
 			http: { 0: /$/ },
 			
-			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, sql_var: /\B@/, sql_sqlset: /(\b)(SET(?:\s+GLOBAL|\s+SESSION)?)(\s+)/i, num: num },
+			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, sql_sqlset: /(\b)(SET(?:\s+GLOBAL|\s+SESSION)?)(\s+)/i, num: num },
 			sql_sqlset: { 1: /(?=[^_a-zA-Z0-9])|$/ },
 			sqlset: { 0: /$/ },
+			com_code: { 1: /()/ },
 			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
 			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num }, // standard_conforming_strings=off
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
