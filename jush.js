@@ -28,7 +28,7 @@ var jush = {
 
 	highlight: function (language, text) {
 		this.last_tag = '';
-		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), (language != 'htm' && language != 'tag'))[0] + '</span>';
+		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml)$/.test(language))[0] + '</span>';
 	},
 
 	highlight_tag: function (tag, tab_width) {
@@ -113,6 +113,10 @@ var jush = {
 			att_quo: { php: php, 2: /"/ },
 			att_apo: { php: php, 2: /'/ },
 			att_val: { php: php, 2: /(?=>|\s)|$/ },
+			
+			xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w\d]+)/, ent: /&/ },
+			xml_tag: { php: php, xml_att: /(\s+)([-\w\d]+)()/, 1: />/ },
+			xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
 			
 			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
