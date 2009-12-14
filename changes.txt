@@ -1,3 +1,8 @@
+JUSH 1.7.0:
+Highlight XML
+Highlight phpDoc
+Highlight MySQL code comments /*! */
+
 JUSH 1.6.0:
 Remove Python (orthogonal)
 Option to customize links - e.g. jush.create_links = ' target="_blank"'
