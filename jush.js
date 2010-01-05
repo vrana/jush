@@ -69,7 +69,7 @@ var jush = {
 							case 'phpini': link = link.replace(/\$1/g, arguments[i].replace(/_/g, '-')); break;
 							case 'php_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W*/, '')); break;
 							case 'sql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+|_/g, '-')); break;
-							case 'sqlset': link = link.replace(/\$1/g, (links2.test(arguments[i].replace('_', '-')) ? arguments[i].replace('_', '-') : arguments[i]).toLowerCase()); break;
+							case 'sqlset': link = link.replace(/\$1/g, (links2.test(arguments[i].replace(/_/g, '-')) ? arguments[i].replace(/_/g, '-') : arguments[i]).toLowerCase()); break;
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, '')); break;
 							case 'pgsql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, (i == 1 ? '-' : ''))); break;
 							case 'cnf': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
