@@ -1,3 +1,6 @@
+JUSH 1.8.0:
+Link mail headers
+
 JUSH 1.7.0:
 Highlight XML
 Highlight phpDoc
