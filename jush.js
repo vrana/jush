@@ -414,7 +414,7 @@ jush.urls = {
 	phpini: [ 'http://www.php.net/$key',
 		'ini.sect.safe-mode#ini.$1', 'ini.core#ini.$1', 'apache.configuration#ini.$1', 'apc.configuration#ini.$1', 'apd.configuration#ini.$1', 'bc.configuration#ini.$1', 'com.configuration#ini.$1', 'datetime.configuration#ini.$1', 'dbx.configuration#ini.$1', 'errorfunc.configuration#ini.$1', 'exif.configuration#ini.$1', 'expect.configuration#ini.$1', 'filesystem.configuration#ini.$1', 'ibase.configuration#ini.$1', 'ibm-db2.configuration#ini.$1', 'ifx.configuration#ini.$1', 'image.configuration#ini.image.jpeg-ignore-warning', 'info.configuration#ini.$1', 'mail.configuration#ini.$1', 'mail.configuration#ini.smtp', 'maxdb.configuration#ini.$1', 'mbstring.configuration#ini.$1', 'mime-magic.configuration#ini.$1', 'misc.configuration#ini.$1', 'misc.configuration#ini.syntax-highlighting', 'msql.configuration#ini.$1', 'mysql.configuration#ini.$1', 'mysqli.configuration#ini.$1', 'network.configuration#ini.$1', 'nsapi.configuration#ini.$1', 'oci8.configuration#ini.$1', 'outcontrol.configuration#ini.$1', 'pcre.configuration#ini.$1', 'pdo-odbc.configuration#ini.$1', 'pgsql.configuration#ini.$1', 'runkit.configuration#ini.$1', 'session.configuration#ini.$1', 'soap.configuration#ini.$1', 'sqlite.configuration#ini.$1', 'sybase.configuration#ini.$1', 'tidy.configuration#ini.$1', 'unicode.configuration#ini.$1', 'odbc.configuration#ini.$1', 'zlib.configuration#ini.$1'
 	],
-	php_doc: [ 'http://manual.phpdoc.org/HTMLframesConverter/default/phpDocumentor/tutorial_tags.$key.pkg.html',
+	php_doc: [ 'http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
 		'$1', 'internal$1'
 	],
 	http: [ 'http://www.w3.org/Protocols/rfc2616/rfc2616-$key',
