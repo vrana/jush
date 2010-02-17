@@ -167,7 +167,7 @@ var jush = {
 			http: { 0: /$/ },
 			mail: { 0: /$/ },
 			
-			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, sql_sqlset: /(\b)(SET)(\s+)(?!NAMES\b|CHARACTER\b|PASSWORD\b|(?:GLOBAL\s+|SESSION\s+)?TRANSACTION\b|@[^@]|NEW\.|OLD\.)/i, num: num },
+			sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, sql_sqlset: /(^|;\s*)(SET)(\s+)(?!NAMES\b|CHARACTER\b|PASSWORD\b|(?:GLOBAL\s+|SESSION\s+)?TRANSACTION\b|@[^@]|NEW\.|OLD\.)/i, num: num },
 			sql_sqlset: { one: /-- |#|--(?=\n|$)/, com: /\/\*/, sqlset_val: /=/, 1: /;|$/ },
 			sqlset_val: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, 1: /,/, 2: /;|$/, num: num }, //! comma can be inside function call
 			sqlset: { 0: /$/ },
