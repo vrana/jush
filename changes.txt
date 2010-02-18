@@ -1,4 +1,5 @@
 JUSH 1.8.0:
+Highlight MS SQL
 Link mail headers
 
 JUSH 1.7.0:

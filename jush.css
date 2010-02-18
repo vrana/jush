@@ -14,7 +14,8 @@
 .jush-js_reg { color: navy; }
 .jush-php_sql .jush-php_quo, .jush-php_sql .jush-php_apo,
 .jush-php_sqlite .jush-php_quo, .jush-php_sqlite .jush-php_apo,
-.jush-php_pgsql .jush-php_quo, .jush-php_pgsql .jush-php_apo
+.jush-php_pgsql .jush-php_quo, .jush-php_pgsql .jush-php_apo,
+.jush-php_mssql .jush-php_quo, .jush-php_mssql .jush-php_apo
 { background-color: #FFBBB0; }
 .jush-bac, .jush-php_bac, .jush-bra, .jush-pgsql .jush-sqlite_quo { color: red; }
 .jush-num, .jush-clr { color: #007F7F; }
@@ -27,5 +28,6 @@
 .jush-php_mail .jush-php_apo a, .jush-php_mail .jush-php_quo a,
 .jush-php_sql .jush-php_apo a, .jush-php_sql .jush-php_quo a,
 .jush-php_sqlite .jush-php_apo a, .jush-php_sqlite .jush-php_quo a,
-.jush-php_pgsql .jush-php_apo a, .jush-php_pgsql .jush-php_quo a
+.jush-php_pgsql .jush-php_apo a, .jush-php_pgsql .jush-php_quo a,
+.jush-php_mssql .jush-php_apo a, .jush-php_mssql .jush-php_quo a
 { color: inherit; color: expression(parentNode.currentStyle.color); }
