@@ -191,7 +191,7 @@ var jush = {
 			bra: { 1: /]/ },
 			mssql_bra: { 0: /]]/, 1: /]/ },
 			
-			cnf: { quo: /"/, one: /#/, cnf_php: /(\b)(PHPIniDir)([ \t]+)/i, cnf_phpini: /(\b)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+)/i },
+			cnf: { quo: /"/, one: /#/, cnf_php: /(\b)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /(\b)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
 			cnf_php: { 1: /()/ },
 			cnf_phpini: { cnf_phpini_val: /[ \t]/ },
 			cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|\n)/ }
