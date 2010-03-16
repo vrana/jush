@@ -22,12 +22,4 @@
 
 .jush a { color: navy; }
 .jush-sql a { font-weight: bold; }
-.jush-tag a,
-.jush-php_phpini .jush-php_apo a, .jush-php_phpini .jush-php_quo a,
-.jush-php_http .jush-php_apo a, .jush-php_http .jush-php_quo a,
-.jush-php_mail .jush-php_apo a, .jush-php_mail .jush-php_quo a,
-.jush-php_sql .jush-php_apo a, .jush-php_sql .jush-php_quo a,
-.jush-php_sqlite .jush-php_apo a, .jush-php_sqlite .jush-php_quo a,
-.jush-php_pgsql .jush-php_apo a, .jush-php_pgsql .jush-php_quo a,
-.jush-php_mssql .jush-php_apo a, .jush-php_mssql .jush-php_quo a
-{ color: inherit; color: expression(parentNode.currentStyle.color); }
+.jush-tag a, .jush-apo a, .jush-quo a, .jush-php_apo a, .jush-php_quo a { color: inherit; color: expression(parentNode.currentStyle.color); }
