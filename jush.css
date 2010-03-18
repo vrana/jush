@@ -22,4 +22,4 @@
 
 .jush a { color: navy; }
 .jush-sql a { font-weight: bold; }
-.jush-tag a, .jush-apo a, .jush-quo a, .jush-php_apo a, .jush-php_quo a { color: inherit; color: expression(parentNode.currentStyle.color); }
+.jush-tag a, .jush-att a, .jush-apo a, .jush-quo a, .jush-php_apo a, .jush-php_quo a { color: inherit; color: expression(parentNode.currentStyle.color); }
