@@ -198,6 +198,10 @@ var jush = {
 			cnf_phpini: { cnf_phpini_val: /[ \t]/ },
 			cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|\n)/ }
 		};
+		var state = states[states.length - 1];
+		if (!tr[state]) {
+			return [ text, states ];
+		}
 		var regexps = { };
 		for (var key in tr) {
 			regexps[key] = this.build_regexp(tr[key], in_php, states[0]);
@@ -206,7 +210,6 @@ var jush = {
 		for (var i=1; i < states.length; i++) {
 			ret.push('<span class="jush-' + states[i] + '">');
 		}
-		var state = states[states.length - 1];
 		var match;
 		var child_states = [ ];
 		var s_states;
