@@ -178,7 +178,7 @@ var jush = {
 			sqlset: { 0: /$/ },
 			sqlstatus: { 0: /$/ },
 			com_code: { 1: /()/ },
-			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
+			sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, num: num },
 			pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num }, // standard_conforming_strings=off
 			mssql: { sqlite_apo: /'/, sqlite_quo: /"/, one: /--/, com: /\/\*/, mssql_bra: /\[/, num: num }, // QUOTED IDENTIFIER = OFF
 			sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
