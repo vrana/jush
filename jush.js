@@ -18,6 +18,7 @@ var jush = {
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
 	pgsql_function: 'pg_prepare|pg_query|pg_query_params|pg_send_prepare|pg_send_query|pg_send_query_params',
 	mssql_function: 'mssql_query|sqlsrv_prepare|sqlsrv_query',
+	regexps: undefined,
 
 	style: function (href) {
 		var link = document.createElement('link');
@@ -86,15 +87,11 @@ var jush = {
 		return s;
 	},
 
-	build_regexp: function (tr1, in_php, state) {
+	build_regexp: function (tr1) {
 		var re = [ ];
 		for (var k in tr1) {
 			var s = tr1[k].toString().replace(/^\/|\/[^\/]*$/g, '');
-			if ((!in_php || k != 'php') && (state == 'htm' || (s != '(<)(\\/script)(>)' && s != '(<)(\\/style)(>)'))) {
-				re.push(s);
-			} else {
-				delete tr1[k];
-			}
+			re.push(s);
 		}
 		return new RegExp(re.join('|'), 'gi');
 	},
@@ -202,9 +199,15 @@ var jush = {
 		if (!tr[state]) {
 			return [ text, states ];
 		}
-		var regexps = { };
-		for (var key in tr) {
-			regexps[key] = this.build_regexp(tr[key], in_php, states[0]);
+		if (!this.regexps) {
+			this.regexps = { };
+			for (var key in tr) {
+				this.regexps[key] = this.build_regexp(tr[key]);
+			}
+		} else {
+			for (var key in tr) {
+				this.regexps[key].lastIndex = 0;
+			}
 		}
 		var ret = [ ]; // return
 		for (var i=1; i < states.length; i++) {
@@ -214,10 +217,18 @@ var jush = {
 		var child_states = [ ];
 		var s_states;
 		var start = 0;
-		loop: while (start < text.length && (match = regexps[state].exec(text))) {
+		loop: while (start < text.length && (match = this.regexps[state].exec(text))) {
+			if (states[0] != 'htm' && /^<\/(script|style)>$/i.test(match[0])) {
+				//~ this.regexps[state].lastIndex = match.index + match[0].length;
+				continue;
+			}
 			for (var key in tr[state]) {
 				var m = tr[state][key].exec(match[0]);
 				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
+					if (in_php && key == 'php') {
+						//~ this.regexps[state].lastIndex = match.index + match[0].length;
+						continue loop;
+					}
 					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 					var s = text.substring(start, division);
@@ -324,10 +335,10 @@ var jush = {
 						states.push(key);
 						if (state == 'php_eot') {
 							tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
-							regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { 2: tr.php_eot2[2] } : tr.php_eot2));
+							this.regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { 2: tr.php_eot2[2] } : tr.php_eot2));
 						} else if (state == 'sql_eot') {
 							tr.sql_eot2[2] = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
-							regexps.sql_eot2 = this.build_regexp(tr.sql_eot2);
+							this.regexps.sql_eot2 = this.build_regexp(tr.sql_eot2);
 						}
 					} else if (states.length <= key) {
 						return [ this.htmlspecialchars(text), [ ] ]; // out of states
@@ -340,7 +351,7 @@ var jush = {
 					}
 					start = match.index + match[0].length;
 					state = states[states.length - 1];
-					regexps[state].lastIndex = start;
+					this.regexps[state].lastIndex = start;
 					continue loop;
 				}
 			}
