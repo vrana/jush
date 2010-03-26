@@ -119,7 +119,7 @@ var jush = {
 			
 			xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w\d:]+)/, ent: /&/ },
 			xml_tag: { php: php, xml_att: /(\s*)([-\w\d:]+)()/, 1: />/ },
-			xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
+			xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, 1: /()/ },
 			
 			css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 			css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
