@@ -60,6 +60,9 @@ var jush = {
 		if (/^(php_quo_var|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state)) {
 			state = 'php';
 		}
+		if (state == 'sql_code') {
+			state = 'sql';
+		}
 		if (this.links2 && this.links2[state]) {
 			var url = this.urls[state];
 			var links2 = this.links2[state];
@@ -171,7 +174,8 @@ var jush = {
 				http: { 0: /$/ },
 				mail: { 0: /$/ },
 				
-				sql: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, sql_sqlset: /(^|;\s*)(SET)(\s+)(?!NAMES\b|CHARACTER\b|PASSWORD\b|(?:GLOBAL\s+|SESSION\s+)?TRANSACTION\b|@[^@]|NEW\.|OLD\.)/i, num: num },
+				sql: { one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_sqlset: /(\s*)(SET)(\s+)(?!NAMES\b|CHARACTER\b|PASSWORD\b|(?:GLOBAL\s+|SESSION\s+)?TRANSACTION\b|@[^@]|NEW\.|OLD\.)/i, sql_code: /()/ },
+				sql_code: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, num: num, 1: /;/ },
 				sql_sqlset: { one: /-- |#|--(?=\n|$)/, com: /\/\*/, sqlset_val: /=/, 1: /;|$/ },
 				sqlset_val: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, 1: /,/, 2: /;|$/, num: num }, //! comma can be inside function call
 				sqlset: { 0: /$/ },
@@ -230,7 +234,7 @@ var jush = {
 						//~ this.regexps[state].lastIndex = match.index + match[0].length;
 						continue loop;
 					}
-					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
+					console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 					var s = text.substring(start, division);
 					
