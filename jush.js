@@ -234,7 +234,7 @@ var jush = {
 						//~ this.regexps[state].lastIndex = match.index + match[0].length;
 						continue loop;
 					}
-					console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
+					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
 					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 					var s = text.substring(start, division);
 					
