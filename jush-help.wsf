@@ -1,7 +1,7 @@
 <job>
 <!-- SciTE: (file must be saved)
 file.patterns.jush=*.htm;*.html;*.php;*.sql;*.js;*.css;php.ini;*.conf;.htaccess
-command.help.$(file.patterns.jush)=WScript jush-help.wsf "$(FilePath)" $(SelectionStartLine) $(SelectionStartColumn) $(tabsize)
+command.help.$(file.patterns.jush)=WScript jush-help.wsf "$(FilePath)" $(SelectionStartLine) $(SelectionStartColumn) $(tabsize) "$(CurrentWord)"
 -->
 <script language="JScript" src="jush.js"></script>
 <script language="JScript">
@@ -18,7 +18,7 @@ function openUrl(url) {
 }
 
 if (WScript.Arguments.length < 3) {
-	WScript.echo('Usage: WScript jush-help.wsf filename line column [tabsize]\nPurpose: Open URL with help on specified position in file');
+	WScript.echo('Usage: WScript jush-help.wsf filename line column [tabsize] [word]\nPurpose: Open URL with help on specified position in file');
 	WScript.Quit(1);
 }
 var filename = WScript.Arguments(0);
@@ -50,18 +50,17 @@ while (match = re.exec(s)) {
 	if (match[1]) {
 		href = match[1];
 	} else if (match[2]) {
-		if (pos == column) { // last character
-			openUrl(href);
+		if (pos == column) { // last character of link
 			break;
 		}
 		href = '';
 	} else if (match[3]) {
 		pos += match[3].length;
 		if (pos > column) {
-			openUrl(href ? href : 'http://www.google.com/search?q=' + match[3]); //! urlencode() or current word only
 			break;
 		}
 	}
 }
+openUrl(href ? href : 'http://www.google.com/search?q=' + (WScript.Arguments.length >= 4 ? WScript.Arguments(4) : (match ? match[3] : ''))); //! urlencode() or current word only
 </script>
 </job>
