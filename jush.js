@@ -13,6 +13,7 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 
 var jush = {
 	create_links: true,
+	timeout: 1000, // milliseconds
 	
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
@@ -40,17 +41,26 @@ var jush = {
 		for (var i = (tab_width !== undefined ? tab_width : 4); i--; ) {
 			tab += ' ';
 		}
-		for (var i=0; i < pre.length; i++) {
-			var match = /(^|\s)jush($|\s|-(\S+))/.exec(pre[i].className);
-			if (match) {
-				var s = this.highlight(match[3] ? match[3] : 'htm', this.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;');
-				if (pre[i].outerHTML && /^pre$/i.test(pre[i].tagName)) {
-					pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+>/)[0] + s + '</' + pre[i].tagName + '>';
-				} else {
-					pre[i].innerHTML = s.replace(/\n/g, '<br />');
+		var i = 0;
+		var highlight = function () {
+			var start = new Date();
+			for (; i < pre.length; i++) {
+				var match = /(^|\s)jush($|\s|-(\S+))/.exec(pre[i].className);
+				if (match) {
+					var s = jush.highlight(match[3] ? match[3] : 'htm', jush.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;');
+					if (pre[i].outerHTML && /^pre$/i.test(pre[i].tagName)) {
+						pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+>/)[0] + s + '</' + pre[i].tagName + '>';
+					} else {
+						pre[i].innerHTML = s.replace(/\n/g, '<br />');
+					}
+				}
+				if (jush.timeout && window.setTimeout && (new Date() - start) > jush.timeout) {
+					window.setTimeout(highlight, 100);
+					break;
 				}
 			}
-		}
+		};
+		highlight();
 	},
 
 	keywords_links: function (state, s) {
