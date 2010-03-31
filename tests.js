@@ -38,6 +38,6 @@ var html = [ ];
 for (var i=0; i < tests.length; i++) {
 	var test = tests[i];
 	var highlighted = jush.highlight(test[0], test[1]);
-	html.push((highlighted != test[2] ? '<b class="error">error</b>' : '') + '<pre>' + highlighted + '</pre>');
+	html.push((highlighted != test[2] ? '<b class="error">error</b>' : '') + '<pre class="jush-' + test[0] + '">' + highlighted + '</pre>');
 }
 document.getElementById('result').innerHTML = html.join('\n');
