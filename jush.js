@@ -108,7 +108,7 @@ var jush = {
 				htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w\d]+)/, ent: /&/ },
 				htm_com: { php: php, 1: /-->/ },
 				ent: { php: php, 1: /[;\s]/ },
-				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*)/i, att_js: /(\s*)(on[-\w\d]+)(\s*=\s*)/i, att_http: /(\s*)(http-equiv)(\s*=\s*)/i, att: /(\s*)([-\w\d]+)()/, 1: />/ },
+				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*|$)/i, att_js: /(\s*)(on[-\w\d]+)(\s*=\s*|$)/i, att_http: /(\s*)(http-equiv)(\s*=\s*|$)/i, att: /(\s*)([-\w\d]+)()/, 1: />/ },
 				tag_css: { php: php, att: /(\s*)([-\w\d]+)()/, css: />/ },
 				tag_js: { php: php, att: /(\s*)([-\w\d]+)()/, js: />/ },
 				att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
