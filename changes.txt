@@ -1,3 +1,8 @@
+JUSH 1.9.0:
+Link PHP classes and special functions
+Improve performance on multiple calls
+Windows command line interface for context help
+
 JUSH 1.8.0:
 Highlight MS SQL
 Link mail headers
