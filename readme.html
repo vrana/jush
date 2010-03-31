@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>JUSH - JavaScript Syntax Highlighter</title>
+<body>
+
+<h1>JavaScript Syntax Highlighter</h1>
+<ul>
+<li><a href="http://jush.sourceforge.net/">Homepage</a></li>
+</ul>
+
+<h3>Installation instructions</h3>
+
+<ol>
+<li>Copy <a href="jush.css">jush.css</a> and <a href="jush.js">jush.js</a> into your directory.</li>
+<li>Add following snippet before the <code>&lt;/body&gt;</code> tag in HTML file:
+<pre class="jush">&lt;script type="text/javascript" src="jush.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+jush.style('jush.css');
+jush.highlight_tag('pre');
+&lt;/script&gt;
+</pre>
+All <code>&lt;pre class="jush"&gt;</code> tags will be highlighted. Language is determined by the class name beginning with "jush-" (e.g. <code>&lt;pre class="jush-js"&gt;</code>). Default language is <code>htm</code>.
+</li>
+</ol>
+<p>Alternativelly call <code>jush.highlight(language, text)</code> to syntax highlight single text.</p>
+
+<h3>Command-line help reference</h3>
+<p>It is also possible to use JUSH for opening the appropriate documentation in a browser. On Windows, it is possible to run:</p>
+<pre>Syntax: WScript jush-help.wsf filename line column [tabsize] [word]
+Example: WScript jush-help.wsf readme.html 2 2
+</pre>
+<p>The example should open a browser with documentation of the <code class="jush">&lt;html&gt;</code> tag which is at position 2:2 of this file.</p>
+
+<script type="text/javascript" src="jush.js"></script>
+<script type="text/javascript">
+jush.style('jush.css');
+jush.highlight_tag('code');
+jush.highlight_tag('pre');
+</script>
