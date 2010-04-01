@@ -21,6 +21,7 @@ var jush = {
 	mssql_function: 'mssql_query|sqlsrv_prepare|sqlsrv_query',
 	tr: undefined,
 	regexps: undefined,
+	api: { },
 
 	style: function (href) {
 		var link = document.createElement('link');
@@ -93,7 +94,11 @@ var jush = {
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
 							default: link = link.replace(/\$1/g, arguments[i]);
 						}
-						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' + (typeof jush.create_links == 'string' ? jush.create_links : '') : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						var title = '';
+						if (jush.api[state]) {
+							title = jush.api[state][(state == 'js' ? arguments[i] : arguments[i].toLowerCase())];
+						}
+						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' : '') + (typeof jush.create_links == 'string' ? jush.create_links : '') + (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});

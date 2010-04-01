@@ -1,3 +1,7 @@
+JUSH 1.10.0-dev:
+Display title with function summary and parameters
+Highlight tags in 1 second chunks (let browser live)
+
 JUSH 1.9.0:
 Link PHP classes and special functions
 Improve performance on multiple calls
