@@ -68,7 +68,7 @@ var jush = {
 		if (/^js(_write|_code)+$/.test(state)) {
 			state = 'js';
 		}
-		if (/^(php_quo_var|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state)) {
+		if (/^(php_quo_var|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state)) {
 			state = 'php';
 		}
 		if (state == 'sql_code') {
@@ -162,9 +162,10 @@ var jush = {
 				js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
 				js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 				
-				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /\$/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
-				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
-				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /\$/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
+				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_php: /(\b)(eval|create_function)(\s*\(|$)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /\$/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
+				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_php: /(\b)(eval|create_function)(\s*\(|$)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
+				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class)(\b\s*)/i, php_fun: /(\b)(function)(\b\s*)/i, php_php: /(\b)(eval|create_function)(\s*\(|$)/i, php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /\$/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
+				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_php: /\(/, php_var: /\$/, num: num, 1: /\)/ },
 				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /\$/, num: num, 1: /\)/ },
 				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /\$/, num: num, 1: /\)/ },
 				php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /\$/, num: num, 1: /\)/ },
@@ -262,7 +263,7 @@ var jush = {
 					} else if (state == 'css_js' || state == 'cnf_http' || state == 'cnf_phpini' || state == 'sql_sqlset') {
 						child_states.unshift(state.substr(4));
 						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'php_quo' || state == 'php_apo') && /^(php_sql|php_sqlite|php_pgsql|php_mssql|php_phpini|php_http|php_mail)$/.test(prev_state)) {
+					} else if ((state == 'php_quo' || state == 'php_apo') && /^(php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_phpini|php_http|php_mail)$/.test(prev_state)) {
 						child_states.unshift(prev_state.substr(4));
 						s_states = this.highlight_states(child_states, this.stripslashes(s), true, (state == 'php_apo' ? this.addslashes_apo : this.addslashes_quo));
 					} else if (key == 'php_halt2') {
@@ -294,11 +295,11 @@ var jush = {
 							s_states = this.highlight_states(child_states, s, true, f);
 						} else {
 							s = this.htmlspecialchars(s);
-							s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
+							s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
 						}
 					} else {
 						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when escaping construct
+						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
 					}
 					s = s_states[0];
 					child_states = s_states[1];
@@ -439,6 +440,7 @@ jush.urls = {
 	css_at: 'http://www.w3.org/TR/CSS21/$key',
 	js_write: 'http://developer.mozilla.org/En/docs/DOM/$key.$val',
 	js_http: 'http://www.w3.org/TR/XMLHttpRequest/#the-$val-$key',
+	php_php: 'http://www.php.net/$key.$val',
 	php_sql: 'http://www.php.net/$key.$val',
 	php_sqlite: 'http://www.php.net/$key.$val',
 	php_pgsql: 'http://www.php.net/$key.$val',
@@ -601,6 +603,7 @@ jush.links = {
 		'http://www.php.net/language.operators.type': /^instanceof$/i
 	},
 	php_fun: { 'http://www.php.net/functions.user-defined': /^function$/i },
+	php_php: { 'function': /^(eval|create_function)$/i },
 	php_sql: { 'function': new RegExp('^' + jush.sql_function + '$', 'i') },
 	php_sqlite: { 'function': new RegExp('^' + jush.sqlite_function + '$', 'i') },
 	php_pgsql: { 'function': new RegExp('^' + jush.pgsql_function + '$', 'i') },
