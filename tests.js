@@ -31,7 +31,7 @@ var tests = [
 	[ 'sql', 'SET foreign_key_checks = 0', '<span class="jush"><span class="jush-sql_sqlset"><a href="http://dev.mysql.com/doc/mysql/en/set-option.html">SET</a><span class="jush-op"> </span><a href="http://dev.mysql.com/doc/mysql/en/server-session-variables.html#sysvar_foreign_key_checks">foreign_key_checks</a> <span class="jush-sqlset_val"><span class="jush-op">=</span> <span class="jush-num"><span class="jush-op">0</span></span></span></span></span>' ],
 	[ 'sqlstatus', 'Qcache_hits', '<span class="jush"><a href="http://dev.mysql.com/doc/mysql/en/server-status-variables.html#statvar_Qcache_hits">Qcache_hits</a></span>' ],
 	
-	[ 'cnf', 'Listen 80\nphp_flag display_errors On', '<span class="jush"><a href="http://httpd.apache.org/docs/2.2/mod/mpm_common.html#listen">Listen</a> 80\n<span class="jush-cnf_phpini"><a href="http://www.php.net/configuration.changes#configuration.changes.apache">php_flag</a><span class="jush-op"> </span><a href="http://www.php.net/errorfunc.configuration#ini.display-errors">display_errors</a><span class="jush-cnf_phpini_val"><span class="jush-op"> </span>On</span></span></span>' ]
+	[ 'cnf', 'Listen 80\nphp_flag display_errors On', '<span class="jush"><a href="http://httpd.apache.org/docs/2.2/mod/mpm_common.html#listen">Listen</a> 80<span class="jush-cnf_phpini"><span class="jush-op">\n</span><a href="http://www.php.net/configuration.changes#configuration.changes.apache">php_flag</a><span class="jush-op"> </span><a href="http://www.php.net/errorfunc.configuration#ini.display-errors">display_errors</a><span class="jush-cnf_phpini_val"><span class="jush-op"> </span>On</span></span></span>' ]
 ];
 
 var html = [ ];
