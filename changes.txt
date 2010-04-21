@@ -1,5 +1,6 @@
 JUSH 1.10.0-dev:
-Display title with function summary and parameters
+Optionally display title with function summary and parameters
+Link SQLite PRAGMA
 Highlight tags in 1 second chunks (let browser live)
 
 JUSH 1.9.0:
