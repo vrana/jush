@@ -12,8 +12,9 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 */
 
 var jush = {
-	create_links: true,
+	create_links: true, // string for extra <a> parameters, e.g. ' target="_blank"'
 	timeout: 1000, // milliseconds
+	custom_links: { }, // { state: [ url, regexp ] }, for example { php : [ 'doc/$&.html', /\b(getData|setData)\b/g ] }
 	
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
@@ -105,6 +106,11 @@ var jush = {
 						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' : '') + (typeof jush.create_links == 'string' ? jush.create_links : '') + (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
+			});
+		}
+		if (this.custom_links[state]) {
+			s = s.replace(this.custom_links[state][1], function (str) {
+				return '<a href="' + jush.custom_links[state][0].replace('$&', encodeURIComponent(str)) + '" class="jush-custom">' + str + '</a>';
 			});
 		}
 		return s;
