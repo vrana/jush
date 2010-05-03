@@ -110,6 +110,10 @@ var jush = {
 		}
 		if (this.custom_links[state]) {
 			s = s.replace(this.custom_links[state][1], function (str) {
+				var offset = arguments[arguments.length - 2];
+				if (/<[^>]*$/.test(s.substr(0, offset))) {
+					return str; // don't create links inside tags
+				}
 				return '<a href="' + jush.custom_links[state][0].replace('$&', encodeURIComponent(str)) + '" class="jush-custom">' + str + '</a>';
 			});
 		}
