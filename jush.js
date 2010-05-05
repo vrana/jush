@@ -472,7 +472,7 @@ jush.urls = {
 	php_halt: 'http://www.php.net/$key.halt-compiler',
 	sql_sqlset: 'http://dev.mysql.com/doc/mysql/en/$key',
 	sqlite_sqliteset: 'http://www.sqlite.org/$key',
-	pgsql_pgsqlset: 'http://www.postgresql.org/docs/8.2/static/$key-$val.html',
+	pgsql_pgsqlset: 'http://www.postgresql.org/docs/8.2/static/$key',
 	cnf_http: 'http://httpd.apache.org/docs/2.2/mod/$key.html#$val',
 	cnf_php: 'http://www.php.net/$key',
 	cnf_phpini: 'http://www.php.net/configuration.changes#$key',
@@ -653,7 +653,7 @@ jush.links = {
 	php_halt: { 'function': /^__halt_compiler$/i },
 	sql_sqlset: { 'set-option.html': /.+/ },
 	sqlite_sqliteset: { 'pragma.html': /.+/ },
-	pgsql_pgsqlset: { 'sql': /.+/ },
+	pgsql_pgsqlset: { 'sql-$val.html': /.+/ },
 	cnf_http: { 'mod_cache': /CacheIgnoreHeaders/i, 'mod_headers': /.+/ },
 	cnf_php: { 'configuration.file': /.+/ },
 	cnf_phpini: { 'configuration.changes.apache': /.+/ }
