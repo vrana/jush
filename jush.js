@@ -207,7 +207,7 @@ var jush = {
 				php_halt_one: { 1: /\n|(?=\?>)|$/ },
 				php_halt2: { 3: /$/ },
 				
-				phpini: { 0: /$/ },
+				phpini: { one: /;/, 0: /$/ },
 				http: { 0: /$/ },
 				mail: { 0: /$/ },
 				
