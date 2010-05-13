@@ -22,5 +22,5 @@
 
 .jush a { color: navy; }
 .jush-sql a, .jush-sql_code a, .jush-sqlite a, .jush-pgsql a, .jush-mssql a { font-weight: bold; }
-.jush-tag a, .jush-att a, .jush-apo a, .jush-quo a, .jush-php_apo a, .jush-php_quo a { color: inherit; color: expression(parentNode.currentStyle.color); }
+.jush-tag a, .jush-att a, .jush-apo a, .jush-quo a, .jush-php_apo a, .jush-php_quo a, .jush-php_eot2 a { color: inherit; color: expression(parentNode.currentStyle.color); }
 a.jush-custom:link, a.jush-custom:visited { font-weight: normal; color: inherit; color: expression(parentNode.currentStyle.color); }
