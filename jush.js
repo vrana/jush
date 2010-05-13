@@ -34,6 +34,7 @@ var jush = {
 
 	highlight: function (language, text) {
 		this.last_tag = '';
+		this.last_class = '';
 		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml)$/.test(language))[0] + '</span>';
 	},
 
@@ -65,6 +66,10 @@ var jush = {
 		highlight();
 	},
 
+	create_link: function (link, s, attrs) {
+		return '<a' + (this.create_links && link ? ' href="' + link + '"' : '') + (typeof this.create_links == 'string' ? this.create_links : '') + (attrs ? attrs : '') + '>' + s + '</a>';
+	},
+
 	keywords_links: function (state, s) {
 		if (/^js(_write|_code)+$/.test(state)) {
 			state = 'js';
@@ -81,7 +86,7 @@ var jush = {
 			s = s.replace(links2, function (str) {
 				for (var i=arguments.length - 4; i > 0; i--) {
 					if (arguments[i]) {
-						var link = (/^http:/.test(url[i]) ? url[i] : url[0].replace(/\$key/g, url[i]));
+						var link = (/^http:/.test(url[i]) || !url[i] ? url[i] : url[0].replace(/\$key/g, url[i]));
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break; // toLowerCase() - case sensitive after #
@@ -103,7 +108,7 @@ var jush = {
 						if (jush.api[state]) {
 							title = jush.api[state][(state == 'js' ? arguments[i] : arguments[i].toLowerCase())];
 						}
-						return '<a' + (jush.create_links && url[i] ? ' href="' + link + '"' : '') + (typeof jush.create_links == 'string' ? jush.create_links : '') + (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '') + '>' + arguments[i] + '</a>' + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						return jush.create_link(link, arguments[i], (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '')) + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
@@ -114,7 +119,7 @@ var jush = {
 				if (/<[^>]*$/.test(s.substr(0, offset))) {
 					return str; // don't create links inside tags
 				}
-				return '<a href="' + jush.custom_links[state][0].replace('$&', encodeURIComponent(str)) + '" class="jush-custom">' + str + '</a>';
+				return jush.create_link(jush.custom_links[state][0].replace('$&', encodeURIComponent(str)), str, '" class="jush-custom"');
 			});
 		}
 		return s;
@@ -175,9 +180,9 @@ var jush = {
 				js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
 				js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 				
-				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
-				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
-				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
+				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
+				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
+				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_mssql: new RegExp('(\\b)(' + this.mssql_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
 				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_php: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
@@ -187,6 +192,7 @@ var jush = {
 				php_http: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_http: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_mail: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mail: /\(/, php_var: /(\$)([\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 0: /\s*,\s*/, 1: /(?=[^\w\u007F-\uFFFF])|$/ }, //! classes are used also for type hinting and catch
+				php_met: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /()([\w\u007F-\uFFFF]+)()/ },
 				php_fun: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /(?=[^\w\u007F-\uFFFF])|$/ },
 				php_one: { 1: /\n|(?=\?>)|$/ },
 				php_eot: { php_eot2: /([^'"\n]+)(['"]?)/ },
@@ -365,9 +371,12 @@ var jush = {
 									}
 								}
 							}
+							if (key == 'php_met') {
+								this.last_class = (k_link && !/^(self|parent|static)$/.test(link) ? link : '');
+							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += '<a' + (this.create_links ? ' href="' + (/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, link) + '"' + (typeof this.create_links == 'string' ? this.create_links : '') : '') + '>' + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + '</a>';
+								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, link), this.htmlspecialchars(escape ? escape(m[2]) : m[2]));
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
@@ -381,6 +390,9 @@ var jush = {
 							this.regexps.sql_eot2 = this.build_regexp(this.tr.sql_eot2);
 						}
 					} else {
+						if (state == 'php_met' && this.last_class) {
+							s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s);
+						}
 						ret.push(s);
 						for (var i = Math.min(states.length, key); i--; ) {
 							ret.push('</span>');
@@ -468,6 +480,7 @@ jush.urls = {
 	php_phpini: 'http://www.php.net/$key.$val',
 	php_http: 'http://www.php.net/$key.$val',
 	php_mail: 'http://www.php.net/$key.$val',
+	php_met: 'http://www.php.net/$key',
 	php_halt: 'http://www.php.net/$key.halt-compiler',
 	sql_sqlset: 'http://dev.mysql.com/doc/mysql/en/$key',
 	sqlite_sqliteset: 'http://www.sqlite.org/$key',
@@ -633,6 +646,12 @@ jush.links = {
 		'http://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
 		'http://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,
 		'http://www.php.net/language.operators.type': /^instanceof$/i
+	},
+	php_met: {
+		'language.oop5.paamayim-nekudotayim': /^(self|parent|static)$/i,
+		'reserved.classes#reserved.classes.$val': /^Closure$/i,
+		'ref.sqlite#sqlite.class.$val': /^(SQLiteDatabase|SQLiteResult|SQLiteUnbuffered)$/i,
+		'class.$val': /^(ArrayAccess|ErrorException|Exception|Iterator|IteratorAggregate|Serializable|Traversable|Cairo|CairoAntialias|CairoContent|CairoContext|CairoException|CairoExtend|CairoFillRule|CairoFilter|CairoFontFace|CairoFontOptions|CairoFontSlant|CairoFontType|CairoFontWeight|CairoFormat|CairoGradientPattern|CairoHintMetrics|CairoHintStyle|CairoImageSurface|CairoLinearGradient|CairoLineCap|CairoLineJoin|CairoMatrix|CairoOperator|CairoPath|CairoPattern|CairoPatternType|CairoPdfSurface|CairoPsLevel|CairoPsSurface|CairoRadialGradient|CairoScaledFont|CairoSolidPattern|CairoStatus|CairoSubpixelOrder|CairoSurface|CairoSurfacePattern|CairoSurfaceType|CairoSvgSurface|CairoSvgVersion|CairoToyFontFace|DateInterval|DatePeriod|DateTime|DateTimeZone|DOMAttr|DOMCharacterData|DOMComment|DOMDocument|DOMDocumentFragment|DOMDocumentType|DOMElement|DOMEntity|DOMEntityReference|DOMException|DOMImplementation|DOMNamedNodeMap|DOMNode|DOMNodeList|DOMNotation|DOMProcessingInstruction|DOMText|DOMXPath|GearmanClient|GearmanException|GearmanJob|GearmanTask|GearmanWorker|Gmagick|GmagickDraw|GmagickException|GmagickPixel|GmagickPixelException|HaruAnnotation|HaruDestination|HaruDoc|HaruEncoder|HaruException|HaruFont|HaruImage|HaruOutline|HaruPage|HttpDeflateStream|HttpInflateStream|HttpMessage|HttpQueryString|HttpRequest|HttpRequestPool|HttpResponse|Imagick|ImagickDraw|ImagickPixel|ImagickPixelIterator|Collator|IntlDateFormatter|Locale|MessageFormatter|Normalizer|NumberFormatter|ResourceBundle|libXMLError|Memcached|MemcachedException|SWFAction|SWFBitmap|SWFButton|SWFDisplayItem|SWFFill|SWFFont|SWFFontChar|SWFGradient|SWFMorph|SWFMovie|SWFPrebuiltClip|SWFShape|SWFSound|SWFSoundInstance|SWFSprite|SWFText|SWFTextField|SWFVideoStream|Mongo|MongoBinData|MongoCode|MongoCollection|MongoConnectionException|MongoCursor|MongoCursorException|MongoCursorTimeoutException|MongoDate|MongoDB|MongoDBRef|MongoException|MongoGridFS|MongoGridFSCursor|MongoGridFSException|MongoGridFSFile|MongoId|MongoMaxKey|MongoMinKey|MongoRegex|MongoTimestamp|MySQLi|OAuth|OAuthException|PDO|PDOException|PDOStatement|Phar|PharData|PharException|PharFileInfo|RarArchive|RarEntry|RarException|Reflection|ReflectionClass|ReflectionException|ReflectionExtension|ReflectionFunction|ReflectionFunctionAbstract|ReflectionMethod|ReflectionObject|ReflectionParameter|ReflectionProperty|Reflector|SimpleXMLElement|SoapClient|SoapFault|SoapHeader|SoapParam|SoapServer|SoapVar|SolrClient|SolrClientException|SolrDocument|SolrDocumentField|SolrException|SolrGenericResponse|SolrIllegalArgumentException|SolrIllegalOperationException|SolrInputDocument|SolrModifiableParams|SolrObject|SolrParams|SolrPingResponse|SolrQuery|SolrQueryResponse|SolrResponse|SolrUpdateResponse|SolrUtils|SphinxClient|AppendIterator|ArrayIterator|ArrayObject|BadFunctionCallException|BadMethodCallException|CachingIterator|Countable|DirectoryIterator|DomainException|EmptyIterator|FilesystemIterator|FilterIterator|GlobIterator|InfiniteIterator|InvalidArgumentException|IteratorIterator|LengthException|LimitIterator|LogicException|MultipleIterator|NoRewindIterator|OuterIterator|OutOfBoundsException|OutOfRangeException|OverflowException|ParentIterator|RangeException|RecursiveArrayIterator|RecursiveCachingIterator|RecursiveDirectoryIterator|RecursiveFilterIterator|RecursiveIterator|RecursiveIteratorIterator|RecursiveRegexIterator|RecursiveTreeIterator|RegexIterator|RuntimeException|SeekableIterator|SimpleXMLIterator|SplDoublyLinkedList|SplFileInfo|SplFileObject|SplFixedArray|SplHeap|SplMaxHeap|SplMinHeap|SplObjectStorage|SplObserver|SplPriorityQueue|SplQueue|SplStack|SplSubject|SplTempFileObject|UnderflowException|UnexpectedValueException|SplBool|SplEnum|SplFloat|SplInt|SplString|SQLite3|SQLite3Result|SQLite3Stmt|Stomp|StompException|StompFrame|streamWrapper|Tidy|TidyNode|TokyoTyrant|tokyotyrantexception|TokyoTyrantIterator|TokyoTyrantQuery|TokyoTyrantTable|XMLReader|XSLTProcessor|ZipArchive|dir)$/i
 	},
 	php_fun: { 'http://www.php.net/functions.user-defined': /^function$/i },
 	php_var: {

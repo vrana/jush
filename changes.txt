@@ -1,5 +1,6 @@
 JUSH 1.10.0-dev:
 Optionally display title with function summary and parameters
+Link PHP methods
 Link SQLite PRAGMA
 Link PostgreSQL variables
 Ability to link custom words (e.g. function or table names)
