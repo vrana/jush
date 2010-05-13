@@ -134,12 +134,12 @@ var jush = {
 			var php = /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i; // asp_tags=0, short_open_tag=1
 			var num = /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
 			this.tr = { // transitions
-				htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w\d]+)/, ent: /&/ },
+				htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w]+)/, ent: /&/ },
 				htm_com: { php: php, 1: /-->/ },
 				ent: { php: php, 1: /[;\s]/ },
-				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*|$)/i, att_js: /(\s*)(on[-\w\d]+)(\s*=\s*|$)/i, att_http: /(\s*)(http-equiv)(\s*=\s*|$)/i, att: /(\s*)([-\w\d]+)()/, 1: />/ },
-				tag_css: { php: php, att: /(\s*)([-\w\d]+)()/, css: />/ },
-				tag_js: { php: php, att: /(\s*)([-\w\d]+)()/, js: />/ },
+				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*|$)/i, att_js: /(\s*)(on[-\w]+)(\s*=\s*|$)/i, att_http: /(\s*)(http-equiv)(\s*=\s*|$)/i, att: /(\s*)([-\w]+)()/, 1: />/ },
+				tag_css: { php: php, att: /(\s*)([-\w]+)()/, css: />/ },
+				tag_js: { php: php, att: /(\s*)([-\w]+)()/, js: />/ },
 				att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
 				att_css: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 				att_js: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
@@ -148,14 +148,14 @@ var jush = {
 				att_apo: { php: php, 2: /'/ },
 				att_val: { php: php, 2: /(?=>|\s)|$/ },
 				
-				xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w\d:]+)/, ent: /&/ },
-				xml_tag: { php: php, xml_att: /(\s*)([-\w\d:]+)()/, 1: />/ },
+				xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ },
+				xml_tag: { php: php, xml_att: /(\s*)([-\w:]+)()/, 1: />/ },
 				xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, 1: /()/ },
 				
 				css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
 				css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
 				css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
-				css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w\d]+)(\s*:)/, 1: /}/ }, //! misses e.g. margin/*-left*/:
+				css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w]+)(\s*:)/, 1: /}/ }, //! misses e.g. margin/*-left*/:
 				css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, 1: /;|$/, 2: /}/ },
 				css_js: { php: php, css_js: /\(/, 1: /\)/ },
 				quo: { php: php, esc: /\\/, 1: /"/ },
@@ -167,11 +167,11 @@ var jush = {
 				num: { 1: /()/ },
 				
 				js: { php: php, js_reg: /\s*\/(?![\/*])/, js_code: /()/ },
-				js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, js_http: /(\.)(setRequestHeader|getResponseHeader)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\])}$\w\d\s]/ },
+				js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, js_http: /(\.)(setRequestHeader|getResponseHeader)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\])}$\w\s]/ },
 				js_write: { php: php, js_reg: /\s*\/(?![\/*])/, js_write_code: /()/ },
 				js_http: { php: php, js_reg: /\s*\/(?![\/*])/, js_http_code: /()/ },
-				js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\])}$\w\d\s]/ },
-				js_http_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_http: /\(/, 2: /\)/, 1: /[^\])}$\w\d\s]/ },
+				js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\])}$\w\s]/ },
+				js_http_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_http: /\(/, 2: /\)/, 1: /[^\])}$\w\s]/ },
 				js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
 				js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
 				
