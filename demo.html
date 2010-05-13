@@ -10,7 +10,21 @@
 <form action="">
 <div>
 <textarea name="source" rows="12" cols="80" wrap="off"></textarea><br />
-Language: <select name="language"><option value="htm">HTML</option><option value="css">CSS</option><option value="js">JavaScript</option><option value="php">PHP</option><option value="sql">MySQL</option><option value="sqlite">SQLite</option><option value="pgsql">PostgreSQL</option><option value="mssql">MS SQL</option><option value="cnf">Apache</option><option value="xml">XML</option></select>
+Language: <select name="language">
+<option value="htm">HTML</option>
+<option value="css">CSS</option>
+<option value="js">JavaScript</option>
+<option value="php">PHP</option>
+<option value="sql">MySQL</option>
+<option value="sqlite">SQLite</option>
+<option value="pgsql">PostgreSQL</option>
+<option value="mssql">MS SQL</option>
+<option value="cnf">Apache</option>
+<option value="phpini">php.ini</option>
+<option value="http">HTTP</option>
+<option value="mail">E-mail</option>
+<option value="xml">XML</option>
+</select>
 <input type="button" value="Highlight" onclick="document.getElementById('jush-result').innerHTML = '&lt;pre class=\'jush-' + this.form['language'].value + '\'>' + jush.highlight(this.form['language'].value, this.form['source'].value).replace(/\t/g, '&nbsp; &nbsp; ').replace(/(^|\n| ) /g, '$1&nbsp;') + '&lt;/pre>';" />
 </div>
 </form>
