@@ -14,6 +14,7 @@ var jush = {
 	create_links: true, // string for extra <a> parameters, e.g. ' target="_blank"'
 	timeout: 1000, // milliseconds
 	custom_links: { }, // { state: [ url, regexp ] }, for example { php : [ 'doc/$&.html', /\b(getData|setData)\b/g ] }
+	api: { }, // { state: { function: description } }, for example { php: { array: 'Create an array' } }
 	
 	sql_function: 'mysql_db_query|mysql_query|mysql_unbuffered_query|mysqli_master_query|mysqli_multi_query|mysqli_query|mysqli_real_query|mysqli_rpl_query_type|mysqli_send_query|mysqli_stmt_prepare',
 	sqlite_function: 'sqlite_query|sqlite_unbuffered_query|sqlite_single_query|sqlite_array_query|sqlite_exec',
@@ -23,8 +24,10 @@ var jush = {
 	php_function: 'eval|create_function|assert|classkit_method_add|classkit_method_redefine|runkit_function_add|runkit_function_redefine|runkit_lint|runkit_method_add|runkit_method_redefine',
 	tr: undefined,
 	regexps: undefined,
-	api: { },
 
+	/** Link stylesheet
+	* @param string
+	*/
 	style: function (href) {
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
@@ -33,12 +36,21 @@ var jush = {
 		document.getElementsByTagName('head')[0].appendChild(link);
 	},
 
+	/** Highlight text
+	* @param string
+	* @param string
+	* @return string
+	*/
 	highlight: function (language, text) {
 		this.last_tag = '';
 		this.last_class = '';
 		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml)$/.test(language))[0] + '</span>';
 	},
 
+	/** Highlight text in tags
+	* @param mixed tag name or array of HTMLElement
+	* @param number number of spaces for tab, 0 for tab itself, defaults to 4
+	*/
 	highlight_tag: function (tag, tab_width) {
 		var pre = (typeof tag == 'string' ? document.getElementsByTagName(tag) : tag);
 		var tab = '';
@@ -422,6 +434,10 @@ var jush = {
 		'width-TD': 'TH'
 	},
 
+	/** Replace <&> by HTML entities
+	* @param string
+	* @return string
+	*/
 	htmlspecialchars: function (string) {
 		return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	},
@@ -438,12 +454,20 @@ var jush = {
 		return jush.htmlspecialchars_quo(string).replace(/'/g, '&#39;');
 	},
 	
+	/** Decode HTML entities
+	* @param string
+	* @return string
+	*/
 	html_entity_decode: function (string) {
 		return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#(?:([0-9]+)|x([0-9a-f]+));/gi, function (str, p1, p2) { //! named entities
 			return String.fromCharCode(p1 ? p1 : parseInt(p2, 16));
 		}).replace(/&amp;/g, '&');
 	},
 	
+	/** Add backslash before backslash
+	* @param string
+	* @return string
+	*/
 	addslashes: function (string) {
 		return string.replace(/\\/g, '\\$&');
 	},
@@ -456,6 +480,10 @@ var jush = {
 		return string.replace(/[\\"]/g, '\\$&');
 	},
 	
+	/** Remove backslash before \"'
+	* @param string
+	* @return string
+	*/
 	stripslashes: function (string) {
 		return string.replace(/\\([\\"'])/g, '$1');
 	}
