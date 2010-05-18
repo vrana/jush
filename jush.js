@@ -254,10 +254,10 @@ var jush = {
 				mssql_bra: { 0: /]]/, 1: /]/ },
 				
 				cnf: { quo: /"/, one: /#/, cnf_http: /((?:^|\n)\s*)(RequestHeader|Header|CacheIgnoreHeaders)([ \t]+|$)/i, cnf_php: /((?:^|\n)\s*)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /((?:^|\n)\s*)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
-				cnf_http: { apo: /'/, quo: /"/, 1: /($|\n)/ },
+				cnf_http: { apo: /'/, quo: /"/, 1: /($|(?=\n))/ },
 				cnf_php: { 1: /()/ },
 				cnf_phpini: { cnf_phpini_val: /[ \t]/ },
-				cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|\n)/ }
+				cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|(?=\n))/ }
 			};
 			this.regexps = { };
 			for (var key in this.tr) {
