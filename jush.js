@@ -21,7 +21,9 @@ var jush = {
 	pgsql_function: 'pg_prepare|pg_query|pg_query_params|pg_send_prepare|pg_send_query|pg_send_query_params',
 	mssql_function: 'mssql_query|sqlsrv_prepare|sqlsrv_query',
 	oracle_function: 'oci_parse',
-	php_function: 'eval|create_function|assert|classkit_method_add|classkit_method_redefine|runkit_function_add|runkit_function_redefine|runkit_lint|runkit_method_add|runkit_method_redefine',
+	php_function: 'eval|create_function|assert|classkit_method_add|classkit_method_redefine|runkit_function_add|runkit_function_redefine|runkit_lint|runkit_method_add|runkit_method_redefine'
+		+ '|array_filter|array_map|array_reduce|array_walk|array_walk_recursive|call_user_func|call_user_func_array|ob_start|sqlite_create_function|is_callable' // callback parameter with possible call of builtin function
+	,
 	tr: undefined,
 	regexps: undefined,
 
@@ -196,7 +198,7 @@ var jush = {
 				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
 				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
 				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
-				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_php: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
+				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /[(,)]/ }, // [(,)] - only first parameter //! disables second parameter in create_function()
 				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
 				php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
@@ -372,7 +374,7 @@ var jush = {
 							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, link), this.htmlspecialchars(escape ? escape(m[2]) : m[2]));
+								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, link), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
