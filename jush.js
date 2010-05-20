@@ -123,7 +123,7 @@ var jush = {
 						if (jush.api[state]) {
 							title = jush.api[state][(state == 'js' ? arguments[i] : arguments[i].toLowerCase())];
 						}
-						return match1 + jush.create_link(link, arguments[i], (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '')) + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
+						return (match1 ? match1 : '') + jush.create_link(link, arguments[i], (title ? ' title="' + jush.htmlspecialchars_quo(title) + '"' : '')) + (arguments[arguments.length - 3] ? arguments[arguments.length - 3] : '');
 					}
 				}
 			});
