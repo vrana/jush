@@ -7,20 +7,10 @@
 
 <body>
 
-<script type="text/javascript" src="jush.js"></script>
-<script type="text/javascript">
-jush.style('jush.css');
-function highlight(source) {
-	for (var lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
-		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
-	}
-}
-</script>
-
-<form action="">
+<form action="" onsubmit="highlight(this['source'].value); return false;">
 <p>
-<input name="source" />
-<input type="submit" value="Highlight" onclick="highlight(this.form['source'].value); return false;" />
+<input id="source" name="source" />
+<input type="submit" value="Highlight" />
 </p>
 </form>
 
@@ -31,6 +21,23 @@ function highlight(source) {
 <tr><th>MS SQL </th><td id="mssql"></td></tr>
 <tr><th>Oracle </th><td id="oracle"></td></tr>
 </table>
+
+<script type="text/javascript" src="jush.js"></script>
+<script type="text/javascript">
+function highlight(source) {
+	for (var lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
+		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
+	}
+	location.hash = source;
+}
+
+jush.style('jush.css');
+if (location.hash) {
+	var source = document.getElementById('source');
+	source.value = location.hash.substr(1);
+	highlight(source.value);
+}
+</script>
 
 </body>
 </html>
