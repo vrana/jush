@@ -153,113 +153,113 @@ var jush = {
 		if (!this.regexps) {
 			var php = /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i; // asp_tags=0, short_open_tag=1
 			var num = /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?/;
-			this.tr = { // transitions
+			this.tr = { // transitions - key: go inside this state, _2: go outside 2 levels (number alone is put to the beginning in Chrome)
 				htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w]+)/, ent: /&/ },
-				htm_com: { php: php, 1: /-->/ },
-				ent: { php: php, 1: /[;\s]/ },
-				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*|$)/i, att_js: /(\s*)(on[-\w]+)(\s*=\s*|$)/i, att_http: /(\s*)(http-equiv)(\s*=\s*|$)/i, att: /(\s*)([-\w]+)()/, 1: />/ },
+				htm_com: { php: php, _1: /-->/ },
+				ent: { php: php, _1: /[;\s]/ },
+				tag: { php: php, att_css: /(\s*)(style)(\s*=\s*|$)/i, att_js: /(\s*)(on[-\w]+)(\s*=\s*|$)/i, att_http: /(\s*)(http-equiv)(\s*=\s*|$)/i, att: /(\s*)([-\w]+)()/, _1: />/ },
 				tag_css: { php: php, att: /(\s*)([-\w]+)()/, css: />/ },
 				tag_js: { php: php, att: /(\s*)([-\w]+)()/, js: />/ },
-				att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, 1: /()/ },
+				att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, att_val: /\s*=\s*/, _1: /()/ },
 				att_css: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 				att_js: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 				att_http: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
-				att_quo: { php: php, 2: /"/ },
-				att_apo: { php: php, 2: /'/ },
-				att_val: { php: php, 2: /(?=>|\s)|$/ },
+				att_quo: { php: php, _2: /"/ },
+				att_apo: { php: php, _2: /'/ },
+				att_val: { php: php, _2: /(?=>|\s)|$/ },
 				
 				xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ },
-				xml_tag: { php: php, xml_att: /(\s*)([-\w:]+)()/, 1: />/ },
-				xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, 1: /()/ },
+				xml_tag: { php: php, xml_att: /(\s*)([-\w:]+)()/, _1: />/ },
+				xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, _1: /()/ },
 				
-				css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, 2: /(<)(\/style)(>)/i },
-				css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, 1: /;/ },
-				css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, 2: /}/ },
-				css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w]+)(\s*:)/, 1: /}/ }, //! misses e.g. margin/*-left*/:
-				css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, 1: /;|$/, 2: /}/ },
-				css_js: { php: php, css_js: /\(/, 1: /\)/ },
-				quo: { php: php, esc: /\\/, 1: /"/ },
-				apo: { php: php, esc: /\\/, 1: /'/ },
-				com: { php: php, 1: /\*\// },
-				esc: { 1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
-				one: { 1: /\n/ },
-				clr: { 1: /(?=[^a-fA-F0-9])|$/ },
-				num: { 1: /()/ },
+				css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, _2: /(<)(\/style)(>)/i },
+				css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, _1: /;/ },
+				css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, _2: /}/ },
+				css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w]+)(\s*:)/, _1: /}/ }, //! misses e.g. margin/*-left*/:
+				css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, _1: /;|$/, _2: /}/ },
+				css_js: { php: php, css_js: /\(/, _1: /\)/ },
+				quo: { php: php, esc: /\\/, _1: /"/ },
+				apo: { php: php, esc: /\\/, _1: /'/ },
+				com: { php: php, _1: /\*\// },
+				esc: { _1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
+				one: { _1: /\n/ },
+				clr: { _1: /(?=[^a-fA-F0-9])|$/ },
+				num: { _1: /()/ },
 				
 				js: { php: php, js_reg: /\s*\/(?![\/*])/, js_code: /()/ },
-				js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, js_http: /(\.)(setRequestHeader|getResponseHeader)(\()/, 3: /(<)(\/script)(>)/i, 1: /[^\])}$\w\s]/ },
+				js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, js_http: /(\.)(setRequestHeader|getResponseHeader)(\()/, _3: /(<)(\/script)(>)/i, _1: /[^\])}$\w\s]/ },
 				js_write: { php: php, js_reg: /\s*\/(?![\/*])/, js_write_code: /()/ },
 				js_http: { php: php, js_reg: /\s*\/(?![\/*])/, js_http_code: /()/ },
-				js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, 2: /\)/, 1: /[^\])}$\w\s]/ },
-				js_http_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_http: /\(/, 2: /\)/, 1: /[^\])}$\w\s]/ },
-				js_one: { php: php, 1: /\n/, 3: /(<)(\/script)(>)/i },
-				js_reg: { php: php, esc: /\\/, 1: /\/[a-z]*/i }, //! highlight regexp
+				js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, _2: /\)/, _1: /[^\])}$\w\s]/ },
+				js_http_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_http: /\(/, _2: /\)/, _1: /[^\])}$\w\s]/ },
+				js_one: { php: php, _1: /\n/, _3: /(<)(\/script)(>)/i },
+				js_reg: { php: php, esc: /\\/, _1: /\/[a-z]*/i }, //! highlight regexp
 				
-				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, 1: /\?>|<\/script>/i }, //! matches ::echo
-				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), 1: /}/ },
-				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, 1: /\)|;/, 2: /\?>|<\/script>/i },
-				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /[(,)]/ }, // [(,)] - only first parameter //! disables second parameter in create_function()
-				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_mssql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mssql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_oracle: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_oracle: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /[,)]/ },
-				php_http: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_http: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_mail: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mail: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, 1: /\)/ },
-				php_new: { php_one: /\/\/|#/, php_com: /\/\*/, 0: /\s*,\s*/, 1: /(?=[^\w\u007F-\uFFFF])|$/ }, //! classes are used also for type hinting and catch
-				php_met: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /()([\w\u007F-\uFFFF]+)()/ },
-				php_fun: { php_one: /\/\/|#/, php_com: /\/\*/, 1: /(?=[^\w\u007F-\uFFFF])|$/ },
-				php_one: { 1: /\n|(?=\?>)|$/ },
+				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, _1: /\?>|<\/script>/i }, //! matches ::echo
+				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), _1: /}/ },
+				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, _1: /\)|;/, _2: /\?>|<\/script>/i },
+				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /[(,)]/ }, // [(,)] - only first parameter //! disables second parameter in create_function()
+				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_pgsql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_pgsql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_mssql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mssql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_oracle: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_oracle: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /[,)]/ },
+				php_http: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_http: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_mail: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mail: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
+				php_new: { php_one: /\/\/|#/, php_com: /\/\*/, _0: /\s*,\s*/, _1: /(?=[^\w\u007F-\uFFFF])|$/ }, //! classes are used also for type hinting and catch
+				php_met: { php_one: /\/\/|#/, php_com: /\/\*/, _1: /()([\w\u007F-\uFFFF]+)()/ },
+				php_fun: { php_one: /\/\/|#/, php_com: /\/\*/, _1: /(?=[^\w\u007F-\uFFFF])|$/ },
+				php_one: { _1: /\n|(?=\?>)|$/ },
 				php_eot: { php_eot2: /([^'"\n]+)(['"]?)/ },
-				php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/ }, // php_eot2[2] to be set in php_eot handler
-				php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, esc: /\\/, 1: /"/ },
-				php_bac: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, esc: /\\/, 1: /`/ }, //! highlight shell
-				php_var: { 1: /()/ },
-				php_apo: { esc: /\\/, 1: /'/ },
-				php_doc: { 1: /\*\// },
-				php_com: { 1: /\*\// },
+				php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/ }, // php_eot2._2 to be set in php_eot handler
+				php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, esc: /\\/, _1: /"/ },
+				php_bac: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, esc: /\\/, _1: /`/ }, //! highlight shell
+				php_var: { _1: /()/ },
+				php_apo: { esc: /\\/, _1: /'/ },
+				php_doc: { _1: /\*\// },
+				php_com: { _1: /\*\// },
 				php_halt: { php_halt_one: /\/\/|#/, php_com: /\/\*/, php_halt2: /;|\?>\n?/ },
-				php_halt_one: { 1: /\n|(?=\?>)|$/ },
-				php_halt2: { 3: /$/ },
+				php_halt_one: { _1: /\n|(?=\?>)|$/ },
+				php_halt2: { _3: /$/ },
 				
-				phpini: { one: /;/, 0: /$/ },
-				http: { 0: /$/ },
-				mail: { 0: /$/ },
+				phpini: { one: /;/, _0: /$/ },
+				http: { _0: /$/ },
+				mail: { _0: /$/ },
 				
 				sql: { one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_sqlset: /(\s*)(SET)(\s+|$)(?!NAMES\b|CHARACTER\b|PASSWORD\b|(?:GLOBAL\s+|SESSION\s+)?TRANSACTION\b|@[^@]|NEW\.|OLD\.)/i, sql_code: /()/ },
-				sql_code: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, num: num, 1: /;/ },
-				sql_sqlset: { one: /-- |#|--(?=\n|$)/, com: /\/\*/, sqlset_val: /=/, 1: /;|$/ },
-				sqlset_val: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, 1: /,/, 2: /;|$/, num: num }, //! comma can be inside function call
-				sqlset: { 0: /$/ },
-				sqlstatus: { 0: /$/ },
-				com_code: { 1: /()/ },
+				sql_code: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, num: num, _1: /;/ },
+				sql_sqlset: { one: /-- |#|--(?=\n|$)/, com: /\/\*/, sqlset_val: /=/, _1: /;|$/ },
+				sqlset_val: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, _1: /,/, _2: /;|$/, num: num }, //! comma can be inside function call
+				sqlset: { _0: /$/ },
+				sqlstatus: { _0: /$/ },
+				com_code: { _1: /()/ },
 				sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, sqlite_sqliteset: /(\b)(PRAGMA)(\s+)/i, num: num },
-				sqlite_sqliteset: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, num: num, 1: /;|$/ },
-				sqliteset: { 0: /$/ },
-				sqlitestatus: { 0: /$/ },
+				sqlite_sqliteset: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, num: num, _1: /;|$/ },
+				sqliteset: { _0: /$/ },
+				sqlitestatus: { _0: /$/ },
 				pgsql: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, pgsql_pgsqlset: /(\b)(SHOW|SET)(\s+)/i, num: num }, // standard_conforming_strings=off
-				pgsql_pgsqlset: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num, 1: /;|$/ },
-				pgsqlset: { 0: /$/ },
+				pgsql_pgsqlset: { sql_apo: /'/, sqlite_quo: /"/, sql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: num, _1: /;|$/ },
+				pgsqlset: { _0: /$/ },
 				mssql: { sqlite_apo: /'/, sqlite_quo: /"/, one: /--/, com: /\/\*/, mssql_bra: /\[/, num: num }, // QUOTED IDENTIFIER = OFF
 				oracle: { sqlite_apo: /n?'/i, sqlite_quo: /"/, one: /--/, com: /\/\*/, num: /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?[fd]?/i }, //! q'
-				sql_apo: { esc: /\\/, 0: /''/, 1: /'/ },
-				sql_quo: { esc: /\\/, 0: /""/, 1: /"/ },
-				sql_var: { 1: /(?=[^_.$a-zA-Z0-9])|$/ },
-				sqlite_apo: { 0: /''/, 1: /'/ },
-				sqlite_quo: { 0: /""/, 1: /"/ },
+				sql_apo: { esc: /\\/, _0: /''/, _1: /'/ },
+				sql_quo: { esc: /\\/, _0: /""/, _1: /"/ },
+				sql_var: { _1: /(?=[^_.$a-zA-Z0-9])|$/ },
+				sqlite_apo: { _0: /''/, _1: /'/ },
+				sqlite_quo: { _0: /""/, _1: /"/ },
 				sql_eot: { sql_eot2: /\$/ },
-				sql_eot2: { }, // sql_eot2[2] to be set in sql_eot handler
-				com_nest: { com_nest: /\/\*/, 1: /\*\// },
-				bac: { 1: /`/ },
-				bra: { 1: /]/ },
-				mssql_bra: { 0: /]]/, 1: /]/ },
+				sql_eot2: { }, // sql_eot2._2 to be set in sql_eot handler
+				com_nest: { com_nest: /\/\*/, _1: /\*\// },
+				bac: { _1: /`/ },
+				bra: { _1: /]/ },
+				mssql_bra: { _0: /]]/, _1: /]/ },
 				
 				cnf: { quo: /"/, one: /#/, cnf_http: /((?:^|\n)\s*)(RequestHeader|Header|CacheIgnoreHeaders)([ \t]+|$)/i, cnf_php: /((?:^|\n)\s*)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /((?:^|\n)\s*)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
-				cnf_http: { apo: /'/, quo: /"/, 1: /($|(?=\n))/ },
-				cnf_php: { 1: /()/ },
+				cnf_http: { apo: /'/, quo: /"/, _1: /($|(?=\n))/ },
+				cnf_php: { _1: /()/ },
 				cnf_phpini: { cnf_phpini_val: /[ \t]/ },
-				cnf_phpini_val: { apo: /'/, quo: /"/, 2: /($|(?=\n))/ }
+				cnf_phpini_val: { apo: /'/, quo: /"/, _2: /($|(?=\n))/ }
 			};
 			this.regexps = { };
 			for (var key in this.tr) {
@@ -289,6 +289,7 @@ var jush = {
 			for (var key in this.tr[state]) {
 				var m = this.tr[state][key].exec(match[0]);
 				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
+					var out = (key.charAt(0) == '_');
 					if (in_php && key == 'php') {
 						continue loop;
 					}
@@ -336,11 +337,11 @@ var jush = {
 							s_states = this.highlight_states(child_states, s, true, f);
 						} else {
 							s = this.htmlspecialchars(s);
-							s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
+							s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
 						}
 					} else {
 						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (isNaN(+key) || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
+						s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
 					}
 					s = s_states[0];
 					child_states = s_states[1];
@@ -349,7 +350,7 @@ var jush = {
 					
 					s = text.substring(division, match.index + match[0].length);
 					s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
-					if (isNaN(+key)) {
+					if (!out) {
 						if (this.links && this.links[key] && m[2]) {
 							if (/^tag/.test(key)) {
 								this.last_tag = m[2].toUpperCase();
@@ -381,10 +382,10 @@ var jush = {
 						ret.push('<span class="jush-' + key + '">', s);
 						states.push(key);
 						if (state == 'php_eot') {
-							this.tr.php_eot2[2] = new RegExp('(\n)(' + match[1] + ')(;?\n)');
-							this.regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { 2: this.tr.php_eot2[2] } : this.tr.php_eot2));
+							this.tr.php_eot2._2 = new RegExp('(\n)(' + match[1] + ')(;?\n)');
+							this.regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
 						} else if (state == 'sql_eot') {
-							this.tr.sql_eot2[2] = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
+							this.tr.sql_eot2._2 = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
 							this.regexps.sql_eot2 = this.build_regexp(this.tr.sql_eot2);
 						}
 					} else {
@@ -392,7 +393,7 @@ var jush = {
 							s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s);
 						}
 						ret.push(s);
-						for (var i = Math.min(states.length, key); i--; ) {
+						for (var i = Math.min(states.length, +key.substr(1)); i--; ) {
 							ret.push('</span>');
 							states.pop();
 						}
