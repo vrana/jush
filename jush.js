@@ -182,7 +182,7 @@ var jush = {
 				apo: { php: php, esc: /\\/, _1: /'/ },
 				com: { php: php, _1: /\*\// },
 				esc: { _1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
-				one: { _1: /\n/ },
+				one: { _1: /(?=\n)|$/ },
 				clr: { _1: /(?=[^a-fA-F0-9])|$/ },
 				num: { _1: /()/ },
 				
