@@ -219,8 +219,7 @@ var jush = {
 				php_apo: { esc: /\\/, _1: /'/ },
 				php_doc: { _1: /\*\// },
 				php_com: { _1: /\*\// },
-				php_halt: { php_halt_one: /\/\/|#/, php_com: /\/\*/, php_halt2: /;|\?>\n?/ },
-				php_halt_one: { _1: /\n|(?=\?>)|$/ },
+				php_halt: { php_one: /\/\/|#/, php_com: /\/\*/, php_halt2: /;|\?>\n?/ },
 				php_halt2: { _3: /$/ },
 				
 				phpini: { one: /;/, _0: /$/ },
