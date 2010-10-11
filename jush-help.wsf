@@ -61,6 +61,6 @@ while (match = re.exec(s)) {
 		}
 	}
 }
-openUrl(href ? href : 'http://www.google.com/search?q=' + (WScript.Arguments.length >= 4 ? WScript.Arguments(4) : (match ? match[3] : ''))); //! urlencode() or current word only
+openUrl(href ? href : 'http://www.google.com/search?q=' + encodeURIComponent(WScript.Arguments.length >= 4 ? WScript.Arguments(4) : (match ? match[3] : '')));
 </script>
 </job>
