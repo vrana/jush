@@ -46,7 +46,7 @@ var jush = {
 	highlight: function (language, text) {
 		this.last_tag = '';
 		this.last_class = '';
-		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml)$/.test(language))[0] + '</span>';
+		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml|txt)$/.test(language))[0] + '</span>';
 	},
 
 	/** Highlight text in tags
@@ -172,6 +172,8 @@ var jush = {
 				xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ },
 				xml_tag: { php: php, xml_att: /(\s*)([-\w:]+)()/, _1: />/ },
 				xml_att: { php: php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, _1: /()/ },
+				
+				txt: { php: php },
 				
 				css: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /(@)([^;\s{]+)/, css_pro: /\{/, _2: /(<)(\/style)(>)/i },
 				css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, _1: /;/ },
