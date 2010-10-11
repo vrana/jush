@@ -63,7 +63,7 @@ var jush = {
 		var highlight = function () {
 			var start = new Date();
 			for (; i < pre.length; i++) {
-				var match = /(^|\s)jush($|\s|-(\S+))/.exec(pre[i].className);
+				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // http://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var s = jush.highlight(match[3] ? match[3] : 'htm', jush.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;');
 					if (pre[i].outerHTML && /^pre$/i.test(pre[i].tagName)) {
