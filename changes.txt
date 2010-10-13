@@ -1,10 +1,17 @@
-JUSH 1.10.0-dev:
-Optionally display title with function summary and parameters
+JUSH 1.10.0:
+Highlight Oracle
+Highlight jsDoc
+Highlight text with PHP (e.g. command line scripts)
+Highlight MySQL 5.5
 Link PHP methods
+Link PHP callbacks
 Link SQLite PRAGMA
 Link PostgreSQL variables
+Allow specifying language through class="language-*"
+Optionally display title with function summary and parameters
 Ability to link custom words (e.g. function or table names)
 Highlight tags in 1 second chunks (let browser live)
+Fix highlighting in Chrome
 
 JUSH 1.9.0:
 Link PHP classes and special functions
