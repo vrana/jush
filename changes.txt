@@ -1,3 +1,6 @@
+JUSH 1.11.0-dev:
+Highlight Nette Latte
+
 JUSH 1.10.0:
 Highlight Oracle
 Highlight jsDoc
