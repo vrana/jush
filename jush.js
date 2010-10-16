@@ -174,7 +174,7 @@ var jush = {
 				att_val: { php: php, _2: /(?=>|\s)|$/ },
 				
 				latte: { htm: /()/ }, //! switch context by {contentType}
-				latte_tag: { _1: /}/ },
+				latte_tag: { php_quo: /"/, php_apo: /'/, _1: /}/ },
 				latte_com: { _1: /\*}/ },
 				
 				xml: { php: php, latte_com: /\{\*/, latte_tag: latte, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ },
