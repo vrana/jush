@@ -173,7 +173,7 @@ var jush = {
 				att_apo: { php: php, latte_com: /\{\*/, latte_tag: latte, _2: /'/ },
 				att_val: { php: php, _2: /(?=>|\s)|$/ },
 				
-				latte: { htm: /()/ }, //! switch context by {contentType}
+				latte: { htm: /()/ },
 				latte_tag: { php_quo: /"/, php_apo: /'/, _1: /}/ },
 				latte_com: { _1: /\*}/ },
 				
@@ -353,6 +353,19 @@ var jush = {
 					} else {
 						s = this.htmlspecialchars(s);
 						s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|att_latte|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
+						if (state == 'latte_tag') {
+							states.pop();
+							if (/^contentType (?:application|text)\/(?!xhtml\+)([^+]+\+)?xml/.test(s)) {
+								states.push('xml');
+							} else if (/^contentType text\/plain/.test(s)) {
+								states.push('txt');
+							} else if (/^contentType text\/css/.test(s)) {
+								states.push('css');
+							} else if (/^contentType (?:application|text)\/(?:javascript|json)/.test(s)) {
+								states.push('js');
+							}
+							states.push('latte_tag');
+						}
 					}
 					s = s_states[0];
 					child_states = s_states[1];
