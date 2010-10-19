@@ -1,7 +1,10 @@
 <job>
 <!-- SciTE: (file must be saved)
 file.patterns.jush=*.htm;*.html;*.php;*.sql;*.js;*.css;php.ini;*.conf;.htaccess;my.ini
-command.help.$(file.patterns.jush)=WScript jush-help.wsf "$(FilePath)" $(SelectionStartLine) $(SelectionStartColumn) $(tabsize) "$(CurrentWord)"
+command.1.$(file.patterns.jush)=WScript jush-help.wsf "$(FilePath)" $(SelectionStartLine) $(SelectionStartColumn) $(tabsize) "$(CurrentWord)"
+command.name.1.$(file.patterns.jush)=JUSH help
+command.subsystem.1.$(file.patterns.jush)=2
+command.save.before.1.$(file.patterns.jush)=1
 -->
 <script language="JScript" src="jush.js"></script>
 <script language="JScript">
