@@ -2,7 +2,7 @@
 .jush-htm_com, .jush-com, .jush-com_code, .jush-one, .jush-php_doc, .jush-php_com, .jush-php_one, .jush-js_one, .jush-js_doc { color: gray; }
 .jush-php, .jush-latte_tag, .jush-att_latte .jush-att_quo, .jush-att_latte .jush-att_apo, .jush-att_latte .jush-att_val { color: #000033; background-color: #FFF0F0; }
 .jush-latte_com { color: gray; background-color: #FFF0F0; }
-.jush-php_quo, .jush-quo, .jush-php_eot, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sql_eot { color: green; }
+.jush-php_quo, .jush-quo, .jush-quo_one, .jush-php_eot, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sql_eot { color: green; }
 .jush-php_apo { color: #009F00; }
 .jush-php_quo_var, .jush-php_var, .jush-sql_var { font-style: italic; }
 .jush-php_apo .jush-php_quo_var, .jush-php_apo .jush-php_var { font-style: normal; }
