@@ -266,7 +266,8 @@ var jush = {
 				bra: { _1: /]/ },
 				mssql_bra: { _0: /]]/, _1: /]/ },
 				
-				cnf: { quo: /"/, one: /#/, cnf_http: /((?:^|\n)\s*)(RequestHeader|Header|CacheIgnoreHeaders)([ \t]+|$)/i, cnf_php: /((?:^|\n)\s*)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /((?:^|\n)\s*)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
+				cnf: { quo_one: /"/, one: /#/, cnf_http: /((?:^|\n)\s*)(RequestHeader|Header|CacheIgnoreHeaders)([ \t]+|$)/i, cnf_php: /((?:^|\n)\s*)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /((?:^|\n)\s*)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
+				quo_one: { esc: /\\/, _1: /"|(?=\n)|$/ },
 				cnf_http: { apo: /'/, quo: /"/, _1: /($|(?=\n))/ },
 				cnf_php: { _1: /()/ },
 				cnf_phpini: { cnf_phpini_val: /[ \t]/ },
