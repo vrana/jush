@@ -1,7 +1,6 @@
 .jush { color: black; }
 .jush-htm_com, .jush-com, .jush-com_code, .jush-one, .jush-php_doc, .jush-php_com, .jush-php_one, .jush-js_one, .jush-js_doc { color: gray; }
-.jush-php, .jush-latte_tag, .jush-att_latte .jush-att_quo, .jush-att_latte .jush-att_apo, .jush-att_latte .jush-att_val { color: #000033; background-color: #FFF0F0; }
-.jush-latte_com { color: gray; background-color: #FFF0F0; }
+.jush-php { color: #000033; background-color: #FFF0F0; }
 .jush-php_quo, .jush-quo, .jush-quo_one, .jush-php_eot, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sql_eot { color: green; }
 .jush-php_apo { color: #009F00; }
 .jush-php_quo_var, .jush-php_var, .jush-sql_var { font-style: italic; }
@@ -10,7 +9,7 @@
 .jush-tag_css, .jush-att_css .jush-att_quo, .jush-att_css .jush-att_apo, .jush-att_css .jush-att_val { color: black; background-color: #FFFFE0; }
 .jush-tag_js, .jush-att_js .jush-att_quo, .jush-att_js .jush-att_apo, .jush-att_js .jush-att_val, .jush-css_js { color: black; background-color: #F0F0FF; }
 .jush-tag, .jush-xml_tag { color: navy; }
-.jush-att, .jush-xml_att, .jush-att_js, .jush-att_css, .jush-att_http, .jush-att_latte { color: teal; }
+.jush-att, .jush-xml_att, .jush-att_js, .jush-att_css, .jush-att_http { color: teal; }
 .jush-att_quo, .jush-att_apo, .jush-att_val { color: purple; }
 .jush-ent { color: purple; }
 .jush-js_reg { color: navy; }
