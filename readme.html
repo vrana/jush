@@ -18,13 +18,13 @@
 <ol>
 <li>Copy <a href="jush.css">jush.css</a> and <a href="jush.js">jush.js</a> into your directory.</li>
 <li>Add following snippet before the <code class="jush">&lt;/body&gt;</code> tag in HTML file:
-<pre class="jush">&lt;script type="text/javascript" src="jush.js"&gt;&lt;/script&gt;
+<pre><code class="jush">&lt;script type="text/javascript" src="jush.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript"&gt;
 jush.style('jush.css');
-jush.highlight_tag('pre');
+jush.highlight_tag('code');
 &lt;/script&gt;
-</pre>
-All <code class="jush">&lt;pre class="jush"&gt;</code> tags will be highlighted. Language is determined by the class name beginning with "jush-" (e.g. <code class="jush">&lt;pre class="jush-js"&gt;</code>). Default language is <code>htm</code>. It is also possible to use <code class="jush">&lt;pre class="language-*"&gt;</code>.
+</code></pre>
+All <code class="jush">&lt;code class="jush"&gt;</code> tags will be highlighted. Language is determined by the class name beginning with "jush-" (e.g. <code class="jush">&lt;code class="jush-js"&gt;</code>). Default language is <code>htm</code>. It is also possible to use <code class="jush">&lt;code class="language-*"&gt;</code>.
 </li>
 </ol>
 <p>Alternativelly call <code class="jush-js">jush.highlight(language, text)</code> to syntax highlight single text.</p>
@@ -40,5 +40,4 @@ Example: WScript jush-help.wsf readme.html 2 2
 <script type="text/javascript">
 jush.style('jush.css');
 jush.highlight_tag('code');
-jush.highlight_tag('pre');
 </script>
