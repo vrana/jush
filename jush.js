@@ -106,7 +106,7 @@ var jush = {
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break; // toLowerCase() - case sensitive after #
-							case 'phpini': link = link.replace(/\$1/g, arguments[i].replace(/_/g, '-')); break;
+							case 'phpini': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/_/g, '-')); break;
 							case 'php_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W+/, '')); break;
 							case 'js_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W*(.)/, function (match, p1) { return p1.toUpperCase(); })); break;
 							case 'http': if (/-header$/.test(link)) link = link.replace(/\$1/g, arguments[i].toLowerCase()).substr(0, 67); break;
