@@ -4,17 +4,21 @@
 	
 	$.jush = jush;
 	
-	/** Highlights element content
+	/** Highlight element content
 	* @param [string]
 	* @return jQuery
 	* @this jQuery
 	*/
 	$.fn.jush = function (language) {
-		if (!language) {
-			var match = /(^|\s)(?:jush-|language-)(\S+)/.exec(this.attr('class'));
-			language = (match ? match[2] : 'htm');
-		}
-		return this.html(jush.highlight(language, this.text()));
+		return this.each(function () {
+			var lang = language;
+			var $this = $(this);
+			if (!lang) {
+				var match = /(^|\s)(?:jush-|language-)(\S+)/.exec($this.attr('class'));
+				lang = (match ? match[2] : 'htm');
+			}
+			$this.html(jush.highlight(lang, $this.text()));
+		});
 	}
 	
 })(jQuery);
