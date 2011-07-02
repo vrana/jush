@@ -376,7 +376,7 @@ var jush = {
 								}
 							}
 							if (key == 'php_met') {
-								this.last_class = (k_link && !/^(self|parent|static)$/.test(link) ? link : '');
+								this.last_class = (k_link && !/^(self|parent|static|dir)$/i.test(link) ? link : '');
 							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
