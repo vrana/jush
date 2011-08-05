@@ -235,8 +235,8 @@ var jush = {
 				sql_code: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com_code: /\/\*![0-9]*|\*\//, com: /\/\*/, sql_var: /\B@/, num: num, _1: /;|\b(THEN|ELSE|LOOP|REPEAT|DO)\b/i },
 				sql_sqlset: { one: /-- |#|--(?=\n|$)/, com: /\/\*/, sqlset_val: /=/, _1: /;|$/ },
 				sqlset_val: { sql_apo: /'/, sql_quo: /"/, bac: /`/, one: /-- |#|--(?=\n|$)/, com: /\/\*/, _1: /,/, _2: /;|$/, num: num }, //! comma can be inside function call
-				sqlset: { _0: /$/ },
-				sqlstatus: { _0: /$/ },
+				sqlset: { _0: /$/ }, //! jump from SHOW VARIABLES LIKE ''
+				sqlstatus: { _0: /$/ }, //! jump from SHOW STATUS LIKE ''
 				com_code: { _1: /()/ },
 				sqlite: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, sql_var: /[:@$]/, sqlite_sqliteset: /(\b)(PRAGMA)(\s+)/i, num: num },
 				sqlite_sqliteset: { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /`/, one: /--/, com: /\/\*/, num: num, _1: /;|$/ },
