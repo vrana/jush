@@ -11,7 +11,7 @@ command.save.before.1.$(file.patterns.jush)=1
 function readFile(filename) {
 	var fso = new ActiveXObject('Scripting.FileSystemObject');
 	var file = fso.OpenTextFile(filename, 1);
-	return file.readAll();
+	return file.ReadAll();
 }
 
 function openUrl(url) {
@@ -21,7 +21,7 @@ function openUrl(url) {
 }
 
 if (WScript.Arguments.length < 3) {
-	WScript.echo('Usage: WScript jush-help.wsf filename line column [tabsize] [word]\nPurpose: Open URL with help on specified position in file');
+	WScript.Echo('Usage: WScript jush-help.wsf filename line column [tabsize] [word]\nPurpose: Open URL with help on specified position in file');
 	WScript.Quit(1);
 }
 var filename = WScript.Arguments(0);
