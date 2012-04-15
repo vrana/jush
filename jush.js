@@ -197,7 +197,8 @@ var jush = {
 				js_write_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_write: /\(/, _2: /\)/, _1: /[^\])}$\w\s]/ },
 				js_http_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_http: /\(/, _2: /\)/, _1: /[^\])}$\w\s]/ },
 				js_one: { php: php, _1: /\n/, _3: /(<)(\/script)(>)/i },
-				js_reg: { php: php, esc: /\\/, _1: /\/[a-z]*/i }, //! highlight regexp
+				js_reg: { php: php, esc: /\\/, js_reg_bra: /\[/, _1: /\/[a-z]*/i }, //! highlight regexp
+				js_reg_bra: { php: php, esc: /\\/, _1: /]/ },
 				js_doc: { _1: /\*\// },
 				
 				php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, _1: /\?>|<\/script>/i }, //! matches ::echo
