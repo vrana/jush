@@ -136,7 +136,7 @@ var jush = {
 				if (/<[^>]*$/.test(s.substr(0, offset))) {
 					return str; // don't create links inside tags
 				}
-				return '<a href="' + jush.custom_links[state][0].replace('$&', encodeURIComponent(str)) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
+				return '<a href="' + jush.htmlspecialchars_quo(jush.custom_links[state][0].replace('$&', encodeURIComponent(str))) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
 			});
 		}
 		return s;
