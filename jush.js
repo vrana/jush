@@ -62,7 +62,7 @@ var jush = {
 		var i = 0;
 		var highlight = function () {
 			var start = new Date();
-			for (; i < pre.length; i++) {
+			while (i < pre.length) {
 				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // http://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var language = match[3] ? match[3] : 'htm';
@@ -73,6 +73,7 @@ var jush = {
 						pre[i].innerHTML = s.replace(/\n/g, '<br />');
 					}
 				}
+				i++;
 				if (jush.timeout && window.setTimeout && (new Date() - start) > jush.timeout) {
 					window.setTimeout(highlight, 100);
 					break;
