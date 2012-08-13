@@ -92,7 +92,7 @@ var jush = {
 			state = 'js';
 		}
 		if (/^(php_quo_var|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state)) {
-			state = 'php';
+			state = 'php2';
 		}
 		if (state == 'sql_code') {
 			state = 'sql';
