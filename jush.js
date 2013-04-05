@@ -84,7 +84,12 @@ var jush = {
 	},
 
 	create_link: function (link, s, attrs) {
-		return '<a' + (this.create_links && link ? ' href="' + link + '"' : '') + (typeof this.create_links == 'string' ? this.create_links : '') + (attrs ? attrs : '') + '>' + s + '</a>';
+		return '<a'
+			+ (this.create_links && link ? ' href="' + link + '" class="jush-help"' : '')
+			+ (typeof this.create_links == 'string' ? this.create_links : '')
+			+ (attrs || '')
+			+ '>' + s + '</a>'
+		;
 	},
 
 	keywords_links: function (state, s) {

@@ -50,7 +50,7 @@ if (WScript.Arguments.length >= 3) {
 s = s.replace(/&[^;]+;/g, '&');
 var href = '';
 var pos = 1;
-var re = /<a href="([^"]+)">|(<\/a>)|<[^>]+>|([^<]+)/g;
+var re = /<a href="([^"]+)" class="jush-help">|(<\/a>)|<[^>]+>|([^<]+)/g;
 while (match = re.exec(s)) {
 	if (match[1]) {
 		href = match[1];
