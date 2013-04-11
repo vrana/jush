@@ -9,7 +9,7 @@
 
 <form action="">
 <div>
-<textarea name="source" rows="12" cols="80" wrap="off"></textarea><br />
+<textarea id="source" name="source" rows="12" cols="80" wrap="off"></textarea><br />
 Language: <select name="language">
 <option value="htm">HTML</option>
 <option value="css">CSS</option>
@@ -27,17 +27,14 @@ Language: <select name="language">
 <option value="xml">XML</option>
 <option value="txt">Text</option>
 </select>
-<input type="button" value="Highlight" onclick="document.getElementById('jush-result').innerHTML = '&lt;pre>&lt;code class=\'language-' + this.form['language'].value + '\'>' + jush.highlight(this.form['language'].value, this.form['source'].value).replace(/\t/g, '&nbsp; &nbsp; ').replace(/(^|\n| ) /g, '$1&nbsp;') + '&lt;/code>&lt;/pre>';" />
 </div>
 </form>
 
-<div id="jush-result"></div>
+<pre><code id="result"></code></pre>
 
 <script type="text/javascript" src="jush.js"></script>
 <script type="text/javascript" src="jush-api.js"></script>
-<script type="text/javascript">
-jush.style('jush.css');
-</script>
+<script type="text/javascript" src="demo.js"></script>
 
 </body>
 </html>
