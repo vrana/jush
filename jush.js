@@ -196,7 +196,7 @@ var jush = {
 				clr: { _1: /(?=[^a-fA-F0-9])|$/ },
 				num: { _1: /()/ },
 				
-				js: { php: php, js_reg: /\s*\/(?![\/*])/, js_code: /()/ },
+				js: { php: php, js_reg: /\s*\/(?![\/*])/, js_obj: /\s*\{/, js_code: /()/ },
 				js_code: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, js_doc: /\/\*\*/, com: /\/\*/, num: num, js_write: /(\b)(write(?:ln)?)(\()/, js_http: /(\.)(setRequestHeader|getResponseHeader)(\()/, _3: /(<)(\/script)(>)/i, _1: /[^\])}$\w\s]/ },
 				js_write: { php: php, js_reg: /\s*\/(?![\/*])/, js_write_code: /()/ },
 				js_http: { php: php, js_reg: /\s*\/(?![\/*])/, js_http_code: /()/ },
@@ -206,6 +206,10 @@ var jush = {
 				js_reg: { php: php, esc: /\\/, js_reg_bra: /\[/, _1: /\/[a-z]*/i }, //! highlight regexp
 				js_reg_bra: { php: php, esc: /\\/, _1: /]/ },
 				js_doc: { _1: /\*\// },
+				js_arr: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_arr: /\[/, js_obj: /\{/, _1: /]/ },
+				js_obj: { php: php, js_one: /\s*\/\//, com: /\s*\/\*/, js_val: /:/, _1: /\s*}/, js_key: /()/ },
+				js_val: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_arr: /\[/, js_obj: /\{/, _1: /,|(?=})|$/ },
+				js_key: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, _1: /(?=:)|$/ },
 				
 				php: { php_echo: /=/, php2: /()/ },
 				php2: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, _2: /\?>|<\/script>/i }, //! matches ::echo
