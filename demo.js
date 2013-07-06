@@ -12,7 +12,7 @@
 		value = source.value;
 		var result = document.getElementById('result');
 		var language = source.form['language'].value;
-		result.className = 'language-' + language;
+		result.className = 'jush-' + language;
 		result.innerHTML = jush.highlight(language, source.value);
 	};
 	source.onchange = source.onkeyup;
