@@ -383,7 +383,7 @@ var jush = {
 							var k_link = '';
 							var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
 							for (var k in this.links[key]) {
-								if (key == 'att' && this.links[key][k].test(link + '-' + att_tag)) {
+								if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^http:/.test(k)) {
 									link += '-' + att_tag;
 									k_link = k;
 									break;
@@ -399,7 +399,7 @@ var jush = {
 							}
 							if (k_link) {
 								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, link), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
+								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^http:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
 								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 							}
 						}
@@ -449,14 +449,19 @@ var jush = {
 		'cite-DEL': 'INS',
 		'color-BASEFONT': 'FONT',
 		'face-BASEFONT': 'FONT',
+		'height-INPUT': 'IMG',
 		'height-TD': 'TH',
 		'height-OBJECT': 'IMG',
+		'label-MENU': 'OPTION',
 		'longdesc-IFRAME': 'FRAME',
+		'name-FIELDSET': 'FORM',
 		'name-TEXTAREA': 'BUTTON',
 		'name-IFRAME': 'FRAME',
 		'name-OBJECT': 'INPUT',
 		'src-IFRAME': 'FRAME',
+		'type-AREA': 'A',
 		'type-LINK': 'A',
+		'width-INPUT': 'IMG',
 		'width-OBJECT': 'IMG',
 		'width-TD': 'TH'
 	},
@@ -678,7 +683,16 @@ jush.links = {
 		'struct/lists': /^(dd|dir|dl|dt|li|menu|ol|ul)$/i,
 		'struct/objects': /^(applet|area|img|map|object|param)$/i,
 		'struct/tables': /^(caption|col|colgroup|table|tbody|td|tfoot|th|thead|tr)$/i,
-		'struct/text': /^(abbr|acronym|blockquote|br|cite|code|del|dfn|em|ins|kbd|p|pre|q|samp|strong|sub|sup|var)$/i
+		'struct/text': /^(abbr|acronym|blockquote|br|cite|code|del|dfn|em|ins|kbd|p|pre|q|samp|strong|sub|sup|var)$/i,
+		'http://whatwg.org/html/sections.html#the-$val-element': /^(section|article|aside|hgroup|header|footer|nav)$/i,
+		'http://whatwg.org/html/grouping-content.html#the-$val-element': /^(main|figure|figcaption)$/i,
+		'http://whatwg.org/html/the-video-element.html#the-$val-element': /^(video|audio|source|track)$/i,
+		'http://whatwg.org/html/the-iframe-element.html#the-$val-element': /^(embed)$/i,
+		'http://whatwg.org/html/text-level-semantics.html#the-$val-element': /^(mark|time|data|ruby|rt|rp|bdi|wbr)$/i,
+		'http://whatwg.org/html/the-button-element.html#the-$val-element': /^(progress|meter|datalist|keygen|output)$/i,
+		'http://whatwg.org/html/commands.html#the-$val-element': /^(dialog)$/i,
+		'http://whatwg.org/html/the-canvas-element.html#the-$val-element': /^(canvas)$/i,
+		'http://whatwg.org/html/interactive-elements.html#the-$val-element': /^(menuitem|details|summary)$/i
 	},
 	tag_css: { 'present/styles': /^(style)$/i },
 	tag_js: { 'interact/scripts': /^(script)$/i },
@@ -697,7 +711,33 @@ jush.links = {
 		'struct/lists': /^(compact|start|type-LI|type-OL|type-UL|value-LI)$/i,
 		'struct/objects': /^(align-IMG|alt|archive-APPLET|archive-OBJECT|border-IMG|classid|code|codebase-OBJECT|codebase-APPLET|codetype|coords|data|declare|height-IMG|height-APPLET|hspace|ismap|longdesc-IMG|name-APPLET|name-IMG|name-MAP|name-PARAM|nohref|object|shape|src-IMG|standby|type-OBJECT|type-PARAM|usemap|value-PARAM|valuetype|vspace|width-IMG|width-APPLET)$/i,
 		'struct/tables': /^(abbr|align-CAPTION|align-TABLE|align-TD|axis|border-TABLE|cellpadding|cellspacing|char|charoff|colspan|frame|headers|height-TH|nowrap|rowspan|rules|scope|span-COL|span-COLGROUP|summary|valign|width-TABLE|width-TH|width-COL|width-COLGROUP)$/i,
-		'struct/text': /^(cite-Q|cite-INS|datetime|width-PRE)$/i
+		'struct/text': /^(cite-Q|cite-INS|datetime|width-PRE)$/i,
+		'http://whatwg.org/html/links.html#attr-hyperlink-$val': /^(download)$/i,
+		'http://whatwg.org/html/semantics.html#attr-meta-$val': /^(charset)$/i,
+		'http://whatwg.org/html/tabular-data.html#attr-table-$val': /^(sortable)$/i,
+		'http://whatwg.org/html/tabular-data.html#attr-th-$val': /^(sorted)$/i,
+		'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fe-$val': /^(autofocus|autocomplete|dirname|inputmode)$/i,
+		'http://whatwg.org/html/common-input-element-attributes.html#attr-input-$val': /^(placeholder|required|min|max|pattern|step|list)$/i,
+		'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fae-$val': /^(form)$/i,
+		'http://whatwg.org/html/the-button-element.html#attr-textarea-$val': /^(wrap)$/i,
+		'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fs-$val': /^(novalidate|formaction|formenctype|formmethod|formnovalidate|formtarget)$/i,
+		'http://whatwg.org/html/interactive-elements.html#attr-$val': /^(contextmenu)$/i,
+		'http://whatwg.org/html/the-button-element.html#attr-button-$val': /^(menu)$/i,
+		'http://whatwg.org/html/semantics.html#attr-style-$val': /^(scoped)$/i,
+		'http://whatwg.org/html/scripting-1.html#attr-script-$val': /^(async)$/i,
+		'http://whatwg.org/html/semantics.html#attr-html-$val': /^(manifest)$/i,
+		'http://whatwg.org/html/links.html#attr-link-$val': /^(sizes)$/i,
+		'http://whatwg.org/html/grouping-content.html#attr-ol-$val': /^(reversed)$/i,
+		'http://whatwg.org/html/the-iframe-element.html#attr-iframe-$val': /^(sandbox|seamless|srcdoc)$/i,
+		'http://whatwg.org/html/the-iframe-element.html#attr-object-$val': /^(typemustmatch)$/i,
+		'http://whatwg.org/html/embedded-content-1.html#attr-img-$val': /^(crossorigin|srcset)$/i,
+		'http://whatwg.org/html/editing.html#attr-$val': /^(contenteditable|spellcheck)$/i,
+		'http://whatwg.org/html/elements.html#attr-data-*': /^(data-.+)$/i,
+		'http://whatwg.org/html/dnd.html#the-$val-attribute': /^(draggable|dropzone)$/i,
+		'http://whatwg.org/html/editing.html#the-$val-attribute': /^(hidden|inert)$/i,
+		'http://whatwg.org/html/elements.html#wai-aria': /^(aria-.+)$/i,
+		'http://whatwg.org/html/infrastructure.html#attr-aria-$val': /^(role)$/i,
+		'http://whatwg.org/html/elements.html#attr-$val': /^(translate)$/i
 	},
 	css_val: {
 		'aural': /^(azimuth|cue-after|cue-before|cue|elevation|pause-after|pause-before|pause|pitch-range|pitch|play-during|richness|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|voice-family|volume)$/i,
