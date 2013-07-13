@@ -778,7 +778,12 @@ jush.links = {
 	css_at: {
 		'page.html#page-box': /^page$/i,
 		'media.html#at-media-rule': /^media$/i,
-		'cascade.html#at-import': /^import$/i
+		'cascade.html#at-import': /^import$/i,
+		'syndata.html#charset': /^charset$/i,
+		'http://www.w3.org/TR/css3-conditional/#at-$val': /^supports$/i,
+		'http://www.w3.org/TR/css-fonts-3/#at-$val-rule': /^(font-face|font-feature-values)$/i,
+		'http://www.w3.org/TR/css-counter-styles-3/#the-$val-rule': /^counter-style$/i,
+		'http://www.w3.org/TR/css3-namespace/#declaration': /namespace/
 	},
 	js_write: { 'document': /^(write|writeln)$/ },
 	js_http: { 'method': /^(setRequestHeader|getResponseHeader)$/ },
