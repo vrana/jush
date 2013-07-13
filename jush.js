@@ -387,10 +387,16 @@ var jush = {
 									link += '-' + att_tag;
 									k_link = k;
 									break;
-								} else if (this.links[key][k].test(m[2])) {
-									k_link = k;
-									if (key != 'att') {
-										break;
+								} else {
+									var m2 = this.links[key][k].exec(m[2]);
+									if (m2) {
+										if (m2[1]) {
+											link = m2[1];
+										}
+										k_link = k;
+										if (key != 'att') {
+											break;
+										}
 									}
 								}
 							}
@@ -755,15 +761,15 @@ jush.links = {
 		'visudet': /^(height|line-height|max-height|max-width|min-height|min-width|vertical-align|width)$/i,
 		'visufx': /^(clip|overflow|visibility)$/i,
 		'visuren': /^(bottom|clear|direction|display|float|left|position|right|top|unicode-bidi|z-index)$/i,
-		'http://www.w3.org/TR/css3-cascade/#$val': /^(all)$/i,
-		'http://www.w3.org/TR/css3-writing-modes/#$val': /^(text-combine-horizontal|text-orientation|writing-mode)$/i,
-		'http://www.w3.org/TR/css3-break/#$val': /^(break-after|break-before|break-inside)$/i,
-		'http://www.w3.org/TR/css3-images/#$val': /^(image-orientation|image-resolution|object-fit|object-position)$/i,
-		'http://www.w3.org/TR/css3-marquee/#$val': /^(marquee-direction|marquee-play-count|marquee-speed|marquee-style|overflow-style)$/i,
-		'http://www.w3.org/TR/css3-grid/#$val': /^(grid-columns|grid-rows|align-content|align-items|align-self|justify-content|justify-items|justify-self)$/i,
-		'http://www.w3.org/TR/css-overflow-3/#$val': /^(max-lines|overflow-x|overflow-y)$/i,
-		'http://www.w3.org/TR/css3-ui/#$val': /^(box-sizing|icon|ime-mode|nav-index|nav-up|nav-right|nav-down|nav-left|outline-offset|resize|text-overflow)$/i,
-		'http://www.w3.org/TR/css3-background/#$val': /^(background-clip|background-origin|background-size|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-right-radius|border-bottom-left-radius|box-decoration-break|box-shadow)$/i
+		'http://www.w3.org/TR/css3-cascade/#$val': /^(?:-[a-z]+-)?(all)$/i,
+		'http://www.w3.org/TR/css3-writing-modes/#$val': /^(?:-[a-z]+-)?(text-combine-horizontal|text-orientation|writing-mode)$/i,
+		'http://www.w3.org/TR/css3-break/#$val': /^(?:-[a-z]+-)?(break-after|break-before|break-inside)$/i,
+		'http://www.w3.org/TR/css3-images/#$val': /^(?:-[a-z]+-)?(image-orientation|image-resolution|object-fit|object-position)$/i,
+		'http://www.w3.org/TR/css3-marquee/#$val': /^(?:-[a-z]+-)?(marquee-direction|marquee-play-count|marquee-speed|marquee-style|overflow-style)$/i,
+		'http://www.w3.org/TR/css3-grid/#$val': /^(?:-[a-z]+-)?(grid-columns|grid-rows|align-content|align-items|align-self|justify-content|justify-items|justify-self)$/i,
+		'http://www.w3.org/TR/css-overflow-3/#$val': /^(?:-[a-z]+-)?(max-lines|overflow-x|overflow-y)$/i,
+		'http://www.w3.org/TR/css3-ui/#$val': /^(?:-[a-z]+-)?(box-sizing|icon|ime-mode|nav-index|nav-up|nav-right|nav-down|nav-left|outline-offset|resize|text-overflow)$/i,
+		'http://www.w3.org/TR/css3-background/#$val': /^(?:-[a-z]+-)?(background-clip|background-origin|background-size|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-right-radius|border-bottom-left-radius|box-decoration-break|box-shadow)$/i
 	},
 	css_at: {
 		'page.html#page-box': /^page$/i,
