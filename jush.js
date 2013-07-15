@@ -426,7 +426,7 @@ var jush = {
 							var m2 = this.links[key][k].exec(m[2]);
 							if (m2) {
 								if (m2[1]) {
-									link = m2[1];
+									link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m2[1]) ? m2[1].toUpperCase() : m2[1].toLowerCase());
 								}
 								k_link = k;
 								if (key != 'att') {
