@@ -50,6 +50,40 @@ var jush = {
 		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml|txt)$/.test(language))[0] + '</span>';
 	},
 
+	/** Highlight html
+	* @param string
+	* @param string
+	* @return string
+	*/
+	highlight_html: function (language, html) {
+		var original = html.replace(/<br(\s+[^>]*)?>/gi, '\n');
+		var highlighted = jush.highlight(language, jush.html_entity_decode(original.replace(/<[^>]*>/g, ''))).replace(/(^|\n| ) /g, '$1&nbsp;');
+		
+		var inject = { };
+		var pos = 0;
+		var last_offset = 0;
+		original.replace(/(&[^;]+;)|(?:<[^>]+>)+/g, function (str, entity, offset) {
+			pos += (offset - last_offset) + (entity ? 1 : 0);
+			if (!entity) {
+				inject[pos] = str;
+			}
+			last_offset = offset + str.length;
+		});
+		
+		pos = 0;
+		highlighted = highlighted.replace(/([^&<]*)(?:(&[^;]+;)|(?:<[^>]+>)+|$)/g, function (str, text, entity) {
+			for (var i = text.length; i >= 0; i--) {
+				if (inject[pos + i]) {
+					str = str.substr(0, i) + inject[pos + i] + str.substr(i);
+					delete inject[pos + i];
+				}
+			}
+			pos += text.length + (entity ? 1 : 0);
+			return str;
+		});
+		return highlighted;
+	},
+
 	/** Highlight text in tags
 	* @param mixed tag name or array of HTMLElement
 	* @param number number of spaces for tab, 0 for tab itself, defaults to 4
@@ -67,7 +101,7 @@ var jush = {
 				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // http://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var language = match[3] ? match[3] : 'htm';
-					var s = '<span class="jush-' + language + '">' + jush.highlight(language, jush.html_entity_decode(pre[i].innerHTML.replace(/<br(\s+[^>]*)?>/gi, '\n').replace(/<[^>]*>/g, ''))).replace(/\t/g, tab.length ? tab : '\t').replace(/(^|\n| ) /g, '$1&nbsp;') + '</span>'; // span - enable style for class="language-"
+					var s = '<span class="jush-' + language + '">' + jush.highlight_html(language, pre[i].innerHTML.replace(/\t/g, tab.length ? tab : '\t')) + '</span>'; // span - enable style for class="language-"
 					if (pre[i].outerHTML && /^pre$/i.test(pre[i].tagName)) {
 						pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+>/)[0] + s + '</' + pre[i].tagName + '>';
 					} else {

@@ -1,3 +1,17 @@
+JUSH 1.12.0:
+Allow using tags in highlighted source
+Highlight PHP 5.5
+Highlight HTML5
+Highlight CSS 3
+Highlight SimpleDB
+Highlight keys in JavaScript objects
+Highlight hexadecimal numbers
+Link Suhosin in php.ini
+Link MySQL geometry
+Unlink PECL
+Help cursor for documentation links
+Match regular expressions only once (performance)
+
 JUSH 1.11.0:
 Fix jQuery plugin (thanks to Daniel Kouba)
 

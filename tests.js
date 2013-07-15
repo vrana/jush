@@ -38,10 +38,23 @@ var tests = [
 	[ 'cnf', 'Listen 80\nphp_flag display_errors On', '<span class="jush"><a href="http://httpd.apache.org/docs/current/mod/mpm_common.html#listen" class="jush-help">Listen</a> 80<span class="jush-cnf_phpini"><span class="jush-op">\n</span><a href="http://www.php.net/configuration.changes#configuration.changes.apache" class="jush-help">php_flag</a><span class="jush-op"> </span><a href="http://www.php.net/errorfunc.configuration#ini.display-errors" class="jush-help">display_errors</a><span class="jush-cnf_phpini_val"><span class="jush-op"> </span>On</span></span></span>' ]
 ];
 
+var html_tests = [
+	[ 'htm', '&lt;a<b>re</b>a <i>href</i>=""&gt;', '<span class="jush"><span class="jush-tag"><span class="jush-op">&lt;</span><a href="http://www.w3.org/TR/html4/struct/objects.html#edef-AREA" class="jush-help">a<b>re</b>a</a><span class="jush-att"><span class="jush-op"> <i></span><a href="http://www.w3.org/TR/html4/struct/links.html#adef-href" class="jush-help">href</i></a><span class="jush-att_quo"><span class="jush-op">="</span><span class="jush-op">"</span></span></span><span class="jush-op">&gt;</span></span></span>' ]
+];
+
 var html = [ ];
+
 for (var i=0; i < tests.length; i++) {
 	var test = tests[i];
 	var highlighted = jush.highlight(test[0], test[1]);
 	html.push((highlighted != test[2] ? '<b class="error">error</b>' : '') + '<pre class="jush-' + test[0] + '">' + highlighted + '</pre>');
 }
+
+for (var i=0; i < html_tests.length; i++) {
+	var test = html_tests[i];
+	var highlighted = jush.highlight_html(test[0], test[1]);
+	console.log(highlighted);
+	html.push((highlighted != test[2] ? '<b class="error">error</b>' : '') + '<pre class="jush-' + test[0] + '">' + highlighted + '</pre>');
+}
+
 document.getElementById('result').innerHTML = html.join('\n');
