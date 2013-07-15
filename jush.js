@@ -26,6 +26,7 @@ var jush = {
 	,
 	tr: undefined,
 	regexps: undefined,
+	subpatterns: { },
 
 	/** Link stylesheet
 	* @param string
@@ -148,13 +149,32 @@ var jush = {
 		return s;
 	},
 
-	build_regexp: function (tr1) {
+	build_regexp: function (key, tr1) {
 		var re = [ ];
+		subpatterns = [ '' ];
 		for (var k in tr1) {
-			var s = tr1[k].toString().replace(/^\/|\/[^\/]*$/g, '');
-			re.push(s);
+			var in_bra = false;
+			subpatterns.push(k);
+			var s = tr1[k].source.replace(/\\.|\((?!\?)|\[|]|([a-z])(?:-([a-z]))?/gi, function (str, match1, match2) {
+				// count capturing subpatterns
+				if (str == (in_bra ? ']' : '[')) {
+					in_bra = !in_bra;
+				}
+				if (str == '(') {
+					subpatterns.push(k);
+				}
+				if (match1 && tr1[k].ignoreCase) {
+					if (in_bra) {
+						return str.toLowerCase() + str.toUpperCase();
+					}
+					return '[' + match1.toLowerCase() + match1.toUpperCase() + ']' + (match2 ? '-[' + match2.toLowerCase() + match2.toUpperCase() + ']' : '');
+				}
+				return str;
+			});
+			re.push('(' + s + ')');
 		}
-		return new RegExp(re.join('|'), 'gi');
+		this.subpatterns[key] = subpatterns;
+		this.regexps[key] = new RegExp(re.join('|'), 'g');
 	},
 	
 	highlight_states: function (states, text, in_php, escape) {
@@ -174,7 +194,7 @@ var jush = {
 				att_http: { php: php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ },
 				att_quo: { php: php, _2: /"/ },
 				att_apo: { php: php, _2: /'/ },
-				att_val: { php: php, _2: /(?=>|\s)|$/ },
+				att_val: { php: php, _2: /(?=>|\s)/ },
 				
 				xml: { php: php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ },
 				xml_tag: { php: php, xml_att: /(\s*)([-\w:]+)()/, _1: />/ },
@@ -192,8 +212,8 @@ var jush = {
 				apo: { php: php, esc: /\\/, _1: /'/ },
 				com: { php: php, _1: /\*\// },
 				esc: { _1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
-				one: { _1: /(?=\n)|$/ },
-				clr: { _1: /(?=[^a-fA-F0-9])|$/ },
+				one: { _1: /(?=\n)/ },
+				clr: { _1: /(?=[^a-fA-F0-9])/ },
 				num: { _1: /()/ },
 				
 				js: { php: php, js_reg: /\s*\/(?![\/*])/, js_obj: /\s*\{/, js_code: /()/ },
@@ -208,13 +228,13 @@ var jush = {
 				js_doc: { _1: /\*\// },
 				js_arr: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_arr: /\[/, js_obj: /\{/, _1: /]/ },
 				js_obj: { php: php, js_one: /\s*\/\//, com: /\s*\/\*/, js_val: /:/, _1: /\s*}/, js_key: /()/ },
-				js_val: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_arr: /\[/, js_obj: /\{/, _1: /,|(?=})|$/ },
-				js_key: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, _1: /(?=:)|$/ },
+				js_val: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, js_arr: /\[/, js_obj: /\{/, _1: /,|(?=})/ },
+				js_key: { php: php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: num, _1: /(?=:)/ },
 				
 				php: { php_echo: /=/, php2: /()/ },
 				php2: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, _2: /\?>|<\/script>/i }, //! matches ::echo
 				php_quo_var: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), _1: /}/ },
-				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, _1: /\)|;|(?=\?>|<\/script>)|$/i },
+				php_echo: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + this.php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + this.sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + this.sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + this.pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + this.oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, _1: /\)|;|(?=\?>|<\/script>)/i },
 				php_php: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /[(,)]/ }, // [(,)] - only first parameter //! disables second parameter in create_function()
 				php_sql: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sql: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
 				php_sqlite: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_sqlite: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
@@ -224,10 +244,10 @@ var jush = {
 				php_phpini: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_phpini: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /[,)]/ },
 				php_http: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_http: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
 				php_mail: { php_quo: /"/, php_apo: /'/, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_mail: /\(/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: num, _1: /\)/ },
-				php_new: { php_one: /\/\/|#/, php_com: /\/\*/, _0: /\s*,\s*/, _1: /(?=[^\w\u007F-\uFFFF])|$/ }, //! classes are used also for type hinting and catch //! , because of 'implements' but fails for array(new A, new B)
+				php_new: { php_one: /\/\/|#/, php_com: /\/\*/, _0: /\s*,\s*/, _1: /(?=[^\w\u007F-\uFFFF])/ }, //! classes are used also for type hinting and catch //! , because of 'implements' but fails for array(new A, new B)
 				php_met: { php_one: /\/\/|#/, php_com: /\/\*/, _1: /()([\w\u007F-\uFFFF]+)()/ },
-				php_fun: { php_one: /\/\/|#/, php_com: /\/\*/, _1: /(?=[^\w\u007F-\uFFFF])|$/ },
-				php_one: { _1: /\n|(?=\?>)|$/ },
+				php_fun: { php_one: /\/\/|#/, php_com: /\/\*/, _1: /(?=[^\w\u007F-\uFFFF])/ },
+				php_one: { _1: /\n|(?=\?>)/ },
 				php_eot: { php_eot2: /([^'"\n]+)(['"]?)/ },
 				php_eot2: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/ }, // php_eot2._2 to be set in php_eot handler
 				php_quo: { php_quo_var: /\$\{|\{\$/, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, esc: /\\/, _1: /"/ },
@@ -269,7 +289,7 @@ var jush = {
 				
 				sql_apo: { esc: /\\/, _0: /''/, _1: /'/ },
 				sql_quo: { esc: /\\/, _0: /""/, _1: /"/ },
-				sql_var: { _1: /(?=[^_.$a-zA-Z0-9])|$/ },
+				sql_var: { _1: /(?=[^_.$a-zA-Z0-9])/ },
 				sqlite_apo: { _0: /''/, _1: /'/ },
 				sqlite_quo: { _0: /""/, _1: /"/ },
 				sql_eot: { sql_eot2: /\$/ },
@@ -279,15 +299,15 @@ var jush = {
 				bra: { _1: /]/ },
 				
 				cnf: { quo_one: /"/, one: /#/, cnf_http: /((?:^|\n)\s*)(RequestHeader|Header|CacheIgnoreHeaders)([ \t]+|$)/i, cnf_php: /((?:^|\n)\s*)(PHPIniDir)([ \t]+|$)/i, cnf_phpini: /((?:^|\n)\s*)(php_value|php_flag|php_admin_value|php_admin_flag)([ \t]+|$)/i },
-				quo_one: { esc: /\\/, _1: /"|(?=\n)|$/ },
-				cnf_http: { apo: /'/, quo: /"/, _1: /(?=\n)|$/ },
+				quo_one: { esc: /\\/, _1: /"|(?=\n)/ },
+				cnf_http: { apo: /'/, quo: /"/, _1: /(?=\n)/ },
 				cnf_php: { _1: /()/ },
 				cnf_phpini: { cnf_phpini_val: /[ \t]/ },
-				cnf_phpini_val: { apo: /'/, quo: /"/, _2: /(?=\n)|$/ }
+				cnf_phpini_val: { apo: /'/, quo: /"/, _2: /(?=\n)/ }
 			};
 			this.regexps = { };
 			for (var key in this.tr) {
-				this.regexps[key] = this.build_regexp(this.tr[key]);
+				this.build_regexp(key, this.tr[key]);
 			}
 		} else {
 			for (var key in this.tr) {
@@ -306,138 +326,149 @@ var jush = {
 		var child_states = [ ];
 		var s_states;
 		var start = 0;
-		loop: while (start < text.length && (match = this.regexps[state].exec(text))) {
+		while (start < text.length && (match = this.regexps[state].exec(text))) {
 			if (states[0] != 'htm' && /^<\/(script|style)>$/i.test(match[0])) {
 				continue;
 			}
-			for (var key in this.tr[state]) {
-				var m = this.tr[state][key].exec(match[0]);
-				if (m && !m.index && m[0].length == match[0].length) { // check index and length to allow '/' before '</script>'
-					if (in_php && key == 'php') {
-						continue loop;
+			var key, m = [ ];
+			for (var i = match.length; i--; ) {
+				if (match[i] !== undefined) {
+					key = this.subpatterns[state][i];
+					while (this.subpatterns[state][i - 1] == key) {
+						i--;
 					}
-					//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
-					var out = (key.charAt(0) == '_');
-					var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
-					var s = text.substring(start, division);
-					
-					// highlight children
-					var prev_state = states[states.length - 2];
-					if (/^(att_quo|att_apo|att_val)$/.test(state) && (/^(att_js|att_css|att_http)$/.test(prev_state) || /^\s*javascript:/i.test(s))) { // javascript: - easy but without own state //! should be checked only in %URI;
-						child_states.unshift(prev_state == 'att_css' ? 'css_pro' : (prev_state == 'att_http' ? 'http' : 'js'));
-						s_states = this.highlight_states(child_states, this.html_entity_decode(s), true, (state == 'att_apo' ? this.htmlspecialchars_apo : (state == 'att_quo' ? this.htmlspecialchars_quo : this.htmlspecialchars_quo_apo)));
-					} else if (state == 'css_js' || state == 'cnf_http' || state == 'cnf_phpini' || state == 'sql_sqlset' || state == 'sqlite_sqliteset' || state == 'pgsql_pgsqlset') {
-						child_states.unshift(state.replace(/^[^_]+_/, ''));
-						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'php_quo' || state == 'php_apo') && /^(php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_phpini|php_http|php_mail)$/.test(prev_state)) {
-						child_states.unshift(prev_state.substr(4));
-						s_states = this.highlight_states(child_states, this.stripslashes(s), true, (state == 'php_apo' ? this.addslashes_apo : this.addslashes_quo));
-					} else if (key == 'php_halt2') {
-						child_states.unshift('htm');
-						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_write_code') {
-						child_states.unshift('htm');
-						s_states = this.highlight_states(child_states, s, true);
-					} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_http_code') {
-						child_states.unshift('http');
-						s_states = this.highlight_states(child_states, s, true);
-					} else if (((state == 'php_quo' || state == 'php_apo') && prev_state == 'php_echo') || (state == 'php_eot2' && states[states.length - 3] == 'php_echo')) {
-						var i;
-						for (i=states.length; i--; ) {
-							prev_state = states[i];
-							if (prev_state.substring(0, 3) != 'php' && prev_state != 'att_quo' && prev_state != 'att_apo' && prev_state != 'att_val') {
-								break;
-							}
-							prev_state = '';
-						}
-						var f = (state == 'php_eot2' ? this.addslashes : (state == 'php_apo' ? this.addslashes_apo : this.addslashes_quo));
-						s = this.stripslashes(s);
-						if (/^(att_js|att_css|att_http)$/.test(prev_state)) {
-							var g = (states[i+1] == 'att_quo' ? this.htmlspecialchars_quo : (states[i+1] == 'att_apo' ? this.htmlspecialchars_apo : this.htmlspecialchars_quo_apo));
-							child_states.unshift(prev_state == 'att_js' ? 'js' : prev_state.substr(4));
-							s_states = this.highlight_states(child_states, this.html_entity_decode(s), true, function (string) { return f(g(string)); });
-						} else if (prev_state && child_states) {
-							child_states.unshift(prev_state);
-							s_states = this.highlight_states(child_states, s, true, f);
-						} else {
-							s = this.htmlspecialchars(s);
-							s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
-						}
-					} else {
-						s = this.htmlspecialchars(s);
-						s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
+					while (this.subpatterns[state][i] == key) {
+						m.push(match[i]);
+						i++;
 					}
-					s = s_states[0];
-					child_states = s_states[1];
-					s = this.keywords_links(state, s);
-					ret.push(s);
-					
-					s = text.substring(division, match.index + match[0].length);
-					s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
-					if (!out) {
-						if (this.links && this.links[key] && m[2]) {
-							if (/^tag/.test(key)) {
-								this.last_tag = m[2].toUpperCase();
-							}
-							var link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m[2]) ? m[2].toUpperCase() : m[2].toLowerCase());
-							var k_link = '';
-							var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
-							for (var k in this.links[key]) {
-								if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^http:/.test(k)) {
-									link += '-' + att_tag;
-									k_link = k;
-									break;
-								} else {
-									var m2 = this.links[key][k].exec(m[2]);
-									if (m2) {
-										if (m2[1]) {
-											link = m2[1];
-										}
-										k_link = k;
-										if (key != 'att') {
-											break;
-										}
-									}
-								}
-							}
-							if (key == 'php_met') {
-								this.last_class = (k_link && !/^(self|parent|static|dir)$/i.test(link) ? link : '');
-							}
-							if (k_link) {
-								s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-								s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^http:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
-								s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
-							}
-						}
-						ret.push('<span class="jush-' + key + '">', s);
-						states.push(key);
-						if (state == 'php_eot') {
-							this.tr.php_eot2._2 = new RegExp('(\n)(' + match[1] + ')(;?\n)');
-							this.regexps.php_eot2 = this.build_regexp((match[2] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
-						} else if (state == 'sql_eot') {
-							this.tr.sql_eot2._2 = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
-							this.regexps.sql_eot2 = this.build_regexp(this.tr.sql_eot2);
-						}
-					} else {
-						if (state == 'php_met' && this.last_class) {
-							s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s);
-						}
-						ret.push(s);
-						for (var i = Math.min(states.length, +key.substr(1)); i--; ) {
-							ret.push('</span>');
-							states.pop();
-						}
-					}
-					start = match.index + match[0].length;
-					if (!states.length) { // out of states
-						break loop;
-					}
-					state = states[states.length - 1];
-					this.regexps[state].lastIndex = start;
-					continue loop;
+					break;
 				}
 			}
-			return [ 'regexp not found', [ ] ];
+			if (!key) {
+				return [ 'regexp not found', [ ] ];
+			}
+			
+			if (in_php && key == 'php') {
+				continue;
+			}
+			//~ console.log(states + ' (' + key + '): ' + text.substring(start).replace(/\n/g, '\\n'));
+			var out = (key.charAt(0) == '_');
+			var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
+			var s = text.substring(start, division);
+			
+			// highlight children
+			var prev_state = states[states.length - 2];
+			if (/^(att_quo|att_apo|att_val)$/.test(state) && (/^(att_js|att_css|att_http)$/.test(prev_state) || /^\s*javascript:/i.test(s))) { // javascript: - easy but without own state //! should be checked only in %URI;
+				child_states.unshift(prev_state == 'att_css' ? 'css_pro' : (prev_state == 'att_http' ? 'http' : 'js'));
+				s_states = this.highlight_states(child_states, this.html_entity_decode(s), true, (state == 'att_apo' ? this.htmlspecialchars_apo : (state == 'att_quo' ? this.htmlspecialchars_quo : this.htmlspecialchars_quo_apo)));
+			} else if (state == 'css_js' || state == 'cnf_http' || state == 'cnf_phpini' || state == 'sql_sqlset' || state == 'sqlite_sqliteset' || state == 'pgsql_pgsqlset') {
+				child_states.unshift(state.replace(/^[^_]+_/, ''));
+				s_states = this.highlight_states(child_states, s, true);
+			} else if ((state == 'php_quo' || state == 'php_apo') && /^(php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_phpini|php_http|php_mail)$/.test(prev_state)) {
+				child_states.unshift(prev_state.substr(4));
+				s_states = this.highlight_states(child_states, this.stripslashes(s), true, (state == 'php_apo' ? this.addslashes_apo : this.addslashes_quo));
+			} else if (key == 'php_halt2') {
+				child_states.unshift('htm');
+				s_states = this.highlight_states(child_states, s, true);
+			} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_write_code') {
+				child_states.unshift('htm');
+				s_states = this.highlight_states(child_states, s, true);
+			} else if ((state == 'apo' || state == 'quo') && prev_state == 'js_http_code') {
+				child_states.unshift('http');
+				s_states = this.highlight_states(child_states, s, true);
+			} else if (((state == 'php_quo' || state == 'php_apo') && prev_state == 'php_echo') || (state == 'php_eot2' && states[states.length - 3] == 'php_echo')) {
+				var i;
+				for (i=states.length; i--; ) {
+					prev_state = states[i];
+					if (prev_state.substring(0, 3) != 'php' && prev_state != 'att_quo' && prev_state != 'att_apo' && prev_state != 'att_val') {
+						break;
+					}
+					prev_state = '';
+				}
+				var f = (state == 'php_eot2' ? this.addslashes : (state == 'php_apo' ? this.addslashes_apo : this.addslashes_quo));
+				s = this.stripslashes(s);
+				if (/^(att_js|att_css|att_http)$/.test(prev_state)) {
+					var g = (states[i+1] == 'att_quo' ? this.htmlspecialchars_quo : (states[i+1] == 'att_apo' ? this.htmlspecialchars_apo : this.htmlspecialchars_quo_apo));
+					child_states.unshift(prev_state == 'att_js' ? 'js' : prev_state.substr(4));
+					s_states = this.highlight_states(child_states, this.html_entity_decode(s), true, function (string) { return f(g(string)); });
+				} else if (prev_state && child_states) {
+					child_states.unshift(prev_state);
+					s_states = this.highlight_states(child_states, s, true, f);
+				} else {
+					s = this.htmlspecialchars(s);
+					s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
+				}
+			} else {
+				s = this.htmlspecialchars(s);
+				s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
+			}
+			s = s_states[0];
+			child_states = s_states[1];
+			s = this.keywords_links(state, s);
+			ret.push(s);
+			
+			s = text.substring(division, match.index + match[0].length);
+			s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
+			if (!out) {
+				if (this.links && this.links[key] && m[2]) {
+					if (/^tag/.test(key)) {
+						this.last_tag = m[2].toUpperCase();
+					}
+					var link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m[2]) ? m[2].toUpperCase() : m[2].toLowerCase());
+					var k_link = '';
+					var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
+					for (var k in this.links[key]) {
+						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^http:/.test(k)) {
+							link += '-' + att_tag;
+							k_link = k;
+							break;
+						} else {
+							var m2 = this.links[key][k].exec(m[2]);
+							if (m2) {
+								if (m2[1]) {
+									link = m2[1];
+								}
+								k_link = k;
+								if (key != 'att') {
+									break;
+								}
+							}
+						}
+					}
+					if (key == 'php_met') {
+						this.last_class = (k_link && !/^(self|parent|static|dir)$/i.test(link) ? link : '');
+					}
+					if (k_link) {
+						s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
+						s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^http:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
+						s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
+					}
+				}
+				ret.push('<span class="jush-' + key + '">', s);
+				states.push(key);
+				if (state == 'php_eot') {
+					this.tr.php_eot2._2 = new RegExp('(\n)(' + match[1] + ')(;?\n)');
+					this.build_regexp('php_eot2', (match[2] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
+				} else if (state == 'sql_eot') {
+					this.tr.sql_eot2._2 = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
+					this.build_regexp('sql_eot2', this.tr.sql_eot2);
+				}
+			} else {
+				if (state == 'php_met' && this.last_class) {
+					s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s);
+				}
+				ret.push(s);
+				for (var i = Math.min(states.length, +key.substr(1)); i--; ) {
+					ret.push('</span>');
+					states.pop();
+				}
+			}
+			start = match.index + match[0].length;
+			if (!states.length) { // out of states
+				break;
+			}
+			state = states[states.length - 1];
+			this.regexps[state].lastIndex = start;
 		}
 		ret.push(this.keywords_links(state, this.htmlspecialchars(text.substring(start))));
 		for (var i=1; i < states.length; i++) {
