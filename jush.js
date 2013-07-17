@@ -117,6 +117,18 @@ var jush = {
 		};
 		highlight();
 	},
+	
+	link_manual: function (language, text) {
+		var code = document.createElement('code');
+		code.innerHTML = this.highlight(language, text);
+		var as = code.getElementsByTagName('a');
+		for (var i = 0; i < as.length; i++) {
+			if (as[i].href) {
+				return as[i].href;
+			}
+		}
+		return '';
+	},
 
 	create_link: function (link, s, attrs) {
 		return '<a'
