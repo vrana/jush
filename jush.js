@@ -228,6 +228,7 @@ var jush = {
 			var php = /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i; // asp_tags=0, short_open_tag=1
 			var num = /(?:0x[0-9a-f]+)|(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?/i;
 			this.tr = { // transitions - key: go inside this state, _2: go outside 2 levels (number alone is put to the beginning in Chrome)
+				// regular expressions matching empty string could be used only in the last key
 				htm: { php: php, tag_css: /(<)(style)\b/i, tag_js: /(<)(script)\b/i, htm_com: /<!--/, tag: /(<)(\/?[-\w]+)/, ent: /&/ },
 				htm_com: { php: php, _1: /-->/ },
 				ent: { php: php, _1: /[;\s]/ },
@@ -252,7 +253,7 @@ var jush = {
 				css_at: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at2: /\{/, _1: /;/ },
 				css_at2: { php: php, quo: /"/, apo: /'/, com: /\/\*/, css_at: /@/, css_pro: /\{/, _2: /}/ },
 				css_pro: { php: php, com: /\/\*/, css_val: /(\s*)([-\w]+)(\s*:)/, _1: /}/ }, //! misses e.g. margin/*-left*/:
-				css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, _1: /;|$/, _2: /}/ },
+				css_val: { php: php, quo: /"/, apo: /'/, css_js: /expression\s*\(/i, com: /\/\*/, clr: /#/, num: /[-+]?[0-9]*\.?[0-9]+(?:em|ex|px|in|cm|mm|pt|pc|%)?/, _2: /}/, _1: /;|$/ },
 				css_js: { php: php, css_js: /\(/, _1: /\)/ },
 				quo: { php: php, esc: /\\/, _1: /"/ },
 				apo: { php: php, esc: /\\/, _1: /'/ },
@@ -378,7 +379,7 @@ var jush = {
 			}
 			var key, m = [ ];
 			for (var i = match.length; i--; ) {
-				if (match[i] !== undefined) {
+				if (match[i] || !match[0].length) { // WScript returns empty string even for non matched subexpressions
 					key = this.subpatterns[state][i];
 					while (this.subpatterns[state][i - 1] == key) {
 						i--;
