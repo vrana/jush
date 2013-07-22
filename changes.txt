@@ -1,4 +1,5 @@
-JUSH 1.12.0:
+JUSH 2.0.0:
+Add highlighted textarea
 Allow using tags in highlighted source
 Highlight PHP 5.5
 Highlight HTML5
