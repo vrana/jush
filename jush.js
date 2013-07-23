@@ -771,6 +771,9 @@ jush.textarea = (function () {
 		pre.style.height = el.clientHeight + 'px';
 		pre.style.padding = '2px';
 		pre.style.overflow = 'auto';
+		if (el.wrap != 'off') {
+			pre.style.whiteSpace = 'pre-wrap';
+		}
 		pre.jushTextarea = el;
 		pre.jushUndo = [ ];
 		pre.jushUndoPos = -1;
