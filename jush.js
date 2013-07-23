@@ -785,6 +785,7 @@ jush.textarea = (function () {
 		document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
 		el.parentNode.insertBefore(pre, el);
 		el.style.display = 'none';
+		return pre;
 	};
 })();
 
