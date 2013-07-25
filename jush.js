@@ -611,61 +611,63 @@ jush.textarea = (function () {
 	//! IE sometimes inserts empty <p> in start of a string when newline is entered inside
 	
 	function findPosition(el, container, offset) {
-		var pos = 0;
-		var recurse = function (child) {
-			if (child.nodeType == 3) {
-				if (child == container) {
-					pos += offset;
-					return true;
-				}
-				pos += child.textContent.length;
-			} else if (child == container) {
-				for (var i = 0; i < offset; i++) {
-					recurse(child.childNodes[i]);
-				}
-				return true;
-			} else {
-				if (/^(br|div)$/i.test(child.tagName)) {
-					pos++;
-				}
-				for (var i = 0; i < child.childNodes.length; i++) {
-					if (recurse(child.childNodes[i])) {
-						return true;
-					}
-				}
-				if (/^p$/i.test(child.tagName)) {
-					pos++;
-				}
-			}
-		};
-		recurse(el);
-		return pos;
+		var pos = { pos: 0 };
+		findPositionRecurse(el, container, offset, pos);
+		return pos.pos;
 	}
 
-	function findOffset(el, pos) {
-		var recurse = function (child) {
-			if (child.nodeType == 3) {
-				if (child.textContent.length >= pos) {
-					return { container: child, offset: pos };
+	function findPositionRecurse(child, container, offset, pos) {
+		if (child.nodeType == 3) {
+			if (child == container) {
+				pos.pos += offset;
+				return true;
+			}
+			pos.pos += child.textContent.length;
+		} else if (child == container) {
+			for (var i = 0; i < offset; i++) {
+				findPositionRecurse(child.childNodes[i], container, offset, pos);
+			}
+			return true;
+		} else {
+			if (/^(br|div)$/i.test(child.tagName)) {
+				pos.pos++;
+			}
+			for (var i = 0; i < child.childNodes.length; i++) {
+				if (findPositionRecurse(child.childNodes[i], container, offset, pos)) {
+					return true;
 				}
-				pos -= child.textContent.length;
-			} else {
-				for (var i = 0; i < child.childNodes.length; i++) {
-					if (/^br$/i.test(child.childNodes[i].tagName)) {
-						if (!pos) {
-							return { container: child, offset: i };
-						}
-						pos--;
-					} else {
-						var result = recurse(child.childNodes[i]);
-						if (result) {
-							return result;
-						}
+			}
+			if (/^p$/i.test(child.tagName)) {
+				pos.pos++;
+			}
+		}
+	}
+	
+	function findOffset(el, pos) {
+		return findOffsetRecurse(el, { pos: pos });
+	}
+	
+	function findOffsetRecurse(child, pos) {
+		if (child.nodeType == 3) { // 3 - TEXT_NODE
+			if (child.textContent.length >= pos.pos) {
+				return { container: child, offset: pos.pos };
+			}
+			pos.pos -= child.textContent.length;
+		} else {
+			for (var i = 0; i < child.childNodes.length; i++) {
+				if (/^br$/i.test(child.childNodes[i].tagName)) {
+					if (!pos.pos) {
+						return { container: child, offset: i };
+					}
+					pos.pos--;
+				} else {
+					var result = findOffsetRecurse(child.childNodes[i], pos);
+					if (result) {
+						return result;
 					}
 				}
 			}
-		};
-		return recurse(el);
+		}
 	}
 	
 	function setHTML(pre, html, text, pos) {
