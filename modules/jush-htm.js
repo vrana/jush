@@ -11,6 +11,9 @@ jush.tr.att_http = { php: jush.php, att_quo: /"/, att_apo: /'/, att_val: /\s*/ }
 jush.tr.att_quo = { php: jush.php, _2: /"/ };
 jush.tr.att_apo = { php: jush.php, _2: /'/ };
 jush.tr.att_val = { php: jush.php, _2: /(?=>|\s)/ };
+jush.tr.xml = { php: jush.php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent: /&/ };
+jush.tr.xml_tag = { php: jush.php, xml_att: /(\s*)([-\w:]+)()/, _1: />/ };
+jush.tr.xml_att = { php: jush.php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, _1: /()/ };
 
 jush.urls.tag = 'http://www.w3.org/TR/html4/$key.html#edef-$val';
 jush.urls.tag_css = 'http://www.w3.org/TR/html4/$key.html#edef-$val';

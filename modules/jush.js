@@ -480,6 +480,7 @@ jush.tr = { // transitions - key: go inside this state, _2: go outside 2 levels 
 	apo: { php: jush.php, esc: /\\/, _1: /'/ },
 	com: { php: jush.php, _1: /\*\// },
 	com_nest: { com_nest: /\/\*/, _1: /\*\// },
+	php: { _1: /\?>/ }, // overwritten by jush-php.js
 	esc: { _1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
 	one: { _1: /(?=\n)/ },
 	num: { _1: /()/ },
