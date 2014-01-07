@@ -475,205 +475,6 @@ var jush = {
 
 
 
-jush.textarea = (function () {
-	//! IE sometimes inserts empty <p> in start of a string when newline is entered inside
-	
-	function findPosition(el, container, offset) {
-		var pos = { pos: 0 };
-		findPositionRecurse(el, container, offset, pos);
-		return pos.pos;
-	}
-
-	function findPositionRecurse(child, container, offset, pos) {
-		if (child.nodeType == 3) {
-			if (child == container) {
-				pos.pos += offset;
-				return true;
-			}
-			pos.pos += child.textContent.length;
-		} else if (child == container) {
-			for (var i = 0; i < offset; i++) {
-				findPositionRecurse(child.childNodes[i], container, offset, pos);
-			}
-			return true;
-		} else {
-			if (/^(br|div)$/i.test(child.tagName)) {
-				pos.pos++;
-			}
-			for (var i = 0; i < child.childNodes.length; i++) {
-				if (findPositionRecurse(child.childNodes[i], container, offset, pos)) {
-					return true;
-				}
-			}
-			if (/^p$/i.test(child.tagName)) {
-				pos.pos++;
-			}
-		}
-	}
-	
-	function findOffset(el, pos) {
-		return findOffsetRecurse(el, { pos: pos });
-	}
-	
-	function findOffsetRecurse(child, pos) {
-		if (child.nodeType == 3) { // 3 - TEXT_NODE
-			if (child.textContent.length >= pos.pos) {
-				return { container: child, offset: pos.pos };
-			}
-			pos.pos -= child.textContent.length;
-		} else {
-			for (var i = 0; i < child.childNodes.length; i++) {
-				if (/^br$/i.test(child.childNodes[i].tagName)) {
-					if (!pos.pos) {
-						return { container: child, offset: i };
-					}
-					pos.pos--;
-					if (!pos.pos && i == child.childNodes.length - 1) { // last invisible <br>
-						return { container: child, offset: i };
-					}
-				} else {
-					var result = findOffsetRecurse(child.childNodes[i], pos);
-					if (result) {
-						return result;
-					}
-				}
-			}
-		}
-	}
-	
-	function setHTML(pre, html, text, pos) {
-		pre.innerHTML = html;
-		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
-		pre.jushTextarea.value = text;
-		if (pos) {
-			var start = findOffset(pre, pos);
-			if (start) {
-				var range = document.createRange();
-				range.setStart(start.container, start.offset);
-				var sel = getSelection();
-				sel.removeAllRanges();
-				sel.addRange(range);
-			}
-		}
-	}
-	
-	function keydown(event) {
-		event = event || window.event;
-		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
-			var isUndo = (event.keyCode == 90); // 90 - z
-			var isRedo = (event.keyCode == 89); // 89 - y
-			if (isUndo || isRedo) {
-				if (isRedo) {
-					if (this.jushUndoPos + 1 < this.jushUndo.length) {
-						this.jushUndoPos++;
-						var undo = this.jushUndo[this.jushUndoPos];
-						setHTML(this, undo.html, undo.text, undo.end);
-					}
-				} else if (this.jushUndoPos > 0) {
-					this.jushUndoPos--;
-					var undo = this.jushUndo[this.jushUndoPos];
-					setHTML(this, undo.html, undo.text, this.jushUndo[this.jushUndoPos + 1].start);
-				}
-				return false;
-			}
-		} else {
-			setLastPos(this);
-		}
-	}
-	
-	function setLastPos(pre) {
-		var sel = getSelection();
-		if (sel.rangeCount) {
-			var range = sel.getRangeAt(0);
-			if (pre.lastPos === undefined) {
-				pre.lastPos = findPosition(pre, range.endContainer, range.endOffset);
-			}
-		}
-	}
-	
-	function highlight(pre, forceNewUndo) {
-		var start = pre.lastPos;
-		pre.lastPos = undefined;
-		var innerHTML = pre.innerHTML;
-		if (innerHTML != pre.lastHTML) {
-			var end;
-			var sel = getSelection();
-			if (sel.rangeCount) {
-				var range = sel.getRangeAt(0);
-				end = findPosition(pre, range.startContainer, range.startOffset);
-			}
-			innerHTML = innerHTML.replace(/<br>((<\/[^>]+>)*<\/?div>)(?!$)/gi, function (all, rest) {
-				if (end) {
-					end--;
-				}
-				return rest;
-			});
-			pre.innerHTML = innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
-			var text = pre.textContent;
-			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
-			var lang = (match ? match[2] : 'htm');
-			setHTML(pre, jush.highlight(lang, text).replace(/\n/g, '<br>'), text, end);
-			pre.jushUndo.length = pre.jushUndoPos + 1;
-			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
-				pre.jushUndo.push({ html: pre.lastHTML, text: pre.jushTextarea.value, start: start, end: end });
-				pre.jushUndoPos++;
-			} else {
-				pre.jushUndo[pre.jushUndoPos].html = pre.lastHTML;
-				pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
-				pre.jushUndo[pre.jushUndoPos].end = end;
-			}
-		}
-	}
-	
-	function keyup() {
-		highlight(this);
-	}
-	
-	function paste(event) {
-		event = event || window.event;
-		if (event.clipboardData) {
-			setLastPos(this);
-			document.execCommand('insertText', false, event.clipboardData.getData('text'));
-			event.preventDefault();
-			highlight(this, true);
-		}
-	}
-	
-	return function textarea(el) {
-		if (!window.getSelection) {
-			return;
-		}
-		var pre = document.createElement('pre');
-		pre.contentEditable = true;
-		pre.className = el.className + ' jush';
-		pre.style.border = '1px inset #ccc';
-		pre.style.width = el.clientWidth + 'px';
-		pre.style.height = el.clientHeight + 'px';
-		pre.style.padding = '3px';
-		pre.style.overflow = 'auto';
-		if (el.wrap != 'off') {
-			pre.style.whiteSpace = 'pre-wrap';
-		}
-		pre.jushTextarea = el;
-		pre.jushUndo = [ ];
-		pre.jushUndoPos = -1;
-		pre.onkeydown = keydown;
-		pre.onkeyup = keyup;
-		pre.onpaste = paste;
-		pre.appendChild(document.createTextNode(el.value));
-		highlight(pre);
-		if (el.spellcheck === false) {
-			document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
-		}
-		el.parentNode.insertBefore(pre, el);
-		if (document.activeElement === el) {
-			pre.focus();
-		}
-		el.style.display = 'none';
-		return pre;
-	};
-})();
-
 jush.tr = { // transitions - key: go inside this state, _2: go outside 2 levels (number alone is put to the beginning in Chrome)
 	// regular expressions matching empty string could be used only in the last key
 	quo: { php: jush.php, esc: /\\/, _1: /"/ },
@@ -1171,6 +972,207 @@ jush.links.sqlite_sqliteset = { 'pragma.html': /.+/ };
 jush.links2.sqlite = /(\b)(ALTER\s+TABLE|ANALYZE|ATTACH|COPY|DELETE|DETACH|DROP\s+INDEX|DROP\s+TABLE|DROP\s+TRIGGER|DROP\s+VIEW|EXPLAIN|INSERT|CONFLICT|REINDEX|REPLACE|SELECT|UPDATE|TRANSACTION|VACUUM|(CREATE\s+VIRTUAL\s+TABLE)|(BEGIN|COMMIT|ROLLBACK)|(CREATE(?:\s+UNIQUE)?\s+INDEX)|(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+TABLE)|(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+TRIGGER)|(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+VIEW)|(ABORT|ACTION|ADD|AFTER|ALL|AS|ASC|AUTOINCREMENT|BEFORE|BY|CASCADE|CHECK|COLUMN|CONSTRAINT|CROSS|CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|DATABASE|DEFAULT|DEFERRABLE|DEFERRED|DESC|DISTINCT|EACH|END|EXCEPT|EXCLUSIVE|FAIL|FOR|FOREIGN|FROM|FULL|GROUP|HAVING|IF|IGNORE|IMMEDIATE|INDEXED|INITIALLY|INNER|INSTEAD|INTERSECT|INTO|IS|JOIN|KEY|LEFT|LIMIT|NATURAL|NO|NOT|NOTNULL|NULL|OF|OFFSET|ON|ORDER|OUTER|PLAN|PRAGMA|PRIMARY|QUERY|RAISE|REFERENCES|RELEASE|RENAME|RESTRICT|RIGHT|ROW|SAVEPOINT|SET|TEMPORARY|TO|UNION|UNIQUE|USING|VALUES|WHERE)|(like|glob|regexp|match|escape|isnull|isnotnull|between|exists|case|when|then|else|cast|collate|in|and|or|not))\b|\b(abs|coalesce|glob|ifnull|hex|last_insert_rowid|length|like|load_extension|lower|nullif|quote|random|randomblob|round|soundex|sqlite_version|substr|typeof|upper|(date|time|datetime|julianday|strftime)|(avg|count|max|min|sum|total))(\s*\(|$)/gi; // collisions: min, max, end, like, glob
 jush.links2.sqliteset = /(\b)(auto_vacuum|cache_size|case_sensitive_like|count_changes|default_cache_size|empty_result_callbacks|encoding|foreign_keys|full_column_names|fullfsync|incremental_vacuum|journal_mode|journal_size_limit|legacy_file_format|locking_mode|page_size|max_page_count|read_uncommitted|recursive_triggers|reverse_unordered_selects|secure_delete|short_column_names|synchronous|temp_store|temp_store_directory|collation_list|database_list|foreign_key_list|freelist_count|index_info|index_list|page_count|table_info|schema_version|compile_options|integrity_check|quick_check|parser_trace|vdbe_trace|vdbe_listing)(\b)/gi;
 jush.links2.sqlitestatus = /()(.+)()/g;
+
+
+
+jush.textarea = (function () {
+	//! IE sometimes inserts empty <p> in start of a string when newline is entered inside
+	
+	function findPosition(el, container, offset) {
+		var pos = { pos: 0 };
+		findPositionRecurse(el, container, offset, pos);
+		return pos.pos;
+	}
+
+	function findPositionRecurse(child, container, offset, pos) {
+		if (child.nodeType == 3) {
+			if (child == container) {
+				pos.pos += offset;
+				return true;
+			}
+			pos.pos += child.textContent.length;
+		} else if (child == container) {
+			for (var i = 0; i < offset; i++) {
+				findPositionRecurse(child.childNodes[i], container, offset, pos);
+			}
+			return true;
+		} else {
+			if (/^(br|div)$/i.test(child.tagName)) {
+				pos.pos++;
+			}
+			for (var i = 0; i < child.childNodes.length; i++) {
+				if (findPositionRecurse(child.childNodes[i], container, offset, pos)) {
+					return true;
+				}
+			}
+			if (/^p$/i.test(child.tagName)) {
+				pos.pos++;
+			}
+		}
+	}
+	
+	function findOffset(el, pos) {
+		return findOffsetRecurse(el, { pos: pos });
+	}
+	
+	function findOffsetRecurse(child, pos) {
+		if (child.nodeType == 3) { // 3 - TEXT_NODE
+			if (child.textContent.length >= pos.pos) {
+				return { container: child, offset: pos.pos };
+			}
+			pos.pos -= child.textContent.length;
+		} else {
+			for (var i = 0; i < child.childNodes.length; i++) {
+				if (/^br$/i.test(child.childNodes[i].tagName)) {
+					if (!pos.pos) {
+						return { container: child, offset: i };
+					}
+					pos.pos--;
+					if (!pos.pos && i == child.childNodes.length - 1) { // last invisible <br>
+						return { container: child, offset: i };
+					}
+				} else {
+					var result = findOffsetRecurse(child.childNodes[i], pos);
+					if (result) {
+						return result;
+					}
+				}
+			}
+		}
+	}
+	
+	function setHTML(pre, html, text, pos) {
+		pre.innerHTML = html;
+		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
+		pre.jushTextarea.value = text;
+		if (pos) {
+			var start = findOffset(pre, pos);
+			if (start) {
+				var range = document.createRange();
+				range.setStart(start.container, start.offset);
+				var sel = getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
+		}
+	}
+	
+	function keydown(event) {
+		event = event || window.event;
+		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
+			var isUndo = (event.keyCode == 90); // 90 - z
+			var isRedo = (event.keyCode == 89); // 89 - y
+			if (isUndo || isRedo) {
+				if (isRedo) {
+					if (this.jushUndoPos + 1 < this.jushUndo.length) {
+						this.jushUndoPos++;
+						var undo = this.jushUndo[this.jushUndoPos];
+						setHTML(this, undo.html, undo.text, undo.end);
+					}
+				} else if (this.jushUndoPos > 0) {
+					this.jushUndoPos--;
+					var undo = this.jushUndo[this.jushUndoPos];
+					setHTML(this, undo.html, undo.text, this.jushUndo[this.jushUndoPos + 1].start);
+				}
+				return false;
+			}
+		} else {
+			setLastPos(this);
+		}
+	}
+	
+	function setLastPos(pre) {
+		var sel = getSelection();
+		if (sel.rangeCount) {
+			var range = sel.getRangeAt(0);
+			if (pre.lastPos === undefined) {
+				pre.lastPos = findPosition(pre, range.endContainer, range.endOffset);
+			}
+		}
+	}
+	
+	function highlight(pre, forceNewUndo) {
+		var start = pre.lastPos;
+		pre.lastPos = undefined;
+		var innerHTML = pre.innerHTML;
+		if (innerHTML != pre.lastHTML) {
+			var end;
+			var sel = getSelection();
+			if (sel.rangeCount) {
+				var range = sel.getRangeAt(0);
+				end = findPosition(pre, range.startContainer, range.startOffset);
+			}
+			innerHTML = innerHTML.replace(/<br>((<\/[^>]+>)*<\/?div>)(?!$)/gi, function (all, rest) {
+				if (end) {
+					end--;
+				}
+				return rest;
+			});
+			pre.innerHTML = innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
+			var text = pre.textContent;
+			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
+			var lang = (match ? match[2] : 'htm');
+			setHTML(pre, jush.highlight(lang, text).replace(/\n/g, '<br>'), text, end);
+			pre.jushUndo.length = pre.jushUndoPos + 1;
+			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
+				pre.jushUndo.push({ html: pre.lastHTML, text: pre.jushTextarea.value, start: start, end: end });
+				pre.jushUndoPos++;
+			} else {
+				pre.jushUndo[pre.jushUndoPos].html = pre.lastHTML;
+				pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
+				pre.jushUndo[pre.jushUndoPos].end = end;
+			}
+		}
+	}
+	
+	function keyup() {
+		highlight(this);
+	}
+	
+	function paste(event) {
+		event = event || window.event;
+		if (event.clipboardData) {
+			setLastPos(this);
+			document.execCommand('insertText', false, event.clipboardData.getData('text'));
+			event.preventDefault();
+			highlight(this, true);
+		}
+	}
+	
+	return function textarea(el) {
+		if (!window.getSelection) {
+			return;
+		}
+		var pre = document.createElement('pre');
+		pre.contentEditable = true;
+		pre.className = el.className + ' jush';
+		pre.style.border = '1px inset #ccc';
+		pre.style.width = el.clientWidth + 'px';
+		pre.style.height = el.clientHeight + 'px';
+		pre.style.padding = '3px';
+		pre.style.overflow = 'auto';
+		if (el.wrap != 'off') {
+			pre.style.whiteSpace = 'pre-wrap';
+		}
+		pre.jushTextarea = el;
+		pre.jushUndo = [ ];
+		pre.jushUndoPos = -1;
+		pre.onkeydown = keydown;
+		pre.onkeyup = keyup;
+		pre.onpaste = paste;
+		pre.appendChild(document.createTextNode(el.value));
+		highlight(pre);
+		if (el.spellcheck === false) {
+			document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
+		}
+		el.parentNode.insertBefore(pre, el);
+		if (document.activeElement === el) {
+			pre.focus();
+		}
+		el.style.display = 'none';
+		return pre;
+	};
+})();
 
 
 
