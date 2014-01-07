@@ -527,6 +527,9 @@ jush.textarea = (function () {
 						return { container: child, offset: i };
 					}
 					pos.pos--;
+					if (!pos.pos && i == child.childNodes.length - 1) { // last invisible <br>
+						return { container: child, offset: i };
+					}
 				} else {
 					var result = findOffsetRecurse(child.childNodes[i], pos);
 					if (result) {
@@ -590,14 +593,21 @@ jush.textarea = (function () {
 	function highlight(pre, forceNewUndo) {
 		var start = pre.lastPos;
 		pre.lastPos = undefined;
-		if (pre.lastHTML != pre.innerHTML) {
+		var innerHTML = pre.innerHTML;
+		if (innerHTML != pre.lastHTML) {
 			var end;
 			var sel = getSelection();
 			if (sel.rangeCount) {
 				var range = sel.getRangeAt(0);
 				end = findPosition(pre, range.startContainer, range.startOffset);
 			}
-			pre.innerHTML = pre.innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
+			innerHTML = innerHTML.replace(/<br>((<\/[^>]+>)*<\/?div>)(?!$)/gi, function (all, rest) {
+				if (end) {
+					end--;
+				}
+				return rest;
+			});
+			pre.innerHTML = innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
 			var text = pre.textContent;
 			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
 			var lang = (match ? match[2] : 'htm');

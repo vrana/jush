@@ -528,6 +528,9 @@ jush.textarea = (function () {
 						return { container: child, offset: i };
 					}
 					pos.pos--;
+					if (!pos.pos && i == child.childNodes.length - 1) { // last invisible <br>
+						return { container: child, offset: i };
+					}
 				} else {
 					var result = findOffsetRecurse(child.childNodes[i], pos);
 					if (result) {
@@ -591,14 +594,21 @@ jush.textarea = (function () {
 	function highlight(pre, forceNewUndo) {
 		var start = pre.lastPos;
 		pre.lastPos = undefined;
-		if (pre.lastHTML != pre.innerHTML) {
+		var innerHTML = pre.innerHTML;
+		if (innerHTML != pre.lastHTML) {
 			var end;
 			var sel = getSelection();
 			if (sel.rangeCount) {
 				var range = sel.getRangeAt(0);
 				end = findPosition(pre, range.startContainer, range.startOffset);
 			}
-			pre.innerHTML = pre.innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
+			innerHTML = innerHTML.replace(/<br>((<\/[^>]+>)*<\/?div>)(?!$)/gi, function (all, rest) {
+				if (end) {
+					end--;
+				}
+				return rest;
+			});
+			pre.innerHTML = innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
 			var text = pre.textContent;
 			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
 			var lang = (match ? match[2] : 'htm');
@@ -964,7 +974,7 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	var php_function = 'eval|create_function|assert|classkit_method_add|classkit_method_redefine|runkit_function_add|runkit_function_redefine|runkit_lint|runkit_method_add|runkit_method_redefine'
 		+ '|array_filter|array_map|array_reduce|array_walk|array_walk_recursive|call_user_func|call_user_func_array|ob_start|sqlite_create_function|is_callable' // callback parameter with possible call of builtin function
 	;
-	
+
 	jush.tr.php = { php_echo: /=/, php2: /()/ };
 	jush.tr.php2 = { php_quo: /b?"/i, php_apo: /b?'/i, php_bac: /`/, php_one: /\/\/|#/, php_doc: /\/\*\*/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + oracle_function + ')(\\s*\\(|$)', 'i'), php_echo: /(\b)(echo|print)\b/i, php_halt: /(\b)(__halt_compiler)(\s*\(\s*\)|$)/i, php_var: /()(\$[\w\u007F-\uFFFF]+)()/, num: jush.num, php_phpini: /(\b)(ini_get|ini_set)(\s*\(|$)/i, php_http: /(\b)(header)(\s*\(|$)/i, php_mail: /(\b)(mail)(\s*\(|$)/i, _2: /\?>|<\/script>/i }; //! matches ::echo
 	jush.tr.php_quo_var = { php_quo: /b?"/i, php_apo: /b?'/i, php_bac: /`/, php_one: /\/\/|#/, php_com: /\/\*/, php_eot: /<<<[ \t]*/, php_new: /(\b)(new|instanceof|extends|class|implements|interface)(\b\s*)/i, php_met: /()([\w\u007F-\uFFFF]+)(::)/, php_fun: /()(\bfunction\b|->|::)(\s*)/i, php_php: new RegExp('(\\b)(' + php_function + ')(\\s*\\(|$)', 'i'), php_sql: new RegExp('(\\b)(' + sql_function + ')(\\s*\\(|$)', 'i'), php_sqlite: new RegExp('(\\b)(' + sqlite_function + ')(\\s*\\(|$)', 'i'), php_pgsql: new RegExp('(\\b)(' + pgsql_function + ')(\\s*\\(|$)', 'i'), php_oracle: new RegExp('(\\b)(' + oracle_function + ')(\\s*\\(|$)', 'i'), _1: /}/ };
@@ -992,7 +1002,6 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	jush.tr.php_com = { _1: /\*\// };
 	jush.tr.php_halt = { php_one: /\/\/|#/, php_com: /\/\*/, php_halt2: /;|\?>\n?/ };
 	jush.tr.php_halt2 = { _4: /$/ };
-	
 	jush.tr.phpini = { one: /;/, _0: /$/ };
 	jush.tr.http = { _0: /$/ };
 	jush.tr.mail = { _0: /$/ };
