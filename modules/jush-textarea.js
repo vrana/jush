@@ -174,6 +174,7 @@ jush.textarea = (function () {
 		pre.style.height = el.clientHeight + 'px';
 		pre.style.padding = '3px';
 		pre.style.overflow = 'auto';
+		pre.style.resize = 'both';
 		if (el.wrap != 'off') {
 			pre.style.whiteSpace = 'pre-wrap';
 		}
