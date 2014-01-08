@@ -131,7 +131,11 @@ jush.textarea = (function () {
 				}
 				return rest;
 			});
-			pre.innerHTML = innerHTML.replace(/&nbsp;(<\/[pP]\b)/g, '$1').replace(/<(br|div|\/p\b[^>]*><p)\b[^>]*>/gi, '\n');
+			pre.innerHTML = innerHTML
+				.replace(/<(br|div)\b[^>]*>/gi, '\n') // Firefox, Chrome
+				.replace(/&nbsp;(<\/[pP]\b)/g, '$1') // IE
+				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
+			;
 			var text = pre.textContent;
 			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
 			var lang = (match ? match[2] : 'htm');
