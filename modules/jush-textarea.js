@@ -137,9 +137,13 @@ jush.textarea = (function () {
 				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
 			;
 			var text = pre.textContent;
-			var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
-			var lang = (match ? match[2] : 'htm');
-			setHTML(pre, jush.highlight(lang, text).replace(/\n/g, '<br>'), text, end);
+			var lang = 'txt';
+			if (text.length < 1e4) { // highlighting is slow with most languages
+				var match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
+				lang = (match ? match[2] : 'htm');
+			}
+			var html = jush.highlight(lang, text).replace(/\n/g, '<br>');
+			setHTML(pre, html, text, end);
 			pre.jushUndo.length = pre.jushUndoPos + 1;
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 				pre.jushUndo.push({ html: pre.lastHTML, text: pre.jushTextarea.value, start: start, end: end });
