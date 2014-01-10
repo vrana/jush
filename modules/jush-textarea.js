@@ -198,7 +198,7 @@ jush.textarea = (function () {
 			document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
 		}
 		el.parentNode.insertBefore(pre, el);
-		if (document.activeElement === el) {
+		if (document.activeElement === el && !/firefox/i.test(navigator.userAgent)) { // clicking on focused element makes Firefox to lose focus
 			pre.focus();
 		}
 		el.style.display = 'none';
