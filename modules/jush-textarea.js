@@ -92,9 +92,9 @@ jush.textarea = (function () {
 						var undo = this.jushUndo[this.jushUndoPos];
 						setHTML(this, undo.html, undo.text, undo.end);
 					}
-				} else if (this.jushUndoPos > 0) {
+				} else if (this.jushUndoPos >= 0) {
 					this.jushUndoPos--;
-					var undo = this.jushUndo[this.jushUndoPos];
+					var undo = this.jushUndo[this.jushUndoPos] || { html: '', text: '' };
 					setHTML(this, undo.html, undo.text, this.jushUndo[this.jushUndoPos + 1].start);
 				}
 				return false;
@@ -146,7 +146,7 @@ jush.textarea = (function () {
 			setHTML(pre, html, text, end);
 			pre.jushUndo.length = pre.jushUndoPos + 1;
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
-				pre.jushUndo.push({ html: pre.lastHTML, text: pre.jushTextarea.value, start: start, end: end });
+				pre.jushUndo.push({ html: pre.lastHTML, text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
 				pre.jushUndoPos++;
 			} else {
 				pre.jushUndo[pre.jushUndoPos].html = pre.lastHTML;
