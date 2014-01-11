@@ -230,7 +230,7 @@ var jush = {
 		}
 		var state = states[states.length - 1];
 		if (!this.tr[state]) {
-			return [ htmlspecialchars(text), states ];
+			return [ this.htmlspecialchars(text), states ];
 		}
 		var ret = [ ]; // return
 		for (var i=1; i < states.length; i++) {
