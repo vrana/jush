@@ -164,8 +164,9 @@ jush.textarea = (function () {
 		event = event || window.event;
 		if (event.clipboardData) {
 			setLastPos(this);
-			document.execCommand('insertText', false, event.clipboardData.getData('text'));
-			event.preventDefault();
+			if (document.execCommand('insertHTML', false, jush.htmlspecialchars(event.clipboardData.getData('text')))) { // Opera doesn't support insertText
+				event.preventDefault();
+			}
 			highlight(this, true);
 		}
 	}

@@ -231,7 +231,7 @@ var jush = {
 		}
 		var state = states[states.length - 1];
 		if (!this.tr[state]) {
-			return [ text, states ];
+			return [ htmlspecialchars(text), states ];
 		}
 		var ret = [ ]; // return
 		for (var i=1; i < states.length; i++) {
@@ -1145,7 +1145,7 @@ jush.textarea = (function () {
 		event = event || window.event;
 		if (event.clipboardData) {
 			setLastPos(this);
-			document.execCommand('insertText', false, event.clipboardData.getData('text'));
+			document.execCommand('insertHTML', false, jush.htmlspecialchars(event.clipboardData.getData('text'))); // Opera doesn't support insertText
 			event.preventDefault();
 			highlight(this, true);
 		}
