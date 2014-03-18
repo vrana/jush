@@ -671,7 +671,9 @@ jush.links.att = {
 	'http://whatwg.org/html/editing.html#the-$val-attribute': /^(hidden|inert)$/i,
 	'http://www.w3.org/WAI/PF/aria/states_and_properties#$val': /^(aria-.+)$/i,
 	'http://whatwg.org/html/infrastructure.html#attr-aria-$val': /^(role)$/i,
-	'http://whatwg.org/html/elements.html#attr-$val': /^(translate)$/i
+	'http://whatwg.org/html/elements.html#attr-$val': /^(translate)$/i,
+	'http://schema.org/docs/gs.html#microdata_itemscope_itemtype': /^(itemscope|itemtype)$/i,
+	'http://schema.org/docs/gs.html#microdata_$val': /^(itemprop)$/i
 };
 
 
