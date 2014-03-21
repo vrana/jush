@@ -1133,6 +1133,7 @@ jush.textarea = (function () {
 				.replace(/<(br|div)\b[^>]*>/gi, '\n') // Firefox, Chrome
 				.replace(/&nbsp;(<\/[pP]\b)/g, '$1') // IE
 				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
+				.replace(/(&nbsp;)+$/gm, '') // Chrome for some users
 			;
 			setText(pre, pre.textContent, end);
 			pre.jushUndo.length = pre.jushUndoPos + 1;
