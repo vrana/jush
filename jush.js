@@ -706,7 +706,7 @@ jush.tr.js_doc = { _1: /\*\// };
 jush.tr.js_arr = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, js_arr: /\[/, js_obj: /\{/, _1: /]/ };
 jush.tr.js_obj = { php: jush.php, js_one: /\s*\/\//, com: /\s*\/\*/, js_val: /:/, _1: /\s*}/, js_key: /()/ };
 jush.tr.js_val = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, js_arr: /\[/, js_obj: /\{/, _1: /,|(?=})/ };
-jush.tr.js_key = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, _1: /(?=:)/ };
+jush.tr.js_key = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, _1: /(?=[:}])/ };
 
 jush.urls.js_write = 'https://developer.mozilla.org/en/docs/DOM/$key.$val';
 jush.urls.js_http = 'http://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
