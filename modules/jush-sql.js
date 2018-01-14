@@ -6,8 +6,8 @@ jush.tr.sqlset = { _0: /$/ }; //! jump from SHOW VARIABLES LIKE ''
 jush.tr.sqlstatus = { _0: /$/ }; //! jump from SHOW STATUS LIKE ''
 jush.tr.com_code = { _1: /()/ };
 
-jush.urls.sql_sqlset = 'http://dev.mysql.com/doc/mysql/en/$key';
-jush.urls.sql = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sql_sqlset = 'https://dev.mysql.com/doc/mysql/en/$key';
+jush.urls.sql = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'alter-event.html', 'alter-table.html', 'alter-view.html', 'analyze-table.html', 'create-event.html', 'create-function.html', 'create-procedure.html', 'create-index.html', 'create-table.html', 'create-trigger.html', 'create-view.html', 'drop-index.html', 'drop-table.html', 'begin-end.html', 'optimize-table.html', 'repair-table.html', 'set-transaction.html', 'show-columns.html', 'show-engines.html', 'show-index.html', 'show-processlist.html', 'show-status.html', 'show-tables.html', 'show-variables.html',
 	'$1.html', '$1-statement.html', 'if-statement.html', 'repeat-statement.html', 'truncate-table.html', 'commit.html', 'savepoints.html', 'lock-tables.html', 'charset-connection.html', 'insert-on-duplicate.html', 'fulltext-search.html', 'example-auto-increment.html',
 	'comparison-operators.html#operator_$1', 'comparison-operators.html#function_$1', 'any-in-some-subqueries.html', 'all-subqueries.html', 'exists-and-not-exists-subqueries.html', 'group-by-modifiers.html', 'string-functions.html#operator_$1', 'string-comparison-functions.html#operator_$1', 'regexp.html#operator_$1', 'regexp.html#operator_regexp', 'logical-operators.html#operator_$1', 'control-flow-functions.html#operator_$1', 'arithmetic-functions.html#operator_$1', 'cast-functions.html#operator_$1', 'date-and-time-functions.html#function_$1', 'date-and-time-functions.html#function_date-add',
@@ -26,7 +26,7 @@ jush.urls.sql = ['http://dev.mysql.com/doc/mysql/en/$key',
 	'row-subqueries.html',
 	'fulltext-search.html#function_match'
 ];
-jush.urls.sqlset = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sqlset = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'innodb-parameters.html#sysvar_$1',
 	'mysql-cluster-program-options-mysqld.html#option_mysqld_$1', 'mysql-cluster-replication-conflict-resolution.html#option_mysqld_$1', 'mysql-cluster-replication-schema.html', 'mysql-cluster-replication-starting.html', 'mysql-cluster-system-variables.html#sysvar_$1',
 	'replication-options-binary-log.html#option_mysqld_$1', 'replication-options-binary-log.html#sysvar_$1', 'replication-options-master.html#sysvar_$1', 'replication-options-slave.html#option_mysqld_log-slave-updates', 'replication-options-slave.html#option_mysqld_$1', 'replication-options-slave.html#sysvar_$1', 'replication-options.html#option_mysqld_$1',
@@ -35,7 +35,7 @@ jush.urls.sqlset = ['http://dev.mysql.com/doc/mysql/en/$key',
 	'server-system-variables.html#sysvar_low_priority_updates', 'server-system-variables.html#sysvar_max_join_size', 'server-system-variables.html#sysvar_$1',
 	'ssl-options.html#option_general_$1'
 ];
-jush.urls.sqlstatus = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sqlstatus = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'server-status-variables.html#statvar_Com_xxx',
 	'server-status-variables.html#statvar_$1'
 ];

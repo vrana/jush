@@ -43,7 +43,7 @@
 	jush.urls.php_sql = 'http://www.php.net/$key.$val';
 	jush.urls.php_sqlite = 'http://www.php.net/$key.$val';
 	jush.urls.php_pgsql = 'http://www.php.net/$key.$val';
-	jush.urls.php_mssql = 'http://msdn.microsoft.com/library/$key.aspx';
+	jush.urls.php_mssql = 'https://msdn.microsoft.com/library/$key.aspx';
 	jush.urls.php_oracle = 'http://www.php.net/$key.$val';
 	jush.urls.php_echo = 'http://www.php.net/$key.$val';
 	jush.urls.php_phpini = 'http://www.php.net/$key.$val';
@@ -65,10 +65,10 @@
 		'ini.core#ini.$1', 'errorfunc.configuration#ini.$1', 'outcontrol.configuration#ini.$1', 'info.configuration#ini.$1', 'datetime.configuration#ini.$1', 'readline.configuration#ini.$1', 'phar.configuration#ini.$1', 'zlib.configuration#ini.$1', 'mcrypt.configuration#ini.$1', 'odbc.configuration#ini.$1', 'pdo.configuration#ini.$1', 'pdo-mysql.configuration#ini.$1', 'pdo-odbc.configuration#ini.$1', 'ibase.configuration#ini.$1', 'fbsql.configuration#ini.$1', 'ifx.configuration#ini.$1', 'msql.configuration#ini.$1', 'mssql.configuration#ini.$1', 'mysql.configuration#ini.$1', 'mysqli.configuration#ini.$1', 'oci8.configuration#ini.$1', 'pgsql.configuration#ini.$1', 'sqlite3.configuration#ini.$1', 'sybase.configuration#ini.$1', 'filesystem.configuration#ini.$1', 'mime-magic.configuration#ini.$1', 'iconv.configuration#ini.$1', 'intl.configuration#ini.$1', 'mbstring.configuration#ini.$1', 'exif.configuration#ini.$1', 'image.configuration#ini.$1', 'mail.configuration#ini.$1', 'bc.configuration#ini.$1', 'sem.configuration#ini.$1', 'misc.configuration#ini.$1', 'tidy.configuration#ini.$1', 'curl.configuration#ini.$1', 'ldap.configuration#ini.$1', 'network.configuration#ini.$1', 'apache.configuration#ini.$1', 'nsapi.configuration#ini.$1', 'session.configuration#ini.$1', 'pcre.configuration#ini.$1', 'filter.configuration#ini.$1', 'var.configuration#ini.$1', 'soap.configuration#ini.$1', 'com.configuration#ini.$1',
 		'http://www.hardened-php.net/suhosin/configuration.html#$1'
 	];
-	jush.urls.php_doc = ['http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
+	jush.urls.php_doc = ['https://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
 		'$1', '', 'inline$1'
 	];
-	jush.urls.mail = ['http://tools.ietf.org/html/rfc2076#section-3.$key',
+	jush.urls.mail = ['https://tools.ietf.org/html/rfc2076#section-3.$key',
 		'2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'
 	];
 

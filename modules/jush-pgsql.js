@@ -4,13 +4,13 @@ jush.tr.pgsql_eot2 = { }; // pgsql_eot2._2 to be set in pgsql_eot handler
 jush.tr.pgsql_pgsqlset = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: jush.num, _1: /;|$/ };
 jush.tr.pgsqlset = { _0: /$/ };
 
-jush.urls.pgsql_pgsqlset = 'http://www.postgresql.org/docs/current/static/$key';
-jush.urls.pgsql = ['http://www.postgresql.org/docs/current/static/$key',
+jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/static/$key';
+jush.urls.pgsql = ['https://www.postgresql.org/docs/current/static/$key',
 	'sql-$1.html', 'sql-$1.html', 'sql-alteropclass.html', 'sql-createopclass.html', 'sql-dropopclass.html',
 	'functions-datetime.html', 'functions-info.html', 'functions-logical.html', 'functions-comparison.html', 'functions-matching.html', 'functions-conditional.html', 'functions-subquery.html',
 	'functions-math.html', 'functions-string.html', 'functions-binarystring.html', 'functions-formatting.html', 'functions-datetime.html', 'functions-geometry.html', 'functions-net.html', 'functions-sequence.html', 'functions-array.html', 'functions-aggregate.html', 'functions-srf.html', 'functions-info.html', 'functions-admin.html'
 ];
-jush.urls.pgsqlset = ['http://www.postgresql.org/docs/current/static/runtime-config-$key.html#GUC-$1',
+jush.urls.pgsqlset = ['https://www.postgresql.org/docs/current/static/runtime-config-$key.html#GUC-$1',
 	'autovacuum', 'client', 'compatible', 'connection', 'custom', 'developer', 'file-locations', 'locks', 'logging', 'preset', 'query', 'resource', 'statistics', 'wal'
 ];
 

@@ -1,6 +1,6 @@
 jush.tr.simpledb = { sqlite_apo: /'/, sqlite_quo: /"/, bac: /`/ };
 
-jush.urls.simpledb = ['http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/$key.html',
+jush.urls.simpledb = ['https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/$key.html',
 	'QuotingRulesSelect', 'CountingDataSelect', 'SortingDataSelect', 'SimpleQueriesSelect', 'UsingSelectOperators', 'RangeValueQueriesSelect', ''
 ];
 

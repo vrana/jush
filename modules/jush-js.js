@@ -14,7 +14,7 @@ jush.tr.js_val = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*
 jush.tr.js_key = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, _1: /(?=[:}])/ };
 
 jush.urls.js_write = 'https://developer.mozilla.org/en/docs/DOM/$key.$val';
-jush.urls.js_http = 'http://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
+jush.urls.js_http = 'https://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
 jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Global_Objects/$1',
 	'JavaScript/Reference/Statements/$1',
@@ -23,7 +23,7 @@ jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Statements/try...catch',
 	'JavaScript/Reference/Operators/Special/$1',
 	'DOM/document.$1', 'DOM/element.$1', 'DOM/event.$1', 'DOM/form.$1', 'DOM/table.$1', 'DOM/window.$1',
-	'http://www.w3.org/TR/XMLHttpRequest/',
+	'https://www.w3.org/TR/XMLHttpRequest/',
 	'JavaScript/Reference/Global_Objects/Array$1',
 	'JavaScript/Reference/Global_Objects/Array$1',
 	'JavaScript/Reference/Global_Objects/Date$1',
@@ -32,7 +32,7 @@ jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Global_Objects/RegExp$1',
 	'JavaScript/Reference/Global_Objects/String$1'
 ];
-jush.urls.js_doc = ['http://code.google.com/p/jsdoc-toolkit/wiki/Tag$key',
+jush.urls.js_doc = ['https://code.google.com/p/jsdoc-toolkit/wiki/Tag$key',
 	'$1', 'Param', 'Augments', '$1'
 ];
 

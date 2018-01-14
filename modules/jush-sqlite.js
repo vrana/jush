@@ -3,17 +3,17 @@ jush.tr.sqlite_sqliteset = { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /
 jush.tr.sqliteset = { _0: /$/ };
 jush.tr.sqlitestatus = { _0: /$/ };
 
-jush.urls.sqlite_sqliteset = 'http://www.sqlite.org/$key';
-jush.urls.sqlite = ['http://www.sqlite.org/$key',
+jush.urls.sqlite_sqliteset = 'https://www.sqlite.org/$key';
+jush.urls.sqlite = ['https://www.sqlite.org/$key',
 	'lang_$1.html', 'lang_createvtab.html', 'lang_transaction.html',
 	'lang_createindex.html', 'lang_createtable.html', 'lang_createtrigger.html', 'lang_createview.html',
 	'',
 	'lang_expr.html#$1', 'lang_corefunc.html#$1', 'lang_datefunc.html#$1', 'lang_aggfunc.html#$1'
 ];
-jush.urls.sqliteset = ['http://www.sqlite.org/pragma.html#$key',
+jush.urls.sqliteset = ['https://www.sqlite.org/pragma.html#$key',
 	'pragma_$1'
 ];
-jush.urls.sqlitestatus = ['http://www.sqlite.org/compile.html#$key',
+jush.urls.sqlitestatus = ['https://www.sqlite.org/compile.html#$key',
 	'$1'
 ];
 

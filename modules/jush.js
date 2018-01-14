@@ -1,8 +1,8 @@
 /** JUSH - JavaScript Syntax Highlighter
 * @link http://jush.sourceforge.net
-* @author Jakub Vrana, http://www.vrana.cz
+* @author Jakub Vrana, https://www.vrana.cz
 * @copyright 2007 Jakub Vrana
-* @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+* @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 */
 
 /* Limitations:
@@ -92,7 +92,7 @@ var jush = {
 		var highlight = function () {
 			var start = new Date();
 			while (i < pre.length) {
-				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // http://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
+				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // https://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var language = match[3] ? match[3] : 'htm';
 					var s = '<span class="jush-' + language + '">' + jush.highlight_html(language, pre[i].innerHTML.replace(/\t/g, tab.length ? tab : '\t')) + '</span>'; // span - enable style for class="language-"
@@ -149,7 +149,7 @@ var jush = {
 			s = s.replace(links2, function (str, match1) {
 				for (var i=arguments.length - 4; i > 1; i--) {
 					if (arguments[i]) {
-						var link = (/^http:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
+						var link = (/^https?:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break; // toLowerCase() - case sensitive after #
@@ -332,7 +332,7 @@ var jush = {
 					var k_link = '';
 					var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
 					for (var k in this.links[key]) {
-						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^http:/.test(k)) {
+						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^https?:/.test(k)) {
 							link += '-' + att_tag;
 							k_link = k;
 							break;
@@ -354,7 +354,7 @@ var jush = {
 					}
 					if (k_link) {
 						s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-						s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^http:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
+						s += this.create_link((/^https?:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^https?:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
 						s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 					}
 				}
