@@ -1,9 +1,9 @@
 // @generated from modules/*.js
 /** JUSH - JavaScript Syntax Highlighter
 * @link http://jush.sourceforge.net
-* @author Jakub Vrana, http://www.vrana.cz
+* @author Jakub Vrana, https://www.vrana.cz
 * @copyright 2007 Jakub Vrana
-* @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+* @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 */
 
 /* Limitations:
@@ -93,7 +93,7 @@ var jush = {
 		var highlight = function () {
 			var start = new Date();
 			while (i < pre.length) {
-				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // http://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
+				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // https://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var language = match[3] ? match[3] : 'htm';
 					var s = '<span class="jush-' + language + '">' + jush.highlight_html(language, pre[i].innerHTML.replace(/\t/g, tab.length ? tab : '\t')) + '</span>'; // span - enable style for class="language-"
@@ -150,7 +150,7 @@ var jush = {
 			s = s.replace(links2, function (str, match1) {
 				for (var i=arguments.length - 4; i > 1; i--) {
 					if (arguments[i]) {
-						var link = (/^http:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
+						var link = (/^https?:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break; // toLowerCase() - case sensitive after #
@@ -333,7 +333,7 @@ var jush = {
 					var k_link = '';
 					var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
 					for (var k in this.links[key]) {
-						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^http:/.test(k)) {
+						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^https?:/.test(k)) {
 							link += '-' + att_tag;
 							k_link = k;
 							break;
@@ -355,7 +355,7 @@ var jush = {
 					}
 					if (k_link) {
 						s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-						s += this.create_link((/^http:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^http:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
+						s += this.create_link((/^https?:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^https?:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
 						s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 					}
 				}
@@ -510,10 +510,10 @@ jush.tr.cnf_php = { _1: /()/ };
 jush.tr.cnf_phpini = { cnf_phpini_val: /[ \t]/ };
 jush.tr.cnf_phpini_val = { apo: /'/, quo: /"/, _2: /(?=\n)/ };
 
-jush.urls.cnf_http = 'http://httpd.apache.org/docs/current/mod/$key.html#$val';
+jush.urls.cnf_http = 'https://httpd.apache.org/docs/current/mod/$key.html#$val';
 jush.urls.cnf_php = 'http://www.php.net/$key';
 jush.urls.cnf_phpini = 'http://www.php.net/configuration.changes#$key';
-jush.urls.cnf = ['http://httpd.apache.org/docs/current/mod/$key.html#$1',
+jush.urls.cnf = ['https://httpd.apache.org/docs/current/mod/$key.html#$1',
 	'beos', 'core', 'mod_actions', 'mod_alias', 'mod_auth_basic', 'mod_auth_digest', 'mod_authn_alias', 'mod_authn_anon', 'mod_authn_dbd', 'mod_authn_dbm', 'mod_authn_default', 'mod_authn_file', 'mod_authnz_ldap', 'mod_authz_dbm', 'mod_authz_default', 'mod_authz_groupfile', 'mod_authz_host', 'mod_authz_owner', 'mod_authz_user', 'mod_autoindex', 'mod_cache', 'mod_cern_meta', 'mod_cgi', 'mod_cgid', 'mod_dav', 'mod_dav_fs', 'mod_dav_lock', 'mod_dbd', 'mod_deflate', 'mod_dir', 'mod_disk_cache', 'mod_dumpio', 'mod_echo', 'mod_env', 'mod_example', 'mod_expires', 'mod_ext_filter', 'mod_file_cache', 'mod_filter', 'mod_charset_lite', 'mod_ident', 'mod_imagemap', 'mod_include', 'mod_info', 'mod_isapi', 'mod_ldap', 'mod_log_config', 'mod_log_forensic', 'mod_mem_cache', 'mod_mime', 'mod_mime_magic', 'mod_negotiation', 'mod_nw_ssl', 'mod_proxy', 'mod_rewrite', 'mod_setenvif', 'mod_so', 'mod_speling', 'mod_ssl', 'mod_status', 'mod_substitute', 'mod_suexec', 'mod_userdir', 'mod_usertrack', 'mod_version', 'mod_vhost_alias', 'mpm_common', 'mpm_netware', 'mpm_winnt', 'prefork'
 ];
 
@@ -533,9 +533,9 @@ jush.tr.css_val = { php: jush.php, quo: /"/, apo: /'/, css_js: /expression\s*\(/
 jush.tr.css_js = { php: jush.php, css_js: /\(/, _1: /\)/ };
 jush.tr.clr = { _1: /(?=[^a-fA-F0-9])/ };
 
-jush.urls.css_val = 'http://www.w3.org/TR/CSS21/$key.html#propdef-$val';
-jush.urls.css_at = 'http://www.w3.org/TR/CSS21/$key';
-jush.urls.css = ['http://www.w3.org/TR/css3-selectors/#$key',
+jush.urls.css_val = 'https://www.w3.org/TR/CSS21/$key.html#propdef-$val';
+jush.urls.css_at = 'https://www.w3.org/TR/CSS21/$key';
+jush.urls.css = ['https://www.w3.org/TR/css3-selectors/#$key',
 	'link', 'useraction-pseudos', '$1-pseudo', 'enableddisabled', '$1', '$1', 'gen-content'
 ];
 
@@ -552,26 +552,26 @@ jush.links.css_val = {
 	'visudet': /^(height|line-height|max-height|max-width|min-height|min-width|vertical-align|width)$/i,
 	'visufx': /^(clip|overflow|visibility)$/i,
 	'visuren': /^(bottom|clear|direction|display|float|left|position|right|top|unicode-bidi|z-index)$/i,
-	'http://www.w3.org/TR/css3-cascade/#$val': /^(?:-[a-z]+-)?(all)$/i,
-	'http://www.w3.org/TR/css3-writing-modes/#$val': /^(?:-[a-z]+-)?(text-combine-horizontal|text-orientation|writing-mode)$/i,
-	'http://www.w3.org/TR/css3-break/#$val': /^(?:-[a-z]+-)?(break-after|break-before|break-inside)$/i,
-	'http://www.w3.org/TR/css3-images/#$val': /^(?:-[a-z]+-)?(image-orientation|image-resolution|object-fit|object-position)$/i,
-	'http://www.w3.org/TR/css3-marquee/#$val': /^(?:-[a-z]+-)?(marquee-direction|marquee-play-count|marquee-speed|marquee-style|overflow-style)$/i,
-	'http://www.w3.org/TR/css3-grid/#$val': /^(?:-[a-z]+-)?(grid-columns|grid-rows|align-content|align-items|align-self|justify-content|justify-items|justify-self)$/i,
-	'http://www.w3.org/TR/css-fonts-3/#$val-prop': /^(?:-[a-z]+-)?(font-feature-settings|font-kerning|font-language-override|font-size-adjust|font-stretch|font-synthesis|font-variant-alternates|font-variant-caps|font-variant-east-asian|font-variant-ligatures|font-variant-numeric|font-variant-position)$/i,
-	'http://www.w3.org/TR/css-overflow-3/#$val': /^(?:-[a-z]+-)?(max-lines|overflow-x|overflow-y)$/i,
-	'http://www.w3.org/TR/css3-ui/#$val': /^(?:-[a-z]+-)?(box-sizing|icon|ime-mode|nav-index|nav-up|nav-right|nav-down|nav-left|outline-offset|resize|text-overflow)$/i,
-	'http://www.w3.org/TR/css3-background/#$val': /^(?:-[a-z]+-)?(background-clip|background-origin|background-size|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-right-radius|border-bottom-left-radius|box-decoration-break|box-shadow)$/i
+	'https://www.w3.org/TR/css3-cascade/#$val': /^(?:-[a-z]+-)?(all)$/i,
+	'https://www.w3.org/TR/css3-writing-modes/#$val': /^(?:-[a-z]+-)?(text-combine-horizontal|text-orientation|writing-mode)$/i,
+	'https://www.w3.org/TR/css3-break/#$val': /^(?:-[a-z]+-)?(break-after|break-before|break-inside)$/i,
+	'https://www.w3.org/TR/css3-images/#$val': /^(?:-[a-z]+-)?(image-orientation|image-resolution|object-fit|object-position)$/i,
+	'https://www.w3.org/TR/css3-marquee/#$val': /^(?:-[a-z]+-)?(marquee-direction|marquee-play-count|marquee-speed|marquee-style|overflow-style)$/i,
+	'https://www.w3.org/TR/css3-grid/#$val': /^(?:-[a-z]+-)?(grid-columns|grid-rows|align-content|align-items|align-self|justify-content|justify-items|justify-self)$/i,
+	'https://www.w3.org/TR/css-fonts-3/#$val-prop': /^(?:-[a-z]+-)?(font-feature-settings|font-kerning|font-language-override|font-size-adjust|font-stretch|font-synthesis|font-variant-alternates|font-variant-caps|font-variant-east-asian|font-variant-ligatures|font-variant-numeric|font-variant-position)$/i,
+	'https://www.w3.org/TR/css-overflow-3/#$val': /^(?:-[a-z]+-)?(max-lines|overflow-x|overflow-y)$/i,
+	'https://www.w3.org/TR/css3-ui/#$val': /^(?:-[a-z]+-)?(box-sizing|icon|ime-mode|nav-index|nav-up|nav-right|nav-down|nav-left|outline-offset|resize|text-overflow)$/i,
+	'https://www.w3.org/TR/css3-background/#$val': /^(?:-[a-z]+-)?(background-clip|background-origin|background-size|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-right-radius|border-bottom-left-radius|box-decoration-break|box-shadow)$/i
 };
 jush.links.css_at = {
 	'page.html#page-box': /^page$/i,
 	'media.html#at-media-rule': /^media$/i,
 	'cascade.html#at-import': /^import$/i,
 	'syndata.html#charset': /^charset$/i,
-	'http://www.w3.org/TR/css3-conditional/#at-$val': /^supports$/i,
-	'http://www.w3.org/TR/css-fonts-3/#at-$val-rule': /^(font-face|font-feature-values)$/i,
-	'http://www.w3.org/TR/css-counter-styles-3/#the-$val-rule': /^counter-style$/i,
-	'http://www.w3.org/TR/css3-namespace/#declaration': /namespace/
+	'https://www.w3.org/TR/css3-conditional/#at-$val': /^supports$/i,
+	'https://www.w3.org/TR/css-fonts-3/#at-$val-rule': /^(font-face|font-feature-values)$/i,
+	'https://www.w3.org/TR/css-counter-styles-3/#the-$val-rule': /^counter-style$/i,
+	'https://www.w3.org/TR/css3-namespace/#declaration': /namespace/
 };
 
 jush.links2.css = /(:)(link|visited|(hover|active|focus)|(target|lang|root|nth-child|nth-last-child|nth-of-type|nth-last-of-type|first-child|last-child|first-of-type|last-of-type|only-child|only-of-type|empty)|(enabled|disabled)|(checked|indeterminate|not)|(first-line|first-letter)|(before|after))(\b)/gi;
@@ -595,13 +595,13 @@ jush.tr.xml = { php: jush.php, htm_com: /<!--/, xml_tag: /(<)(\/?[-\w:]+)/, ent:
 jush.tr.xml_tag = { php: jush.php, xml_att: /(\s*)([-\w:]+)()/, _1: />/ };
 jush.tr.xml_att = { php: jush.php, att_quo: /\s*=\s*"/, att_apo: /\s*=\s*'/, _1: /()/ };
 
-jush.urls.tag = 'http://www.w3.org/TR/html4/$key.html#edef-$val';
-jush.urls.tag_css = 'http://www.w3.org/TR/html4/$key.html#edef-$val';
-jush.urls.tag_js = 'http://www.w3.org/TR/html4/$key.html#edef-$val';
-jush.urls.att = 'http://www.w3.org/TR/html4/$key.html#adef-$val';
-jush.urls.att_css = 'http://www.w3.org/TR/html4/$key.html#adef-$val';
-jush.urls.att_js = 'http://www.w3.org/TR/html4/$key.html#adef-$val';
-jush.urls.att_http = 'http://www.w3.org/TR/html4/$key.html#adef-$val';
+jush.urls.tag = 'https://www.w3.org/TR/html4/$key.html#edef-$val';
+jush.urls.tag_css = 'https://www.w3.org/TR/html4/$key.html#edef-$val';
+jush.urls.tag_js = 'https://www.w3.org/TR/html4/$key.html#edef-$val';
+jush.urls.att = 'https://www.w3.org/TR/html4/$key.html#adef-$val';
+jush.urls.att_css = 'https://www.w3.org/TR/html4/$key.html#adef-$val';
+jush.urls.att_js = 'https://www.w3.org/TR/html4/$key.html#adef-$val';
+jush.urls.att_http = 'https://www.w3.org/TR/html4/$key.html#adef-$val';
 
 jush.links.tag = {
 	'interact/forms': /^(button|fieldset|form|input|isindex|label|legend|optgroup|option|select|textarea)$/i,
@@ -615,22 +615,22 @@ jush.links.tag = {
 	'struct/objects': /^(applet|area|img|map|object|param)$/i,
 	'struct/tables': /^(caption|col|colgroup|table|tbody|td|tfoot|th|thead|tr)$/i,
 	'struct/text': /^(abbr|acronym|blockquote|br|cite|code|del|dfn|em|ins|kbd|p|pre|q|samp|strong|sub|sup|var)$/i,
-	'http://whatwg.org/html/sections.html#the-$val-element': /^(section|article|aside|hgroup|header|footer|nav)$/i,
-	'http://whatwg.org/html/grouping-content.html#the-$val-element': /^(main|figure|figcaption)$/i,
-	'http://whatwg.org/html/the-video-element.html#the-$val-element': /^(video|audio|source|track)$/i,
-	'http://whatwg.org/html/the-iframe-element.html#the-$val-element': /^(embed)$/i,
-	'http://whatwg.org/html/text-level-semantics.html#the-$val-element': /^(mark|time|data|ruby|rt|rp|bdi|wbr)$/i,
-	'http://whatwg.org/html/the-button-element.html#the-$val-element': /^(progress|meter|datalist|keygen|output)$/i,
-	'http://whatwg.org/html/commands.html#the-$val-element': /^(dialog)$/i,
-	'http://whatwg.org/html/the-canvas-element.html#the-$val-element': /^(canvas)$/i,
-	'http://whatwg.org/html/interactive-elements.html#the-$val-element': /^(menuitem|details|summary)$/i
+	'https://whatwg.org/html/sections.html#the-$val-element': /^(section|article|aside|hgroup|header|footer|nav)$/i,
+	'https://whatwg.org/html/grouping-content.html#the-$val-element': /^(main|figure|figcaption)$/i,
+	'https://whatwg.org/html/the-video-element.html#the-$val-element': /^(video|audio|source|track)$/i,
+	'https://whatwg.org/html/the-iframe-element.html#the-$val-element': /^(embed)$/i,
+	'https://whatwg.org/html/text-level-semantics.html#the-$val-element': /^(mark|time|data|ruby|rt|rp|bdi|wbr)$/i,
+	'https://whatwg.org/html/the-button-element.html#the-$val-element': /^(progress|meter|datalist|keygen|output)$/i,
+	'https://whatwg.org/html/commands.html#the-$val-element': /^(dialog)$/i,
+	'https://whatwg.org/html/the-canvas-element.html#the-$val-element': /^(canvas)$/i,
+	'https://whatwg.org/html/interactive-elements.html#the-$val-element': /^(menuitem|details|summary)$/i
 };
 jush.links.tag_css = { 'present/styles': /^(style)$/i };
 jush.links.tag_js = { 'interact/scripts': /^(script)$/i };
 jush.links.att_css = { 'present/styles': /^(style)$/i };
 jush.links.att_js = {
 	'interact/scripts': /^(onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload|onunload)$/i,
-	'http://whatwg.org/html/webappapis.html#handler-$val': /^(onabort|oncancel|oncanplay|oncanplaythrough|onclose|oncontextmenu|oncuechange|ondrag|ondragend|ondragenter|ondragexit|ondragleave|ondragover|ondragstart|ondrop|ondurationchange|onemptied|onended|oninput|oninvalid|onloadeddata|onloadedmetadata|onloadstart|onmouseenter|onmouseleave|onmousewheel|onpause|onplay|onplaying|onprogress|onratechange|onseeked|onseeking|onshow|onsort|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting)$/i
+	'https://whatwg.org/html/webappapis.html#handler-$val': /^(onabort|oncancel|oncanplay|oncanplaythrough|onclose|oncontextmenu|oncuechange|ondrag|ondragend|ondragenter|ondragexit|ondragleave|ondragover|ondragstart|ondrop|ondurationchange|onemptied|onended|oninput|oninvalid|onloadeddata|onloadedmetadata|onloadstart|onmouseenter|onmouseleave|onmousewheel|onpause|onplay|onplaying|onprogress|onratechange|onseeked|onseeking|onshow|onsort|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting)$/i
 };
 jush.links.att_http = { 'struct/global': /^(http-equiv)$/i };
 jush.links.att = {
@@ -646,47 +646,47 @@ jush.links.att = {
 	'struct/objects': /^(align-IMG|alt|archive-APPLET|archive-OBJECT|border-IMG|classid|code|codebase-OBJECT|codebase-APPLET|codetype|coords|data|declare|height-IMG|height-APPLET|hspace|ismap|longdesc-IMG|name-APPLET|name-IMG|name-MAP|name-PARAM|nohref|object|shape|src-IMG|standby|type-OBJECT|type-PARAM|usemap|value-PARAM|valuetype|vspace|width-IMG|width-APPLET)$/i,
 	'struct/tables': /^(abbr|align-CAPTION|align-TABLE|align-TD|axis|border-TABLE|cellpadding|cellspacing|char|charoff|colspan|frame|headers|height-TH|nowrap|rowspan|rules|scope|span-COL|span-COLGROUP|summary|valign|width-TABLE|width-TH|width-COL|width-COLGROUP)$/i,
 	'struct/text': /^(cite-Q|cite-INS|datetime|width-PRE)$/i,
-	'http://whatwg.org/html/links.html#attr-hyperlink-$val': /^(download)$/i,
-	'http://whatwg.org/html/semantics.html#attr-meta-$val': /^(charset)$/i,
-	'http://whatwg.org/html/tabular-data.html#attr-table-$val': /^(sortable)$/i,
-	'http://whatwg.org/html/tabular-data.html#attr-th-$val': /^(sorted)$/i,
-	'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fe-$val': /^(autofocus|autocomplete|dirname|inputmode)$/i,
-	'http://whatwg.org/html/common-input-element-attributes.html#attr-input-$val': /^(placeholder|required|min|max|pattern|step|list)$/i,
-	'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fae-$val': /^(form)$/i,
-	'http://whatwg.org/html/the-button-element.html#attr-textarea-$val': /^(wrap)$/i,
-	'http://whatwg.org/html/association-of-controls-and-forms.html#attr-fs-$val': /^(novalidate|formaction|formenctype|formmethod|formnovalidate|formtarget)$/i,
-	'http://whatwg.org/html/interactive-elements.html#attr-$val': /^(contextmenu)$/i,
-	'http://whatwg.org/html/the-button-element.html#attr-button-$val': /^(menu)$/i,
-	'http://whatwg.org/html/semantics.html#attr-style-$val': /^(scoped)$/i,
-	'http://whatwg.org/html/scripting-1.html#attr-script-$val': /^(async)$/i,
-	'http://whatwg.org/html/semantics.html#attr-html-$val': /^(manifest)$/i,
-	'http://whatwg.org/html/links.html#attr-link-$val': /^(sizes)$/i,
-	'http://whatwg.org/html/grouping-content.html#attr-ol-$val': /^(reversed)$/i,
-	'http://whatwg.org/html/the-iframe-element.html#attr-iframe-$val': /^(sandbox|seamless|srcdoc)$/i,
-	'http://whatwg.org/html/the-iframe-element.html#attr-object-$val': /^(typemustmatch)$/i,
-	'http://whatwg.org/html/embedded-content-1.html#attr-img-$val': /^(crossorigin|srcset)$/i,
-	'http://whatwg.org/html/editing.html#attr-$val': /^(contenteditable|spellcheck)$/i,
-	'http://whatwg.org/html/elements.html#attr-data-*': /^(data-.+)$/i,
-	'http://whatwg.org/html/dnd.html#the-$val-attribute': /^(draggable|dropzone)$/i,
-	'http://whatwg.org/html/editing.html#the-$val-attribute': /^(hidden|inert)$/i,
-	'http://www.w3.org/WAI/PF/aria/states_and_properties#$val': /^(aria-.+)$/i,
-	'http://whatwg.org/html/infrastructure.html#attr-aria-$val': /^(role)$/i,
-	'http://whatwg.org/html/elements.html#attr-$val': /^(translate)$/i,
-	'http://schema.org/docs/gs.html#microdata_itemscope_itemtype': /^(itemscope|itemtype)$/i,
-	'http://schema.org/docs/gs.html#microdata_$val': /^(itemprop)$/i
+	'https://whatwg.org/html/links.html#attr-hyperlink-$val': /^(download)$/i,
+	'https://whatwg.org/html/semantics.html#attr-meta-$val': /^(charset)$/i,
+	'https://whatwg.org/html/tabular-data.html#attr-table-$val': /^(sortable)$/i,
+	'https://whatwg.org/html/tabular-data.html#attr-th-$val': /^(sorted)$/i,
+	'https://whatwg.org/html/association-of-controls-and-forms.html#attr-fe-$val': /^(autofocus|autocomplete|dirname|inputmode)$/i,
+	'https://whatwg.org/html/common-input-element-attributes.html#attr-input-$val': /^(placeholder|required|min|max|pattern|step|list)$/i,
+	'https://whatwg.org/html/association-of-controls-and-forms.html#attr-fae-$val': /^(form)$/i,
+	'https://whatwg.org/html/the-button-element.html#attr-textarea-$val': /^(wrap)$/i,
+	'https://whatwg.org/html/association-of-controls-and-forms.html#attr-fs-$val': /^(novalidate|formaction|formenctype|formmethod|formnovalidate|formtarget)$/i,
+	'https://whatwg.org/html/interactive-elements.html#attr-$val': /^(contextmenu)$/i,
+	'https://whatwg.org/html/the-button-element.html#attr-button-$val': /^(menu)$/i,
+	'https://whatwg.org/html/semantics.html#attr-style-$val': /^(scoped)$/i,
+	'https://whatwg.org/html/scripting-1.html#attr-script-$val': /^(async)$/i,
+	'https://whatwg.org/html/semantics.html#attr-html-$val': /^(manifest)$/i,
+	'https://whatwg.org/html/links.html#attr-link-$val': /^(sizes)$/i,
+	'https://whatwg.org/html/grouping-content.html#attr-ol-$val': /^(reversed)$/i,
+	'https://whatwg.org/html/the-iframe-element.html#attr-iframe-$val': /^(sandbox|seamless|srcdoc)$/i,
+	'https://whatwg.org/html/the-iframe-element.html#attr-object-$val': /^(typemustmatch)$/i,
+	'https://whatwg.org/html/embedded-content-1.html#attr-img-$val': /^(crossorigin|srcset)$/i,
+	'https://whatwg.org/html/editing.html#attr-$val': /^(contenteditable|spellcheck)$/i,
+	'https://whatwg.org/html/elements.html#attr-data-*': /^(data-.+)$/i,
+	'https://whatwg.org/html/dnd.html#the-$val-attribute': /^(draggable|dropzone)$/i,
+	'https://whatwg.org/html/editing.html#the-$val-attribute': /^(hidden|inert)$/i,
+	'https://www.w3.org/WAI/PF/aria/states_and_properties#$val': /^(aria-.+)$/i,
+	'https://whatwg.org/html/infrastructure.html#attr-aria-$val': /^(role)$/i,
+	'https://whatwg.org/html/elements.html#attr-$val': /^(translate)$/i,
+	'https://schema.org/docs/gs.html#microdata_itemscope_itemtype': /^(itemscope|itemtype)$/i,
+	'https://schema.org/docs/gs.html#microdata_$val': /^(itemprop)$/i
 };
 
 
 
 jush.tr.http = { _0: /$/ };
 
-jush.urls.http = ['http://www.w3.org/Protocols/rfc2616/rfc2616-$key',
+jush.urls.http = ['https://www.w3.org/Protocols/rfc2616/rfc2616-$key',
 	'sec10.html#sec10.1.1', 'sec10.html#sec10.1.2', 'sec10.html#sec10.2.1', 'sec10.html#sec10.2.2', 'sec10.html#sec10.2.3', 'sec10.html#sec10.2.4', 'sec10.html#sec10.2.5', 'sec10.html#sec10.2.6', 'sec10.html#sec10.2.7', 'sec10.html#sec10.3.1', 'sec10.html#sec10.3.2', 'sec10.html#sec10.3.3', 'sec10.html#sec10.3.4', 'sec10.html#sec10.3.5', 'sec10.html#sec10.3.6', 'sec10.html#sec10.3.7', 'sec10.html#sec10.3.8', 'sec10.html#sec10.4.1', 'sec10.html#sec10.4.2', 'sec10.html#sec10.4.3', 'sec10.html#sec10.4.4', 'sec10.html#sec10.4.5', 'sec10.html#sec10.4.6', 'sec10.html#sec10.4.7', 'sec10.html#sec10.4.8', 'sec10.html#sec10.4.9', 'sec10.html#sec10.4.10', 'sec10.html#sec10.4.11', 'sec10.html#sec10.4.12', 'sec10.html#sec10.4.13', 'sec10.html#sec10.4.14', 'sec10.html#sec10.4.15', 'sec10.html#sec10.4.16', 'sec10.html#sec10.4.17', 'sec10.html#sec10.4.18', 'sec10.html#sec10.5.1', 'sec10.html#sec10.5.2', 'sec10.html#sec10.5.3', 'sec10.html#sec10.5.4', 'sec10.html#sec10.5.5', 'sec10.html#sec10.5.6',
 	'sec14.html#sec14.1', 'sec14.html#sec14.2', 'sec14.html#sec14.3', 'sec14.html#sec14.4', 'sec14.html#sec14.5', 'sec14.html#sec14.6', 'sec14.html#sec14.7', 'sec14.html#sec14.8', 'sec14.html#sec14.9', 'sec14.html#sec14.10', 'sec14.html#sec14.11', 'sec14.html#sec14.12', 'sec14.html#sec14.13', 'sec14.html#sec14.14', 'sec14.html#sec14.15', 'sec14.html#sec14.16', 'sec14.html#sec14.17', 'sec14.html#sec14.18', 'sec14.html#sec14.19', 'sec14.html#sec14.20', 'sec14.html#sec14.21', 'sec14.html#sec14.22', 'sec14.html#sec14.23', 'sec14.html#sec14.24', 'sec14.html#sec14.25', 'sec14.html#sec14.26', 'sec14.html#sec14.27', 'sec14.html#sec14.28', 'sec14.html#sec14.29', 'sec14.html#sec14.30', 'sec14.html#sec14.31', 'sec14.html#sec14.32', 'sec14.html#sec14.33', 'sec14.html#sec14.34', 'sec14.html#sec14.35', 'sec14.html#sec14.36', 'sec14.html#sec14.37', 'sec14.html#sec14.38', 'sec14.html#sec14.39', 'sec14.html#sec14.40', 'sec14.html#sec14.41', 'sec14.html#sec14.42', 'sec14.html#sec14.43', 'sec14.html#sec14.44', 'sec14.html#sec14.45', 'sec14.html#sec14.46', 'sec14.html#sec14.47',
 	'sec19.html#sec19.5.1',
-	'http://tools.ietf.org/html/rfc2068#section-19.7.1.1',
-	'http://tools.ietf.org/html/rfc2109#section-4.2.2', 'http://tools.ietf.org/html/rfc2109#section-4.3.4', 'http://en.wikipedia.org/wiki/Meta_refresh', 'http://www.w3.org/TR/cors/#$1-response-header', 'http://www.w3.org/TR/cors/#$1-request-header',
-	'http://en.wikipedia.org/wiki/$1', 'http://msdn.microsoft.com/library/cc288472.aspx#_replace', 'http://msdn.microsoft.com/en-us/library/dd565640.aspx', 'http://msdn.microsoft.com/library/cc817574.aspx', 'http://noarchive.net/xrobots/', 'http://www.w3.org/TR/CSP/#$1-header-field', 'http://tools.ietf.org/html/rfc6797'
+	'https://tools.ietf.org/html/rfc2068#section-19.7.1.1',
+	'https://tools.ietf.org/html/rfc2109#section-4.2.2', 'https://tools.ietf.org/html/rfc2109#section-4.3.4', 'https://en.wikipedia.org/wiki/Meta_refresh', 'https://www.w3.org/TR/cors/#$1-response-header', 'https://www.w3.org/TR/cors/#$1-request-header',
+	'https://en.wikipedia.org/wiki/$1', 'https://msdn.microsoft.com/library/cc288472.aspx#_replace', 'https://msdn.microsoft.com/en-us/library/dd565640.aspx', 'https://msdn.microsoft.com/library/cc817574.aspx', 'http://noarchive.net/xrobots/', 'https://www.w3.org/TR/CSP/#$1-header-field', 'https://tools.ietf.org/html/rfc6797'
 ];
 
 jush.links2.http = /(^(?:HTTP\/[0-9.]+\s+)?)(100.*|(101.*)|(200.*)|(201.*)|(202.*)|(203.*)|(204.*)|(205.*)|(206.*)|(300.*)|(301.*)|(302.*)|(303.*)|(304.*)|(305.*)|(306.*)|(307.*)|(400.*)|(401.*)|(402.*)|(403.*)|(404.*)|(405.*)|(406.*)|(407.*)|(408.*)|(409.*)|(410.*)|(411.*)|(412.*)|(413.*)|(414.*)|(415.*)|(416.*)|(417.*)|(500.*)|(501.*)|(502.*)|(503.*)|(504.*)|(505.*)|(Accept)|(Accept-Charset)|(Accept-Encoding)|(Accept-Language)|(Accept-Ranges)|(Age)|(Allow)|(Authorization)|(Cache-Control)|(Connection)|(Content-Encoding)|(Content-Language)|(Content-Length)|(Content-Location)|(Content-MD5)|(Content-Range)|(Content-Type)|(Date)|(ETag)|(Expect)|(Expires)|(From)|(Host)|(If-Match)|(If-Modified-Since)|(If-None-Match)|(If-Range)|(If-Unmodified-Since)|(Last-Modified)|(Location)|(Max-Forwards)|(Pragma)|(Proxy-Authenticate)|(Proxy-Authorization)|(Range)|(Referer)|(Retry-After)|(Server)|(TE)|(Trailer)|(Transfer-Encoding)|(Upgrade)|(User-Agent)|(Vary)|(Via)|(Warning)|(WWW-Authenticate)|(Content-Disposition)|(Keep-Alive)|(Set-Cookie)|(Cookie)|(Refresh)|(Access-Control-Allow-Origin|Access-Control-Max-Age|Access-Control-Allow-Credentials|Access-Control-Allow-Methods|Access-Control-Allow-Headers)|(Origin|Access-Control-Request-Method|Access-Control-Request-Headers)|(X-Forwarded-For|X-Requested-With)|(X-Frame-Options|X-XSS-Protection)|(X-Content-Type-Options)|(X-UA-Compatible)|(X-Robots-Tag)|(Content-Security-Policy|Content-Security-Policy-Report-Only)|(Strict-Transport-Security))(:|$)/gim;
@@ -709,7 +709,7 @@ jush.tr.js_val = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*
 jush.tr.js_key = { php: jush.php, quo: /"/, apo: /'/, js_one: /\/\//, com: /\/\*/, num: jush.num, _1: /(?=[:}])/ };
 
 jush.urls.js_write = 'https://developer.mozilla.org/en/docs/DOM/$key.$val';
-jush.urls.js_http = 'http://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
+jush.urls.js_http = 'https://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
 jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Global_Objects/$1',
 	'JavaScript/Reference/Statements/$1',
@@ -718,7 +718,7 @@ jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Statements/try...catch',
 	'JavaScript/Reference/Operators/Special/$1',
 	'DOM/document.$1', 'DOM/element.$1', 'DOM/event.$1', 'DOM/form.$1', 'DOM/table.$1', 'DOM/window.$1',
-	'http://www.w3.org/TR/XMLHttpRequest/',
+	'https://www.w3.org/TR/XMLHttpRequest/',
 	'JavaScript/Reference/Global_Objects/Array$1',
 	'JavaScript/Reference/Global_Objects/Array$1',
 	'JavaScript/Reference/Global_Objects/Date$1',
@@ -727,7 +727,7 @@ jush.urls.js = ['https://developer.mozilla.org/en/$key',
 	'JavaScript/Reference/Global_Objects/RegExp$1',
 	'JavaScript/Reference/Global_Objects/String$1'
 ];
-jush.urls.js_doc = ['http://code.google.com/p/jsdoc-toolkit/wiki/Tag$key',
+jush.urls.js_doc = ['https://code.google.com/p/jsdoc-toolkit/wiki/Tag$key',
 	'$1', 'Param', 'Augments', '$1'
 ];
 
@@ -742,7 +742,7 @@ jush.links2.js_doc = /(^[ \t]*|\n\s*\*\s*|(?={))(@(?:augments|author|borrows|cla
 jush.tr.mssql = { sqlite_apo: /'/, sqlite_quo: /"/, one: /--/, com: /\/\*/, mssql_bra: /\[/, num: jush.num }; // QUOTED IDENTIFIER = OFF
 jush.tr.mssql_bra = { _0: /]]/, _1: /]/ };
 
-jush.urls.mssql = ['http://msdn.microsoft.com/library/$key.aspx',
+jush.urls.mssql = ['https://msdn.microsoft.com/library/$key.aspx',
 	'ms181700', 'ms178543', 'ms188372', 'ms189526', 'ms186865', 'ms178578', 'ms174387', 'ms190337', 'ms190487', 'ms187804', 'ms187377', 'ms188386', 'ms188929', 'ms187922', 'ms188362', 'ms177603', 'ms181271', 'ms188365', 'ms181765', 'ms187368', 'ms176089', 'ms188748', 'ms175035', 'ms188387', 'ms177938', 'ms184391', 'ms178628', 'ms190295', 'ms181708', 'ms174366', 'bb630352', 'ms187819', 'bb677335', 'bb630289', 'ms188782', 'ms187746', 'ms188927', 'ms180169', 'ms189835', 'ms188338', 'ms189748', 'ms182587', 'ms182706', 'ms176030', 'ms177521', 'ms188055', 'ms188332', 'ms181362', 'ms188336', 'ms180152', 'ms173773', 'ms173812', 'ms177634', 'cc280766', 'cc280487', 'ms178624', 'ms188037', 'ms180188', 'ms187965', 'ms177673', 'ms180199', 'bb677290', 'ms186775', 'ms182717', 'ms177682', 'ms174335', 'ms187745', 'ms188029', 'ms188795', 'ms173730', 'ms186764', 'ms180016', 'ms179859', 'bb510625', 'ms179882', 'ms174987', 'ms186939', 'ms189455', 'ms187993', 'ms190500', 'ms174433', 'ms190499', 'ms190322', 'ms188361', 'ms188385', 'ms177564', 'ms189461', 'ms176047', 'ms190372', 'ms186336', 'ms187972', 'ms174998', 'ms178632', 'ms187728', 'ms181299', 'ms174973', 'ms182776', 'ms188378', 'ms189499', 'ms188407', 'ms190356', 'ms188767', 'ms182418', 'ms175064', 'ms173829', 'bb677243', 'ms189463', 'ms175976', 'ms177570', 'ms180026', 'ms187942', 'ms177523', 'ms187348', 'ms189466', 'ms188366', 'ms186290', 'ms187331', 'ms188047', 'ms178642', 'ms175972', 'ms177607', 'ms186838', 'ms189797',
 	'ms182741', 'ms181491', 'ms189524', 'ms174430', 'bb934170', 'ms187798', 'ms178528', 'ms189522', 'bb677184', 'ms176061', 'cc280404', 'bb677241', 'ms173565', 'ms181591', 'ms189453', 'bb677289', 'ms189520', 'ms187317', 'cc280405', 'ms186755', 'ms188783', 'ms189751', 'ms174382', 'ms187744', 'ms187802', 'ms179854', 'ms187926', 'ms190495', 'ms178024', 'bb895329', 'ms187936', 'ms186742', 'ms188064', 'ms189462', 'cc280448', 'cc280767', 'ms190332', 'ms188038', 'ms188357', 'ms177544', 'ms174979', 'ms189799', 'ms175007', 'ms173463', 'ms187956', 'bb934146', 'ms176009',
 	'ms186847', 'ms177517', 'ms177514', 'ms188389', 'bb964728', 'ms179906', 'ms190475', 'ms189450', 'bb677309', 'ms178613', 'cc280479', 'bb630256', 'ms188747', 'ms181586', 'ms174414', 'bb630257', 'ms188403', 'ms184393', 'cc280482', 'ms190290', 'ms176118', 'ms188012', 'ms180071', 'ms186728', 'ms187759', 'ms181249', 'ms174969', 'ms190480', 'ms177539', 'bb933779', 'ms174988', 'ms189449', 'ms186791', 'ms186751', 'cc280899', 'cc280603', 'ms174990', 'ms186977', 'ms175075', 'ms182698', 'ms174996', 'ms173790', 'ms173497', 'ms174407', 'ms189438', 'ms173492', 'bb933867', 'ms189448',
@@ -756,7 +756,7 @@ jush.links2.mssql = /(\b)(ADD(?:\s+COUNTER)?\s+SIGNATURE|(ALL)|(AND)|(ANY)|(BACK
 
 jush.tr.oracle = { sqlite_apo: /n?'/i, sqlite_quo: /"/, one: /--/, com: /\/\*/, num: /(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?[fd]?/i }; //! q'
 
-jush.urls.oracle = ['http://download.oracle.com/docs/cd/B19306_01/server.102/b14200/$key',
+jush.urls.oracle = ['https://download.oracle.com/docs/cd/B19306_01/server.102/b14200/$key',
 	'statements_1003.htm', 'statements_1004.htm', 'statements_1005.htm', 'statements_1006.htm', 'statements_1007.htm', 'statements_1008.htm', 'statements_1009.htm', 'statements_1010.htm', 'statements_2001.htm', 'statements_2002.htm', 'statements_2003.htm', 'statements_2004.htm', 'statements_2005.htm', 'statements_2006.htm', 'statements_2007.htm', 'statements_2008.htm', 'statements_2009.htm', 'statements_2010.htm', 'statements_2011.htm', 'statements_2012.htm', 'statements_2013.htm', 'statements_3001.htm', 'statements_3002.htm', 'statements_4001.htm', 'statements_4002.htm', 'statements_4003.htm', 'statements_4004.htm', 'statements_4005.htm', 'statements_4006.htm', 'statements_4007.htm', 'statements_4008.htm', 'statements_4009.htm', 'statements_4010.htm', 'statements_5001.htm', 'statements_5002.htm', 'statements_5003.htm', 'statements_5004.htm', 'statements_5005.htm', 'statements_5006.htm', 'statements_5007.htm', 'statements_5008.htm', 'statements_5009.htm', 'statements_5010.htm', 'statements_5011.htm', 'statements_5012.htm', 'statements_6001.htm', 'statements_6002.htm', 'statements_6003.htm', 'statements_6004.htm', 'statements_6005.htm', 'statements_6006.htm', 'statements_6007.htm', 'statements_6008.htm', 'statements_6009.htm', 'statements_6010.htm', 'statements_6011.htm', 'statements_6012.htm', 'statements_6013.htm', 'statements_6014.htm', 'statements_6015.htm', 'statements_6016.htm', 'statements_7001.htm', 'statements_7002.htm', 'statements_7003.htm', 'statements_7004.htm', 'statements_8001.htm', 'statements_8002.htm', 'statements_8003.htm', 'statements_8004.htm', 'statements_8005.htm', 'statements_8006.htm', 'statements_8007.htm', 'statements_8008.htm', 'statements_8009.htm', 'statements_8010.htm', 'statements_8011.htm', 'statements_8012.htm', 'statements_8013.htm', 'statements_8014.htm', 'statements_8015.htm', 'statements_8016.htm', 'statements_8017.htm', 'statements_8018.htm', 'statements_8019.htm', 'statements_8020.htm', 'statements_8021.htm', 'statements_8022.htm', 'statements_8023.htm', 'statements_8024.htm', 'statements_8025.htm', 'statements_8026.htm', 'statements_8027.htm', 'statements_8028.htm', 'statements_9001.htm', 'statements_9002.htm', 'statements_9003.htm', 'statements_9004.htm', 'statements_9005.htm', 'statements_9006.htm', 'statements_9007.htm', 'statements_9008.htm', 'statements_9009.htm', 'statements_9010.htm', 'statements_9011.htm', 'statements_9012.htm', 'statements_9013.htm', 'statements_9014.htm', 'statements_9015.htm', 'statements_9016.htm', 'statements_9017.htm', 'statements_9018.htm', 'statements_9019.htm', 'statements_9020.htm', 'statements_9021.htm', 'statements_10001.htm', 'statements_10002.htm', 'statements_10003.htm', 'statements_10004.htm', 'statements_10005.htm', 'statements_10006.htm', 'statements_10007.htm',
 	'functions002.htm', 'functions003.htm', 'functions004.htm', 'functions005.htm', 'functions006.htm', 'functions007.htm', 'functions008.htm', 'functions009.htm', 'functions010.htm', 'functions011.htm', 'functions012.htm', 'functions013.htm', 'functions014.htm', 'functions015.htm', 'functions016.htm', 'functions017.htm', 'functions018.htm', 'functions019.htm', 'functions020.htm', 'functions021.htm', 'functions022.htm', 'functions023.htm', 'functions024.htm', 'functions025.htm', 'functions026.htm', 'functions027.htm', 'functions028.htm', 'functions029.htm#i1279881', 'functions029.htm#i1281694', 'functions030.htm', 'functions031.htm', 'functions032.htm', 'functions033.htm', 'functions034.htm', 'functions035.htm', 'functions036.htm', 'functions037.htm', 'functions038.htm', 'functions039.htm', 'functions040.htm', 'functions041.htm', 'functions042.htm', 'functions043.htm', 'functions044.htm', 'functions045.htm', 'functions046.htm', 'functions047.htm', 'functions048.htm', 'functions049.htm', 'functions050.htm', 'functions052.htm', 'functions053.htm', 'functions054.htm', 'functions055.htm', 'functions056.htm', 'functions057.htm', 'functions058.htm', 'functions059.htm', 'functions060.htm', 'functions061.htm', 'functions062.htm', 'functions063.htm', 'functions064.htm', 'functions065.htm', 'functions066.htm', 'functions067.htm', 'functions068.htm', 'functions069.htm', 'functions070.htm', 'functions071.htm', 'functions072.htm', 'functions073.htm', 'functions074.htm', 'functions075.htm', 'functions076.htm', 'functions077.htm', 'functions078.htm', 'functions079.htm', 'functions080.htm', 'functions081.htm', 'functions082.htm', 'functions083.htm', 'functions084.htm', 'functions085.htm', 'functions086.htm', 'functions087.htm', 'functions088.htm', 'functions089.htm', 'functions090.htm', 'functions091.htm', 'functions092.htm', 'functions093.htm', 'functions094.htm', 'functions095.htm', 'functions096.htm', 'functions097.htm', 'functions098.htm', 'functions099.htm', 'functions100.htm', 'functions101.htm', 'functions102.htm', 'functions103.htm', 'functions104.htm', 'functions105.htm', 'functions106.htm', 'functions107.htm', 'functions108.htm', 'functions109.htm', 'functions110.htm', 'functions111.htm', 'functions112.htm', 'functions113.htm', 'functions114.htm', 'functions115.htm', 'functions116.htm', 'functions117.htm', 'functions118.htm', 'functions119.htm', 'functions120.htm', 'functions121.htm', 'functions122.htm', 'functions123.htm', 'functions124.htm', 'functions125.htm', 'functions126.htm', 'functions127.htm', 'functions128.htm', 'functions129.htm', 'functions130.htm', 'functions131.htm', 'functions132.htm', 'functions133.htm', 'functions134.htm', 'functions135.htm', 'functions137.htm', 'functions138.htm', 'functions139.htm', 'functions140.htm', 'functions141.htm', 'functions142.htm', 'functions143.htm', 'functions144.htm', 'functions145.htm', 'functions146.htm', 'functions147.htm', 'functions148.htm', 'functions149.htm', 'functions150.htm', 'functions151.htm', 'functions152.htm', 'functions153.htm', 'functions154.htm', 'functions155.htm', 'functions156.htm', 'functions157.htm#sthref2125', 'functions157.htm#sthref2129', 'functions157.htm#sthref2132', 'functions158.htm', 'functions159.htm', 'functions160.htm', 'functions161.htm', 'functions162.htm', 'functions163.htm', 'functions164.htm', 'functions165.htm', 'functions166.htm', 'functions167.htm', 'functions168.htm', 'functions169.htm', 'functions170.htm', 'functions171.htm', 'functions172.htm', 'functions173.htm', 'functions174.htm', 'functions175.htm', 'functions176.htm', 'functions177.htm', 'functions178.htm', 'functions179.htm', 'functions182.htm', 'functions183.htm', 'functions184.htm', 'functions185.htm', 'functions186.htm', 'functions187.htm', 'functions190.htm', 'functions191.htm', 'functions192.htm', 'functions193.htm', 'functions194.htm', 'functions195.htm', 'functions196.htm', 'functions198.htm', 'functions199.htm', 'functions200.htm', 'functions202.htm', 'functions203.htm', 'functions204.htm', 'functions205.htm', 'functions206.htm', 'functions207.htm', 'functions208.htm', 'functions209.htm', 'functions210.htm', 'functions211.htm', 'functions212.htm', 'functions213.htm', 'functions214.htm', 'functions215.htm', 'functions216.htm', 'functions217.htm', 'functions218.htm', 'functions219.htm', 'functions220.htm', 'functions221.htm', 'functions222.htm', 'functions223.htm', 'functions224.htm', 'functions225.htm', 'functions226.htm', 'functions227.htm', 'functions228.htm', 'functions229.htm'
 ];
@@ -771,13 +771,13 @@ jush.tr.pgsql_eot2 = { }; // pgsql_eot2._2 to be set in pgsql_eot handler
 jush.tr.pgsql_pgsqlset = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: jush.num, _1: /;|$/ };
 jush.tr.pgsqlset = { _0: /$/ };
 
-jush.urls.pgsql_pgsqlset = 'http://www.postgresql.org/docs/current/static/$key';
-jush.urls.pgsql = ['http://www.postgresql.org/docs/current/static/$key',
+jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/static/$key';
+jush.urls.pgsql = ['https://www.postgresql.org/docs/current/static/$key',
 	'sql-$1.html', 'sql-$1.html', 'sql-alteropclass.html', 'sql-createopclass.html', 'sql-dropopclass.html',
 	'functions-datetime.html', 'functions-info.html', 'functions-logical.html', 'functions-comparison.html', 'functions-matching.html', 'functions-conditional.html', 'functions-subquery.html',
 	'functions-math.html', 'functions-string.html', 'functions-binarystring.html', 'functions-formatting.html', 'functions-datetime.html', 'functions-geometry.html', 'functions-net.html', 'functions-sequence.html', 'functions-array.html', 'functions-aggregate.html', 'functions-srf.html', 'functions-info.html', 'functions-admin.html'
 ];
-jush.urls.pgsqlset = ['http://www.postgresql.org/docs/current/static/runtime-config-$key.html#GUC-$1',
+jush.urls.pgsqlset = ['https://www.postgresql.org/docs/current/static/runtime-config-$key.html#GUC-$1',
 	'autovacuum', 'client', 'compatible', 'connection', 'custom', 'developer', 'file-locations', 'locks', 'logging', 'preset', 'query', 'resource', 'statistics', 'wal'
 ];
 
@@ -833,7 +833,7 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	jush.urls.php_sql = 'http://www.php.net/$key.$val';
 	jush.urls.php_sqlite = 'http://www.php.net/$key.$val';
 	jush.urls.php_pgsql = 'http://www.php.net/$key.$val';
-	jush.urls.php_mssql = 'http://msdn.microsoft.com/library/$key.aspx';
+	jush.urls.php_mssql = 'https://msdn.microsoft.com/library/$key.aspx';
 	jush.urls.php_oracle = 'http://www.php.net/$key.$val';
 	jush.urls.php_echo = 'http://www.php.net/$key.$val';
 	jush.urls.php_phpini = 'http://www.php.net/$key.$val';
@@ -855,10 +855,10 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 		'ini.core#ini.$1', 'errorfunc.configuration#ini.$1', 'outcontrol.configuration#ini.$1', 'info.configuration#ini.$1', 'datetime.configuration#ini.$1', 'readline.configuration#ini.$1', 'phar.configuration#ini.$1', 'zlib.configuration#ini.$1', 'mcrypt.configuration#ini.$1', 'odbc.configuration#ini.$1', 'pdo.configuration#ini.$1', 'pdo-mysql.configuration#ini.$1', 'pdo-odbc.configuration#ini.$1', 'ibase.configuration#ini.$1', 'fbsql.configuration#ini.$1', 'ifx.configuration#ini.$1', 'msql.configuration#ini.$1', 'mssql.configuration#ini.$1', 'mysql.configuration#ini.$1', 'mysqli.configuration#ini.$1', 'oci8.configuration#ini.$1', 'pgsql.configuration#ini.$1', 'sqlite3.configuration#ini.$1', 'sybase.configuration#ini.$1', 'filesystem.configuration#ini.$1', 'mime-magic.configuration#ini.$1', 'iconv.configuration#ini.$1', 'intl.configuration#ini.$1', 'mbstring.configuration#ini.$1', 'exif.configuration#ini.$1', 'image.configuration#ini.$1', 'mail.configuration#ini.$1', 'bc.configuration#ini.$1', 'sem.configuration#ini.$1', 'misc.configuration#ini.$1', 'tidy.configuration#ini.$1', 'curl.configuration#ini.$1', 'ldap.configuration#ini.$1', 'network.configuration#ini.$1', 'apache.configuration#ini.$1', 'nsapi.configuration#ini.$1', 'session.configuration#ini.$1', 'pcre.configuration#ini.$1', 'filter.configuration#ini.$1', 'var.configuration#ini.$1', 'soap.configuration#ini.$1', 'com.configuration#ini.$1',
 		'http://www.hardened-php.net/suhosin/configuration.html#$1'
 	];
-	jush.urls.php_doc = ['http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
+	jush.urls.php_doc = ['https://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
 		'$1', '', 'inline$1'
 	];
-	jush.urls.mail = ['http://tools.ietf.org/html/rfc2076#section-3.$key',
+	jush.urls.mail = ['https://tools.ietf.org/html/rfc2076#section-3.$key',
 		'2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'
 	];
 
@@ -902,7 +902,7 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 
 jush.tr.simpledb = { sqlite_apo: /'/, sqlite_quo: /"/, bac: /`/ };
 
-jush.urls.simpledb = ['http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/$key.html',
+jush.urls.simpledb = ['https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/$key.html',
 	'QuotingRulesSelect', 'CountingDataSelect', 'SortingDataSelect', 'SimpleQueriesSelect', 'UsingSelectOperators', 'RangeValueQueriesSelect', ''
 ];
 
@@ -918,8 +918,8 @@ jush.tr.sqlset = { _0: /$/ }; //! jump from SHOW VARIABLES LIKE ''
 jush.tr.sqlstatus = { _0: /$/ }; //! jump from SHOW STATUS LIKE ''
 jush.tr.com_code = { _1: /()/ };
 
-jush.urls.sql_sqlset = 'http://dev.mysql.com/doc/mysql/en/$key';
-jush.urls.sql = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sql_sqlset = 'https://dev.mysql.com/doc/mysql/en/$key';
+jush.urls.sql = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'alter-event.html', 'alter-table.html', 'alter-view.html', 'analyze-table.html', 'create-event.html', 'create-function.html', 'create-procedure.html', 'create-index.html', 'create-table.html', 'create-trigger.html', 'create-view.html', 'drop-index.html', 'drop-table.html', 'begin-end.html', 'optimize-table.html', 'repair-table.html', 'set-transaction.html', 'show-columns.html', 'show-engines.html', 'show-index.html', 'show-processlist.html', 'show-status.html', 'show-tables.html', 'show-variables.html',
 	'$1.html', '$1-statement.html', 'if-statement.html', 'repeat-statement.html', 'truncate-table.html', 'commit.html', 'savepoints.html', 'lock-tables.html', 'charset-connection.html', 'insert-on-duplicate.html', 'fulltext-search.html', 'example-auto-increment.html',
 	'comparison-operators.html#operator_$1', 'comparison-operators.html#function_$1', 'any-in-some-subqueries.html', 'all-subqueries.html', 'exists-and-not-exists-subqueries.html', 'group-by-modifiers.html', 'string-functions.html#operator_$1', 'string-comparison-functions.html#operator_$1', 'regexp.html#operator_$1', 'regexp.html#operator_regexp', 'logical-operators.html#operator_$1', 'control-flow-functions.html#operator_$1', 'arithmetic-functions.html#operator_$1', 'cast-functions.html#operator_$1', 'date-and-time-functions.html#function_$1', 'date-and-time-functions.html#function_date-add',
@@ -938,7 +938,7 @@ jush.urls.sql = ['http://dev.mysql.com/doc/mysql/en/$key',
 	'row-subqueries.html',
 	'fulltext-search.html#function_match'
 ];
-jush.urls.sqlset = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sqlset = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'innodb-parameters.html#sysvar_$1',
 	'mysql-cluster-program-options-mysqld.html#option_mysqld_$1', 'mysql-cluster-replication-conflict-resolution.html#option_mysqld_$1', 'mysql-cluster-replication-schema.html', 'mysql-cluster-replication-starting.html', 'mysql-cluster-system-variables.html#sysvar_$1',
 	'replication-options-binary-log.html#option_mysqld_$1', 'replication-options-binary-log.html#sysvar_$1', 'replication-options-master.html#sysvar_$1', 'replication-options-slave.html#option_mysqld_log-slave-updates', 'replication-options-slave.html#option_mysqld_$1', 'replication-options-slave.html#sysvar_$1', 'replication-options.html#option_mysqld_$1',
@@ -947,7 +947,7 @@ jush.urls.sqlset = ['http://dev.mysql.com/doc/mysql/en/$key',
 	'server-system-variables.html#sysvar_low_priority_updates', 'server-system-variables.html#sysvar_max_join_size', 'server-system-variables.html#sysvar_$1',
 	'ssl-options.html#option_general_$1'
 ];
-jush.urls.sqlstatus = ['http://dev.mysql.com/doc/mysql/en/$key',
+jush.urls.sqlstatus = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'server-status-variables.html#statvar_Com_xxx',
 	'server-status-variables.html#statvar_$1'
 ];
@@ -965,17 +965,17 @@ jush.tr.sqlite_sqliteset = { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /
 jush.tr.sqliteset = { _0: /$/ };
 jush.tr.sqlitestatus = { _0: /$/ };
 
-jush.urls.sqlite_sqliteset = 'http://www.sqlite.org/$key';
-jush.urls.sqlite = ['http://www.sqlite.org/$key',
+jush.urls.sqlite_sqliteset = 'https://www.sqlite.org/$key';
+jush.urls.sqlite = ['https://www.sqlite.org/$key',
 	'lang_$1.html', 'lang_createvtab.html', 'lang_transaction.html',
 	'lang_createindex.html', 'lang_createtable.html', 'lang_createtrigger.html', 'lang_createview.html',
 	'',
 	'lang_expr.html#$1', 'lang_corefunc.html#$1', 'lang_datefunc.html#$1', 'lang_aggfunc.html#$1'
 ];
-jush.urls.sqliteset = ['http://www.sqlite.org/pragma.html#$key',
+jush.urls.sqliteset = ['https://www.sqlite.org/pragma.html#$key',
 	'pragma_$1'
 ];
-jush.urls.sqlitestatus = ['http://www.sqlite.org/compile.html#$key',
+jush.urls.sqlitestatus = ['https://www.sqlite.org/compile.html#$key',
 	'$1'
 ];
 
@@ -1083,7 +1083,7 @@ jush.textarea = (function () {
 		event = event || window.event;
 		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
 			var isUndo = (event.keyCode == 90); // 90 - z
-			var isRedo = (event.keyCode == 89); // 89 - y
+			var isRedo = (event.keyCode == 89 || (event.keyCode == 90 && event.shiftKey)); // 89 - y
 			if (isUndo || isRedo) {
 				if (isRedo) {
 					if (this.jushUndoPos + 1 < this.jushUndo.length) {
