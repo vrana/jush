@@ -92,6 +92,7 @@ jush.textarea = (function () {
 	
 	function keydown(event) {
 		event = event || window.event;
+		this.keydownCode = event.keyCode;
 		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
 			var isUndo = (event.keyCode == 90); // 90 - z
 			var isRedo = (event.keyCode == 89 || (event.keyCode == 90 && event.shiftKey)); // 89 - y
@@ -160,7 +161,9 @@ jush.textarea = (function () {
 	}
 	
 	function keyup() {
-		highlight(this);
+		if (this.keydownCode != 229) { // 229 - IME composition
+			highlight(this);
+		}
 	}
 	
 	function paste(event) {
@@ -193,6 +196,7 @@ jush.textarea = (function () {
 		pre.jushTextarea = el;
 		pre.jushUndo = [ ];
 		pre.jushUndoPos = -1;
+		pre.keydownCode = 0;
 		pre.onkeydown = keydown;
 		pre.onkeyup = keyup;
 		pre.onpaste = paste;
