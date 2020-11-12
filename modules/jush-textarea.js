@@ -148,7 +148,7 @@ jush.textarea = (function () {
 				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
 				.replace(/(&nbsp;)+$/gm, '') // Chrome for some users
 			;
-			setText(pre, pre.textContent, end);
+			setText(pre, pre.textContent.replace(/\u00A0/g, ' '), end);
 			pre.jushUndo.length = pre.jushUndoPos + 1;
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 				pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
