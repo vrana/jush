@@ -365,7 +365,7 @@ var jush = {
 					this.tr.php_eot2._2 = new RegExp('(\n)(' + match[1] + ')(;?\n)');
 					this.build_regexp('php_eot2', (match[2] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
 				} else if (state == 'pgsql_eot') {
-					this.tr.pgsql_eot2._2 = new RegExp('\\$' + text.substring(start, match.index) + '\\$');
+					this.tr.pgsql_eot2._2 = new RegExp('\\$' + match[0].replace(/\$/, '\\$'));
 					this.build_regexp('pgsql_eot2', this.tr.pgsql_eot2);
 				}
 			} else {
@@ -766,7 +766,7 @@ jush.links2.oracle = /(\b)(ALTER\s+CLUSTER|(ALTER\s+DATABASE)|(ALTER\s+DIMENSION
 
 
 jush.tr.pgsql = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, pgsql_pgsqlset: /(\b)(SHOW|SET)(\s+)/i, num: jush.num }; // standard_conforming_strings=off
-jush.tr.pgsql_eot = { pgsql_eot2: /\$/ };
+jush.tr.pgsql_eot = { pgsql_eot2: /\w*\$/, _1: /()/ };
 jush.tr.pgsql_eot2 = { }; // pgsql_eot2._2 to be set in pgsql_eot handler
 jush.tr.pgsql_pgsqlset = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: jush.num, _1: /;|$/ };
 jush.tr.pgsqlset = { _0: /$/ };
