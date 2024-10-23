@@ -1,7 +1,7 @@
 {
   "name": "vrana/jush",
   "description": "JUSH - JavaScript Syntax Highlighter",
-  "homepage": "http://jush.sourceforge.net/",
+  "homepage": "https://jush.sourceforge.io/",
   "keywords": [
     "syntax highlighter",
     "javascript"

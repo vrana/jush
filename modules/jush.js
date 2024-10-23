@@ -1,5 +1,5 @@
 /** JUSH - JavaScript Syntax Highlighter
-* @link http://jush.sourceforge.net
+* @link https://jush.sourceforge.io/
 * @author Jakub Vrana, https://www.vrana.cz
 * @copyright 2007 Jakub Vrana
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0

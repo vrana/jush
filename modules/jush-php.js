@@ -38,32 +38,32 @@
 	jush.tr.phpini = { one: /;/, _0: /$/ };
 	jush.tr.mail = { _0: /$/ };
 
-	jush.urls.php_var = 'http://www.php.net/reserved.variables.$key';
-	jush.urls.php_php = 'http://www.php.net/$key.$val';
-	jush.urls.php_sql = 'http://www.php.net/$key.$val';
-	jush.urls.php_sqlite = 'http://www.php.net/$key.$val';
-	jush.urls.php_pgsql = 'http://www.php.net/$key.$val';
+	jush.urls.php_var = 'https://www.php.net/reserved.variables.$key';
+	jush.urls.php_php = 'https://www.php.net/$key.$val';
+	jush.urls.php_sql = 'https://www.php.net/$key.$val';
+	jush.urls.php_sqlite = 'https://www.php.net/$key.$val';
+	jush.urls.php_pgsql = 'https://www.php.net/$key.$val';
 	jush.urls.php_mssql = 'https://msdn.microsoft.com/library/$key.aspx';
-	jush.urls.php_oracle = 'http://www.php.net/$key.$val';
-	jush.urls.php_echo = 'http://www.php.net/$key.$val';
-	jush.urls.php_phpini = 'http://www.php.net/$key.$val';
-	jush.urls.php_http = 'http://www.php.net/$key.$val';
-	jush.urls.php_mail = 'http://www.php.net/$key.$val';
-	jush.urls.php_met = 'http://www.php.net/$key';
-	jush.urls.php_halt = 'http://www.php.net/$key.halt-compiler';
-	jush.urls.php2 = ['http://www.php.net/$key',
+	jush.urls.php_oracle = 'https://www.php.net/$key.$val';
+	jush.urls.php_echo = 'https://www.php.net/$key.$val';
+	jush.urls.php_phpini = 'https://www.php.net/$key.$val';
+	jush.urls.php_http = 'https://www.php.net/$key.$val';
+	jush.urls.php_mail = 'https://www.php.net/$key.$val';
+	jush.urls.php_met = 'https://www.php.net/$key';
+	jush.urls.php_halt = 'https://www.php.net/$key.halt-compiler';
+	jush.urls.php2 = ['https://www.php.net/$key',
 		'function.$1', 'control-structures.alternative-syntax', 'control-structures.$1', 'control-structures.do.while', 'control-structures.foreach', 'control-structures.switch', 'keyword.class', 'language.constants.predefined', 'language.exceptions', 'language.oop5.$1', 'language.oop5.cloning', 'language.oop5.constants', 'language.oop5.visibility', 'language.operators.logical', 'language.variables.scope#language.variables.scope.$1', 'language.namespaces', 'language.oop5.traits', 'language.generators.syntax#control-structures.yield',
 		'function.$1'
 	];
-	jush.urls.php_new = ['http://www.php.net/$key',
+	jush.urls.php_new = ['https://www.php.net/$key',
 		'class.$1', 'language.types.object#language.types.object.casting', 'reserved.classes#reserved.classes.standard', 'language.oop5.paamayim-nekudotayim'
 	];
-	jush.urls.php_fun = ['http://www.php.net/$key',
+	jush.urls.php_fun = ['https://www.php.net/$key',
 		'language.oop5.autoload', 'language.oop5.decon#language.oop5.decon.constructor', 'language.oop5.decon#language.oop5.decon.destructor', 'language.oop5.overloading#language.oop5.overloading.methods', 'language.oop5.overloading#language.oop5.overloading.members', 'language.oop5.magic#language.oop5.magic.sleep', 'language.oop5.magic#language.oop5.magic.tostring', 'language.oop5.magic#language.oop5.magic.invoke', 'language.oop5.magic#language.oop5.magic.set-state', 'language.oop5.cloning'
 	];
-	jush.urls.phpini = ['http://www.php.net/$key',
+	jush.urls.phpini = ['https://www.php.net/$key',
 		'ini.core#ini.$1', 'errorfunc.configuration#ini.$1', 'outcontrol.configuration#ini.$1', 'info.configuration#ini.$1', 'datetime.configuration#ini.$1', 'readline.configuration#ini.$1', 'phar.configuration#ini.$1', 'zlib.configuration#ini.$1', 'mcrypt.configuration#ini.$1', 'odbc.configuration#ini.$1', 'pdo.configuration#ini.$1', 'pdo-mysql.configuration#ini.$1', 'pdo-odbc.configuration#ini.$1', 'ibase.configuration#ini.$1', 'fbsql.configuration#ini.$1', 'ifx.configuration#ini.$1', 'msql.configuration#ini.$1', 'mssql.configuration#ini.$1', 'mysql.configuration#ini.$1', 'mysqli.configuration#ini.$1', 'oci8.configuration#ini.$1', 'pgsql.configuration#ini.$1', 'sqlite3.configuration#ini.$1', 'sybase.configuration#ini.$1', 'filesystem.configuration#ini.$1', 'mime-magic.configuration#ini.$1', 'iconv.configuration#ini.$1', 'intl.configuration#ini.$1', 'mbstring.configuration#ini.$1', 'exif.configuration#ini.$1', 'image.configuration#ini.$1', 'mail.configuration#ini.$1', 'bc.configuration#ini.$1', 'sem.configuration#ini.$1', 'misc.configuration#ini.$1', 'tidy.configuration#ini.$1', 'curl.configuration#ini.$1', 'ldap.configuration#ini.$1', 'network.configuration#ini.$1', 'apache.configuration#ini.$1', 'nsapi.configuration#ini.$1', 'session.configuration#ini.$1', 'pcre.configuration#ini.$1', 'filter.configuration#ini.$1', 'var.configuration#ini.$1', 'soap.configuration#ini.$1', 'com.configuration#ini.$1',
-		'http://www.hardened-php.net/suhosin/configuration.html#$1'
+		'https://www.hardened-php.net/suhosin/configuration.html#$1'
 	];
 	jush.urls.php_doc = ['https://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
 		'$1', '', 'inline$1'
@@ -73,15 +73,15 @@
 	];
 
 	jush.links.php_new = {
-		'http://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
-		'http://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,
-		'http://www.php.net/language.operators.type': /^instanceof$/i
+		'https://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
+		'https://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,
+		'https://www.php.net/language.operators.type': /^instanceof$/i
 	};
 	jush.links.php_met = {
 		'language.oop5.paamayim-nekudotayim': /^(self|parent|static)$/i,
 		'class.$val': /^(ArgumentCountError|ArithmeticError|ArrayAccess|AssertionError|Closure|DivisionByZeroError|Error|ErrorException|Exception|Generator|Iterator|IteratorAggregate|ParseError|Serializable|Throwable|Traversable|TypeError|COM|DOTNET|VARIANT|CURLFile|DateInterval|DatePeriod|DateTime|DateTimeImmutable|DateTimeInterface|DateTimeZone|Directory|DOMAttr|DOMCdataSection|DOMCharacterData|DOMComment|DOMDocument|DOMDocumentFragment|DOMDocumentType|DOMElement|DOMEntity|DOMEntityReference|DOMException|DOMImplementation|DOMNamedNodeMap|DOMNode|DOMNodeList|DOMNotation|DOMProcessingInstruction|DOMText|DOMXPath|finfo|GMP|HashContext|Collator|IntlDateFormatter|IntlBreakIterator|IntlCalendar|IntlChar|IntlCodePointBreakIterator|IntlException|IntlGregorianCalendar|IntlIterator|IntlPartsIterator|IntlRuleBasedBreakIterator|IntlTimeZone|Locale|MessageFormatter|Normalizer|NumberFormatter|ResourceBundle|Spoofchecker|Transliterator|UConverter|JsonSerializable|libXMLError|mysqli|mysqli_driver|mysqli_result|mysqli_sql_exception|mysqli_stmt|mysqli_warning|OCI-Collection|OCI-Lob|PDO|PDOException|PDOStatement|Phar|PharData|PharException|PharFileInfo|Reflection|ReflectionClass|ReflectionClassConstant|ReflectionException|ReflectionExtension|ReflectionFunction|ReflectionFunctionAbstract|ReflectionGenerator|ReflectionMethod|ReflectionNamedType|ReflectionObject|ReflectionParameter|ReflectionProperty|ReflectionType|ReflectionZendExtension|Reflector|SessionHandler|SessionHandlerInterface|SessionIdInterface|SessionUpdateTimestampHandlerInterface|SimpleXMLElement|SimpleXMLIterator|SNMP|SNMPException|SoapClient|SoapFault|SoapHeader|SoapParam|SoapServer|SoapVar|SodiumException|AppendIterator|ArrayIterator|ArrayObject|BadFunctionCallException|BadMethodCallException|CachingIterator|CallbackFilterIterator|Countable|DirectoryIterator|DomainException|EmptyIterator|FilesystemIterator|FilterIterator|GlobIterator|InfiniteIterator|InvalidArgumentException|IteratorIterator|LengthException|LimitIterator|LogicException|MultipleIterator|NoRewindIterator|OuterIterator|OutOfBoundsException|OutOfRangeException|OverflowException|ParentIterator|RangeException|RecursiveArrayIterator|RecursiveCachingIterator|RecursiveCallbackFilterIterator|RecursiveDirectoryIterator|RecursiveFilterIterator|RecursiveIterator|RecursiveIteratorIterator|RecursiveRegexIterator|RecursiveTreeIterator|RegexIterator|RuntimeException|SeekableIterator|SplDoublyLinkedList|SplFileInfo|SplFileObject|SplFixedArray|SplHeap|SplMaxHeap|SplMinHeap|SplObjectStorage|SplObserver|SplPriorityQueue|SplQueue|SplStack|SplSubject|SplTempFileObject|UnderflowException|UnexpectedValueException|SQLite3|SQLite3Result|SQLite3Stmt|php_user_filter|streamWrapper|tidy|tidyNode|XMLReader|XSLTProcessor|ZipArchive)$/i
 	};
-	jush.links.php_fun = { 'http://www.php.net/functions.user-defined': /^function$/i };
+	jush.links.php_fun = { 'https://www.php.net/functions.user-defined': /^function$/i };
 	jush.links.php_var = {
 		'globals': /^\$GLOBALS$/,
 		'server': /^\$_SERVER$/, 'get': /^\$_GET$/, 'post': /^\$_POST$/, 'files': /^\$_FILES$/, 'request': /^\$_REQUEST$/, 'session': /^\$_SESSION$/, 'environment': /^\$_ENV$/, 'cookies': /^\$_COOKIE$/,
@@ -92,7 +92,7 @@
 	jush.links.php_sql = { 'function': new RegExp('^' + sql_function + '$', 'i') };
 	jush.links.php_sqlite = { 'function': new RegExp('^' + sqlite_function + '$', 'i') };
 	jush.links.php_pgsql = { 'function': new RegExp('^' + pgsql_function + '$', 'i') };
-	jush.links.php_mssql = { 'http://www.php.net/function.$val': /^mssql_query$/i, 'cc296181': /^sqlsrv_prepare$/i, 'cc296184': /^sqlsrv_query$/i };
+	jush.links.php_mssql = { 'https://www.php.net/function.$val': /^mssql_query$/i, 'cc296181': /^sqlsrv_prepare$/i, 'cc296184': /^sqlsrv_query$/i };
 	jush.links.php_oracle = { 'function': new RegExp('^' + oracle_function + '$', 'i') };
 	jush.links.php_phpini = { 'function': /^(ini_get|ini_set)$/i };
 	jush.links.php_http = { 'function': /^header$/i };

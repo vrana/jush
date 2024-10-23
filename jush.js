@@ -1,6 +1,6 @@
 // @generated from modules/*.js
 /** JUSH - JavaScript Syntax Highlighter
-* @link http://jush.sourceforge.net
+* @link https://jush.sourceforge.io/
 * @author Jakub Vrana, https://www.vrana.cz
 * @copyright 2007 Jakub Vrana
 * @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
@@ -512,8 +512,8 @@ jush.tr.cnf_phpini = { cnf_phpini_val: /[ \t]/ };
 jush.tr.cnf_phpini_val = { apo: /'/, quo: /"/, _2: /(?=\n)/ };
 
 jush.urls.cnf_http = 'https://httpd.apache.org/docs/current/mod/$key.html#$val';
-jush.urls.cnf_php = 'http://www.php.net/$key';
-jush.urls.cnf_phpini = 'http://www.php.net/configuration.changes#$key';
+jush.urls.cnf_php = 'https://www.php.net/$key';
+jush.urls.cnf_phpini = 'https://www.php.net/configuration.changes#$key';
 jush.urls.cnf = ['https://httpd.apache.org/docs/current/mod/$key.html#$1',
 	'beos', 'core', 'mod_actions', 'mod_alias', 'mod_auth_basic', 'mod_auth_digest', 'mod_authn_alias', 'mod_authn_anon', 'mod_authn_dbd', 'mod_authn_dbm', 'mod_authn_default', 'mod_authn_file', 'mod_authnz_ldap', 'mod_authz_dbm', 'mod_authz_default', 'mod_authz_groupfile', 'mod_authz_host', 'mod_authz_owner', 'mod_authz_user', 'mod_autoindex', 'mod_cache', 'mod_cern_meta', 'mod_cgi', 'mod_cgid', 'mod_dav', 'mod_dav_fs', 'mod_dav_lock', 'mod_dbd', 'mod_deflate', 'mod_dir', 'mod_disk_cache', 'mod_dumpio', 'mod_echo', 'mod_env', 'mod_example', 'mod_expires', 'mod_ext_filter', 'mod_file_cache', 'mod_filter', 'mod_charset_lite', 'mod_ident', 'mod_imagemap', 'mod_include', 'mod_info', 'mod_isapi', 'mod_ldap', 'mod_log_config', 'mod_log_forensic', 'mod_mem_cache', 'mod_mime', 'mod_mime_magic', 'mod_negotiation', 'mod_nw_ssl', 'mod_proxy', 'mod_rewrite', 'mod_setenvif', 'mod_so', 'mod_speling', 'mod_ssl', 'mod_status', 'mod_substitute', 'mod_suexec', 'mod_userdir', 'mod_usertrack', 'mod_version', 'mod_vhost_alias', 'mpm_common', 'mpm_netware', 'mpm_winnt', 'prefork'
 ];
@@ -687,7 +687,7 @@ jush.urls.http = ['https://www.w3.org/Protocols/rfc2616/rfc2616-$key',
 	'sec19.html#sec19.5.1',
 	'https://tools.ietf.org/html/rfc2068#section-19.7.1.1',
 	'https://tools.ietf.org/html/rfc2109#section-4.2.2', 'https://tools.ietf.org/html/rfc2109#section-4.3.4', 'https://en.wikipedia.org/wiki/Meta_refresh', 'https://www.w3.org/TR/cors/#$1-response-header', 'https://www.w3.org/TR/cors/#$1-request-header',
-	'https://en.wikipedia.org/wiki/$1', 'https://msdn.microsoft.com/library/cc288472.aspx#_replace', 'https://msdn.microsoft.com/en-us/library/dd565640.aspx', 'https://msdn.microsoft.com/library/cc817574.aspx', 'http://noarchive.net/xrobots/', 'https://www.w3.org/TR/CSP/#$1-header-field', 'https://tools.ietf.org/html/rfc6797'
+	'https://en.wikipedia.org/wiki/$1', 'https://msdn.microsoft.com/library/cc288472.aspx#_replace', 'https://msdn.microsoft.com/en-us/library/dd565640.aspx', 'https://msdn.microsoft.com/library/cc817574.aspx', 'https://noarchive.net/xrobots/', 'https://www.w3.org/TR/CSP/#$1-header-field', 'https://tools.ietf.org/html/rfc6797'
 ];
 
 jush.links2.http = /(^(?:HTTP\/[0-9.]+\s+)?)(100.*|(101.*)|(200.*)|(201.*)|(202.*)|(203.*)|(204.*)|(205.*)|(206.*)|(300.*)|(301.*)|(302.*)|(303.*)|(304.*)|(305.*)|(306.*)|(307.*)|(400.*)|(401.*)|(402.*)|(403.*)|(404.*)|(405.*)|(406.*)|(407.*)|(408.*)|(409.*)|(410.*)|(411.*)|(412.*)|(413.*)|(414.*)|(415.*)|(416.*)|(417.*)|(500.*)|(501.*)|(502.*)|(503.*)|(504.*)|(505.*)|(Accept)|(Accept-Charset)|(Accept-Encoding)|(Accept-Language)|(Accept-Ranges)|(Age)|(Allow)|(Authorization)|(Cache-Control)|(Connection)|(Content-Encoding)|(Content-Language)|(Content-Length)|(Content-Location)|(Content-MD5)|(Content-Range)|(Content-Type)|(Date)|(ETag)|(Expect)|(Expires)|(From)|(Host)|(If-Match)|(If-Modified-Since)|(If-None-Match)|(If-Range)|(If-Unmodified-Since)|(Last-Modified)|(Location)|(Max-Forwards)|(Pragma)|(Proxy-Authenticate)|(Proxy-Authorization)|(Range)|(Referer)|(Retry-After)|(Server)|(TE)|(Trailer)|(Transfer-Encoding)|(Upgrade)|(User-Agent)|(Vary)|(Via)|(Warning)|(WWW-Authenticate)|(Content-Disposition)|(Keep-Alive)|(Set-Cookie)|(Cookie)|(Refresh)|(Access-Control-Allow-Origin|Access-Control-Max-Age|Access-Control-Allow-Credentials|Access-Control-Allow-Methods|Access-Control-Allow-Headers)|(Origin|Access-Control-Request-Method|Access-Control-Request-Headers)|(X-Forwarded-For|X-Requested-With)|(X-Frame-Options|X-XSS-Protection)|(X-Content-Type-Options)|(X-UA-Compatible)|(X-Robots-Tag)|(Content-Security-Policy|Content-Security-Policy-Report-Only)|(Strict-Transport-Security))(:|$)/gim;
@@ -829,32 +829,32 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	jush.tr.phpini = { one: /;/, _0: /$/ };
 	jush.tr.mail = { _0: /$/ };
 
-	jush.urls.php_var = 'http://www.php.net/reserved.variables.$key';
-	jush.urls.php_php = 'http://www.php.net/$key.$val';
-	jush.urls.php_sql = 'http://www.php.net/$key.$val';
-	jush.urls.php_sqlite = 'http://www.php.net/$key.$val';
-	jush.urls.php_pgsql = 'http://www.php.net/$key.$val';
+	jush.urls.php_var = 'https://www.php.net/reserved.variables.$key';
+	jush.urls.php_php = 'https://www.php.net/$key.$val';
+	jush.urls.php_sql = 'https://www.php.net/$key.$val';
+	jush.urls.php_sqlite = 'https://www.php.net/$key.$val';
+	jush.urls.php_pgsql = 'https://www.php.net/$key.$val';
 	jush.urls.php_mssql = 'https://msdn.microsoft.com/library/$key.aspx';
-	jush.urls.php_oracle = 'http://www.php.net/$key.$val';
-	jush.urls.php_echo = 'http://www.php.net/$key.$val';
-	jush.urls.php_phpini = 'http://www.php.net/$key.$val';
-	jush.urls.php_http = 'http://www.php.net/$key.$val';
-	jush.urls.php_mail = 'http://www.php.net/$key.$val';
-	jush.urls.php_met = 'http://www.php.net/$key';
-	jush.urls.php_halt = 'http://www.php.net/$key.halt-compiler';
-	jush.urls.php2 = ['http://www.php.net/$key',
+	jush.urls.php_oracle = 'https://www.php.net/$key.$val';
+	jush.urls.php_echo = 'https://www.php.net/$key.$val';
+	jush.urls.php_phpini = 'https://www.php.net/$key.$val';
+	jush.urls.php_http = 'https://www.php.net/$key.$val';
+	jush.urls.php_mail = 'https://www.php.net/$key.$val';
+	jush.urls.php_met = 'https://www.php.net/$key';
+	jush.urls.php_halt = 'https://www.php.net/$key.halt-compiler';
+	jush.urls.php2 = ['https://www.php.net/$key',
 		'function.$1', 'control-structures.alternative-syntax', 'control-structures.$1', 'control-structures.do.while', 'control-structures.foreach', 'control-structures.switch', 'keyword.class', 'language.constants.predefined', 'language.exceptions', 'language.oop5.$1', 'language.oop5.cloning', 'language.oop5.constants', 'language.oop5.visibility', 'language.operators.logical', 'language.variables.scope#language.variables.scope.$1', 'language.namespaces', 'language.oop5.traits', 'language.generators.syntax#control-structures.yield',
 		'function.$1'
 	];
-	jush.urls.php_new = ['http://www.php.net/$key',
+	jush.urls.php_new = ['https://www.php.net/$key',
 		'class.$1', 'language.types.object#language.types.object.casting', 'reserved.classes#reserved.classes.standard', 'language.oop5.paamayim-nekudotayim'
 	];
-	jush.urls.php_fun = ['http://www.php.net/$key',
+	jush.urls.php_fun = ['https://www.php.net/$key',
 		'language.oop5.autoload', 'language.oop5.decon#language.oop5.decon.constructor', 'language.oop5.decon#language.oop5.decon.destructor', 'language.oop5.overloading#language.oop5.overloading.methods', 'language.oop5.overloading#language.oop5.overloading.members', 'language.oop5.magic#language.oop5.magic.sleep', 'language.oop5.magic#language.oop5.magic.tostring', 'language.oop5.magic#language.oop5.magic.invoke', 'language.oop5.magic#language.oop5.magic.set-state', 'language.oop5.cloning'
 	];
-	jush.urls.phpini = ['http://www.php.net/$key',
+	jush.urls.phpini = ['https://www.php.net/$key',
 		'ini.core#ini.$1', 'errorfunc.configuration#ini.$1', 'outcontrol.configuration#ini.$1', 'info.configuration#ini.$1', 'datetime.configuration#ini.$1', 'readline.configuration#ini.$1', 'phar.configuration#ini.$1', 'zlib.configuration#ini.$1', 'mcrypt.configuration#ini.$1', 'odbc.configuration#ini.$1', 'pdo.configuration#ini.$1', 'pdo-mysql.configuration#ini.$1', 'pdo-odbc.configuration#ini.$1', 'ibase.configuration#ini.$1', 'fbsql.configuration#ini.$1', 'ifx.configuration#ini.$1', 'msql.configuration#ini.$1', 'mssql.configuration#ini.$1', 'mysql.configuration#ini.$1', 'mysqli.configuration#ini.$1', 'oci8.configuration#ini.$1', 'pgsql.configuration#ini.$1', 'sqlite3.configuration#ini.$1', 'sybase.configuration#ini.$1', 'filesystem.configuration#ini.$1', 'mime-magic.configuration#ini.$1', 'iconv.configuration#ini.$1', 'intl.configuration#ini.$1', 'mbstring.configuration#ini.$1', 'exif.configuration#ini.$1', 'image.configuration#ini.$1', 'mail.configuration#ini.$1', 'bc.configuration#ini.$1', 'sem.configuration#ini.$1', 'misc.configuration#ini.$1', 'tidy.configuration#ini.$1', 'curl.configuration#ini.$1', 'ldap.configuration#ini.$1', 'network.configuration#ini.$1', 'apache.configuration#ini.$1', 'nsapi.configuration#ini.$1', 'session.configuration#ini.$1', 'pcre.configuration#ini.$1', 'filter.configuration#ini.$1', 'var.configuration#ini.$1', 'soap.configuration#ini.$1', 'com.configuration#ini.$1',
-		'http://www.hardened-php.net/suhosin/configuration.html#$1'
+		'https://www.hardened-php.net/suhosin/configuration.html#$1'
 	];
 	jush.urls.php_doc = ['https://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_tags.$key.pkg.html',
 		'$1', '', 'inline$1'
@@ -864,15 +864,15 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	];
 
 	jush.links.php_new = {
-		'http://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
-		'http://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,
-		'http://www.php.net/language.operators.type': /^instanceof$/i
+		'https://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
+		'https://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,
+		'https://www.php.net/language.operators.type': /^instanceof$/i
 	};
 	jush.links.php_met = {
 		'language.oop5.paamayim-nekudotayim': /^(self|parent|static)$/i,
 		'class.$val': /^(ArgumentCountError|ArithmeticError|ArrayAccess|AssertionError|Closure|DivisionByZeroError|Error|ErrorException|Exception|Generator|Iterator|IteratorAggregate|ParseError|Serializable|Throwable|Traversable|TypeError|COM|DOTNET|VARIANT|CURLFile|DateInterval|DatePeriod|DateTime|DateTimeImmutable|DateTimeInterface|DateTimeZone|Directory|DOMAttr|DOMCdataSection|DOMCharacterData|DOMComment|DOMDocument|DOMDocumentFragment|DOMDocumentType|DOMElement|DOMEntity|DOMEntityReference|DOMException|DOMImplementation|DOMNamedNodeMap|DOMNode|DOMNodeList|DOMNotation|DOMProcessingInstruction|DOMText|DOMXPath|finfo|GMP|HashContext|Collator|IntlDateFormatter|IntlBreakIterator|IntlCalendar|IntlChar|IntlCodePointBreakIterator|IntlException|IntlGregorianCalendar|IntlIterator|IntlPartsIterator|IntlRuleBasedBreakIterator|IntlTimeZone|Locale|MessageFormatter|Normalizer|NumberFormatter|ResourceBundle|Spoofchecker|Transliterator|UConverter|JsonSerializable|libXMLError|mysqli|mysqli_driver|mysqli_result|mysqli_sql_exception|mysqli_stmt|mysqli_warning|OCI-Collection|OCI-Lob|PDO|PDOException|PDOStatement|Phar|PharData|PharException|PharFileInfo|Reflection|ReflectionClass|ReflectionClassConstant|ReflectionException|ReflectionExtension|ReflectionFunction|ReflectionFunctionAbstract|ReflectionGenerator|ReflectionMethod|ReflectionNamedType|ReflectionObject|ReflectionParameter|ReflectionProperty|ReflectionType|ReflectionZendExtension|Reflector|SessionHandler|SessionHandlerInterface|SessionIdInterface|SessionUpdateTimestampHandlerInterface|SimpleXMLElement|SimpleXMLIterator|SNMP|SNMPException|SoapClient|SoapFault|SoapHeader|SoapParam|SoapServer|SoapVar|SodiumException|AppendIterator|ArrayIterator|ArrayObject|BadFunctionCallException|BadMethodCallException|CachingIterator|CallbackFilterIterator|Countable|DirectoryIterator|DomainException|EmptyIterator|FilesystemIterator|FilterIterator|GlobIterator|InfiniteIterator|InvalidArgumentException|IteratorIterator|LengthException|LimitIterator|LogicException|MultipleIterator|NoRewindIterator|OuterIterator|OutOfBoundsException|OutOfRangeException|OverflowException|ParentIterator|RangeException|RecursiveArrayIterator|RecursiveCachingIterator|RecursiveCallbackFilterIterator|RecursiveDirectoryIterator|RecursiveFilterIterator|RecursiveIterator|RecursiveIteratorIterator|RecursiveRegexIterator|RecursiveTreeIterator|RegexIterator|RuntimeException|SeekableIterator|SplDoublyLinkedList|SplFileInfo|SplFileObject|SplFixedArray|SplHeap|SplMaxHeap|SplMinHeap|SplObjectStorage|SplObserver|SplPriorityQueue|SplQueue|SplStack|SplSubject|SplTempFileObject|UnderflowException|UnexpectedValueException|SQLite3|SQLite3Result|SQLite3Stmt|php_user_filter|streamWrapper|tidy|tidyNode|XMLReader|XSLTProcessor|ZipArchive)$/i
 	};
-	jush.links.php_fun = { 'http://www.php.net/functions.user-defined': /^function$/i };
+	jush.links.php_fun = { 'https://www.php.net/functions.user-defined': /^function$/i };
 	jush.links.php_var = {
 		'globals': /^\$GLOBALS$/,
 		'server': /^\$_SERVER$/, 'get': /^\$_GET$/, 'post': /^\$_POST$/, 'files': /^\$_FILES$/, 'request': /^\$_REQUEST$/, 'session': /^\$_SESSION$/, 'environment': /^\$_ENV$/, 'cookies': /^\$_COOKIE$/,
@@ -883,7 +883,7 @@ jush.links2.pgsqlset = /(\b)(autovacuum|log_autovacuum_min_duration|autovacuum_m
 	jush.links.php_sql = { 'function': new RegExp('^' + sql_function + '$', 'i') };
 	jush.links.php_sqlite = { 'function': new RegExp('^' + sqlite_function + '$', 'i') };
 	jush.links.php_pgsql = { 'function': new RegExp('^' + pgsql_function + '$', 'i') };
-	jush.links.php_mssql = { 'http://www.php.net/function.$val': /^mssql_query$/i, 'cc296181': /^sqlsrv_prepare$/i, 'cc296184': /^sqlsrv_query$/i };
+	jush.links.php_mssql = { 'https://www.php.net/function.$val': /^mssql_query$/i, 'cc296181': /^sqlsrv_prepare$/i, 'cc296184': /^sqlsrv_query$/i };
 	jush.links.php_oracle = { 'function': new RegExp('^' + oracle_function + '$', 'i') };
 	jush.links.php_phpini = { 'function': /^(ini_get|ini_set)$/i };
 	jush.links.php_http = { 'function': /^header$/i };

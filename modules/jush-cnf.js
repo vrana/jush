@@ -6,8 +6,8 @@ jush.tr.cnf_phpini = { cnf_phpini_val: /[ \t]/ };
 jush.tr.cnf_phpini_val = { apo: /'/, quo: /"/, _2: /(?=\n)/ };
 
 jush.urls.cnf_http = 'https://httpd.apache.org/docs/current/mod/$key.html#$val';
-jush.urls.cnf_php = 'http://www.php.net/$key';
-jush.urls.cnf_phpini = 'http://www.php.net/configuration.changes#$key';
+jush.urls.cnf_php = 'https://www.php.net/$key';
+jush.urls.cnf_phpini = 'https://www.php.net/configuration.changes#$key';
 jush.urls.cnf = ['https://httpd.apache.org/docs/current/mod/$key.html#$1',
 	'beos', 'core', 'mod_actions', 'mod_alias', 'mod_auth_basic', 'mod_auth_digest', 'mod_authn_alias', 'mod_authn_anon', 'mod_authn_dbd', 'mod_authn_dbm', 'mod_authn_default', 'mod_authn_file', 'mod_authnz_ldap', 'mod_authz_dbm', 'mod_authz_default', 'mod_authz_groupfile', 'mod_authz_host', 'mod_authz_owner', 'mod_authz_user', 'mod_autoindex', 'mod_cache', 'mod_cern_meta', 'mod_cgi', 'mod_cgid', 'mod_dav', 'mod_dav_fs', 'mod_dav_lock', 'mod_dbd', 'mod_deflate', 'mod_dir', 'mod_disk_cache', 'mod_dumpio', 'mod_echo', 'mod_env', 'mod_example', 'mod_expires', 'mod_ext_filter', 'mod_file_cache', 'mod_filter', 'mod_charset_lite', 'mod_ident', 'mod_imagemap', 'mod_include', 'mod_info', 'mod_isapi', 'mod_ldap', 'mod_log_config', 'mod_log_forensic', 'mod_mem_cache', 'mod_mime', 'mod_mime_magic', 'mod_negotiation', 'mod_nw_ssl', 'mod_proxy', 'mod_rewrite', 'mod_setenvif', 'mod_so', 'mod_speling', 'mod_ssl', 'mod_status', 'mod_substitute', 'mod_suexec', 'mod_userdir', 'mod_usertrack', 'mod_version', 'mod_vhost_alias', 'mpm_common', 'mpm_netware', 'mpm_winnt', 'prefork'
 ];
