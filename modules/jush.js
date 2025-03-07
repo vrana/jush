@@ -159,6 +159,7 @@ var jush = {
 							case 'http': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'sql': link = link.replace(/\$1/g, arguments[i].replace(/\b(ALTER|CREATE|DROP|RENAME|SHOW)\s+SCHEMA\b/, '$1 DATABASE').toLowerCase().replace(/\s+|_/g, '-')); break;
 							case 'sqlset': link = link.replace(/\$1/g, (links2.test(arguments[i].replace(/_/g, '-')) ? arguments[i].replace(/_/g, '-') : arguments[i]).toLowerCase()); break;
+							case 'sqlstatus': link = link.replace(/\$1/g, (/mariadb/.test(url[0]) ? arguments[i].toLowerCase() : arguments[i])); break;
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, '')); break;
 							case 'sqliteset': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'sqlitestatus': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
