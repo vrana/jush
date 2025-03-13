@@ -160,6 +160,7 @@ var jush = {
 							case 'http': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'sql': link = link.replace(/\$1/g, arguments[i].replace(/\b(ALTER|CREATE|DROP|RENAME|SHOW)\s+SCHEMA\b/, '$1 DATABASE').toLowerCase().replace(/\s+|_/g, '-')); break;
 							case 'sqlset': link = link.replace(/\$1/g, (links2.test(arguments[i].replace(/_/g, '-')) ? arguments[i].replace(/_/g, '-') : arguments[i]).toLowerCase()); break;
+							case 'sqlstatus': link = link.replace(/\$1/g, (/mariadb/.test(url[0]) ? arguments[i].toLowerCase() : arguments[i])); break;
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, '')); break;
 							case 'sqliteset': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'sqlitestatus': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
@@ -934,7 +935,7 @@ jush.urls.sql = ['https://dev.mysql.com/doc/mysql/en/$key',
 	'functions-for-testing-spatial-relations-between-geometric-objects.html#function_$1',
 	'functions-that-create-new-geometries-from-existing-ones.html#function_$1',
 	'geometry-property-functions.html#function_$1',
-	'creating-spatial-values.html#function_$1',
+	'gis-wkt-functions.html#function_st-$1',
 	'row-subqueries.html',
 	'fulltext-search.html#function_match'
 ];
@@ -1081,6 +1082,7 @@ jush.textarea = (function () {
 	
 	function keydown(event) {
 		event = event || window.event;
+		this.keydownCode = event.keyCode;
 		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
 			var isUndo = (event.keyCode == 90); // 90 - z
 			var isRedo = (event.keyCode == 89 || (event.keyCode == 90 && event.shiftKey)); // 89 - y
@@ -1136,7 +1138,7 @@ jush.textarea = (function () {
 				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
 				.replace(/(&nbsp;)+$/gm, '') // Chrome for some users
 			;
-			setText(pre, pre.textContent, end);
+			setText(pre, pre.textContent.replace(/\u00A0/g, ' '), end);
 			pre.jushUndo.length = pre.jushUndoPos + 1;
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 				pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
@@ -1149,7 +1151,9 @@ jush.textarea = (function () {
 	}
 	
 	function keyup() {
-		highlight(this);
+		if (this.keydownCode != 229) { // 229 - IME composition
+			highlight(this);
+		}
 	}
 	
 	function paste(event) {
@@ -1182,6 +1186,7 @@ jush.textarea = (function () {
 		pre.jushTextarea = el;
 		pre.jushUndo = [ ];
 		pre.jushUndoPos = -1;
+		pre.keydownCode = 0;
 		pre.onkeydown = keydown;
 		pre.onkeyup = keyup;
 		pre.onpaste = paste;
