@@ -5,12 +5,9 @@
 <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="dark.css">
 <body>
 
-<form action="" onsubmit="highlight(this['source'].value); return false;">
 <p>
-<input id="source" name="source">
-<input type="submit" value="Highlight">
+<input id="source" name="source" size="50" oninput="highlight(this.value);" autocomplete="off">
 </p>
-</form>
 
 <table cellspacing="0">
 <tr><th>MySQL</th><td id="sql"></td></tr>
@@ -26,13 +23,14 @@ function highlight(source) {
 	for (var lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
 		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
 	}
-	location.hash = source;
+	location.hash = encodeURIComponent(source);
 }
 
+jush.create_links = 'target="_blank"';
 jush.style('jush.css');
 if (location.hash) {
 	var source = document.getElementById('source');
-	source.value = location.hash.substr(1);
+	source.value = decodeURIComponent(location.hash.substr(1));
 	highlight(source.value);
 }
 </script>
