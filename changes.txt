@@ -1,3 +1,6 @@
+JUSH-dev:
+Textarea: Open help on Ctrl+click
+
 JUSH 2.1.1:
 Add support for dark mode
 Add support for IME composition

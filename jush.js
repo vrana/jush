@@ -1168,6 +1168,12 @@ jush.textarea = (function () {
 		}
 	}
 	
+	function click(event) {
+		if ((event.ctrlKey || event.metaKey) && event.target.href) {
+			open(event.target.href);
+		}
+	}
+	
 	return function textarea(el) {
 		if (!window.getSelection) {
 			return;
@@ -1191,6 +1197,7 @@ jush.textarea = (function () {
 		pre.onkeydown = keydown;
 		pre.oninput = input;
 		pre.onpaste = paste;
+		pre.onclick = click;
 		pre.appendChild(document.createTextNode(el.value));
 		highlight(pre);
 		if (el.spellcheck === false) {
