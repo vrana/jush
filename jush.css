@@ -1,29 +1,29 @@
 .jush {
-    --text-color: #000;
-    --keyword-color: #03c;
-    --identifier-color: #f00;
-    --string-color: #808;
-    --number-color: #090;
-    --attribute-color: teal;
-    --js-bg-color: #f0f6ff;
-    --css-bg-color: #fffae0;
-    --php-bg-color: #fff3f0;
-    --php-sql-bg-color: #fffae0;
+	--text-color: #000;
+	--keyword-color: #03c;
+	--identifier-color: #f00;
+	--string-color: #808;
+	--number-color: #090;
+	--attribute-color: teal;
+	--js-bg-color: #f0f6ff;
+	--css-bg-color: #fffae0;
+	--php-bg-color: #fff3f0;
+	--php-sql-bg-color: #fffae0;
 }
 
 @media (prefers-color-scheme: dark) {
-    .jush {
-        --text-color: #ccc;
-        --keyword-color: #acf;
-        --identifier-color: #f88;
-        --string-color: #e6e;
-        --number-color: #0c0;
-        --attribute-color: #3cc;
-        --js-bg-color: #036;
-        --css-bg-color: #404000;
-        --php-bg-color: #520;
-        --php-sql-bg-color: #404000;
-    }
+	.jush {
+		--text-color: #ccc;
+		--keyword-color: #acf;
+		--identifier-color: #f88;
+		--string-color: #e6e;
+		--number-color: #0c0;
+		--attribute-color: #3cc;
+		--js-bg-color: #036;
+		--css-bg-color: #404000;
+		--php-bg-color: #520;
+		--php-sql-bg-color: #404000;
+	}
 }
 
 .jush { color: var(--text-color); }
