@@ -1,17 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
 <title>JUSH - SQL</title>
 <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="dark.css">
-</head>
-
 <body>
 
 <form action="" onsubmit="highlight(this['source'].value); return false;">
 <p>
-<input id="source" name="source" />
-<input type="submit" value="Highlight" />
+<input id="source" name="source">
+<input type="submit" value="Highlight">
 </p>
 </form>
 
@@ -23,8 +20,8 @@
 <tr><th>Oracle </th><td id="oracle"></td></tr>
 </table>
 
-<script type="text/javascript" src="jush.js"></script>
-<script type="text/javascript">
+<script src="jush.js"></script>
+<script>
 function highlight(source) {
 	for (var lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
 		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
@@ -39,6 +36,3 @@ if (location.hash) {
 	highlight(source.value);
 }
 </script>
-
-</body>
-</html>
