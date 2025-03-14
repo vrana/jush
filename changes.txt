@@ -1,3 +1,10 @@
+JUSH 2.1.1:
+Add support for dark mode
+Add support for IME composition
+PostgreSQL: Fix dollar-quoted strings
+MySQL: Fix doc links
+MySQL: Lowercase sqlstatus link in MariaDB
+
 JUSH 2.0.0:
 Add highlighted textarea
 Allow using tags in highlighted source
