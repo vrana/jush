@@ -125,7 +125,9 @@ jush.textarea = (function () {
 		}
 	}
 	
-	function highlight(pre, forceNewUndo) {
+	var forceNewUndo = true;
+	
+	function highlight(pre) {
 		var start = pre.lastPos;
 		pre.lastPos = undefined;
 		var innerHTML = pre.innerHTML;
@@ -153,6 +155,7 @@ jush.textarea = (function () {
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 				pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
 				pre.jushUndoPos++;
+				forceNewUndo = false;
 			} else {
 				pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
 				pre.jushUndo[pre.jushUndoPos].end = end;
@@ -171,7 +174,7 @@ jush.textarea = (function () {
 			if (document.execCommand('insertHTML', false, jush.htmlspecialchars(event.clipboardData.getData('text')))) { // Opera doesn't support insertText
 				event.preventDefault();
 			}
-			highlight(this, true);
+			forceNewUndo = true; // highlighted in input
 		}
 	}
 	
