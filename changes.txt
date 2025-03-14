@@ -1,4 +1,4 @@
-JUSH-dev:
+JUSH 2.1.2:
 Textarea: Open help on Ctrl+click
 
 JUSH 2.1.1:

@@ -23,5 +23,6 @@ if (isset($_POST["json"])) {
 <script src="jush.js"></script>
 <script>
 jush.style('jush.css');
+jush.style('jush-dark.css', '(prefers-color-scheme: dark)');
 jush.highlight_tag('code');
 </script>

@@ -1,5 +1,6 @@
 (function () {
 	jush.style('jush.css');
+	jush.style('jush-dark.css', '(prefers-color-scheme: dark)');
 	var source = document.getElementById('source');
 	var value = '';
 	if (!source.value && location.hash) {
