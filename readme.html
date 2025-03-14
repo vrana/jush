@@ -35,6 +35,7 @@ jush.highlight_tag('code');
 </code></pre>
 All <code class="jush">&lt;code class="jush"&gt;</code> tags will be highlighted. Language is determined by the class name beginning with "jush-" (e.g. <code class="jush">&lt;code class="jush-js"&gt;</code>). Default language is <code>htm</code>. It is also possible to use <code class="jush">&lt;code class="language-*"&gt;</code>.
 </li>
+<li>If you want to enable dark mode, call <code class="jush-js">jush.style('jush-dark.css')</code>. To enable it only based on user preferences, call <code class="jush-js">jush.style('jush-dark.css', '(prefers-color-scheme: dark)')</code>.</li>
 </ol>
 <p>Alternativelly call <code class="jush-js">jush.highlight(language, text)</code> to syntax highlight single text.</p>
 
@@ -48,5 +49,6 @@ Example: WScript jush-help.wsf readme.html 2 2
 <script src="jush.js"></script>
 <script>
 jush.style('jush.css');
+jush.style('jush-dark.css', '(prefers-color-scheme: dark)');
 jush.highlight_tag('code');
 </script>

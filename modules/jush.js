@@ -24,11 +24,14 @@ var jush = {
 
 	/** Link stylesheet
 	* @param string
+	* @param [string]
 	*/
-	style: function (href) {
+	style: function (href, media) {
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
-		link.type = 'text/css';
+		if (media) {
+			link.media = media;
+		}
 		link.href = href;
 		document.getElementsByTagName('head')[0].appendChild(link);
 	},
