@@ -12,7 +12,7 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 */
 
 var jush = {
-	create_links: true, // string for extra <a> parameters, e.g. ' target="_blank"'
+	create_links: true, // string for extra <a> parameters, e.g. 'target="_blank"'
 	timeout: 1000, // milliseconds
 	custom_links: { }, // { state: [ url, regexp ] }, for example { php : [ 'doc/$&.html', /\b(getData|setData)\b/g ] }
 	api: { }, // { state: { function: description } }, for example { php: { array: 'Create an array' } }
@@ -128,7 +128,7 @@ var jush = {
 	create_link: function (link, s, attrs) {
 		return '<a'
 			+ (this.create_links && link ? ' href="' + link + '" class="jush-help"' : '')
-			+ (typeof this.create_links == 'string' ? this.create_links : '')
+			+ (typeof this.create_links == 'string' ? ' ' + this.create_links : '')
 			+ (attrs || '')
 			+ '>' + s + '</a>'
 		;
@@ -1115,7 +1115,9 @@ jush.textarea = (function () {
 		}
 	}
 	
-	function highlight(pre, forceNewUndo) {
+	var forceNewUndo = true;
+	
+	function highlight(pre) {
 		var start = pre.lastPos;
 		pre.lastPos = undefined;
 		var innerHTML = pre.innerHTML;
@@ -1143,6 +1145,7 @@ jush.textarea = (function () {
 			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 				pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
 				pre.jushUndoPos++;
+				forceNewUndo = false;
 			} else {
 				pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
 				pre.jushUndo[pre.jushUndoPos].end = end;
@@ -1150,10 +1153,8 @@ jush.textarea = (function () {
 		}
 	}
 	
-	function keyup() {
-		if (this.keydownCode != 229) { // 229 - IME composition
-			highlight(this);
-		}
+	function input() {
+		highlight(this);
 	}
 	
 	function paste(event) {
@@ -1163,7 +1164,7 @@ jush.textarea = (function () {
 			if (document.execCommand('insertHTML', false, jush.htmlspecialchars(event.clipboardData.getData('text')))) { // Opera doesn't support insertText
 				event.preventDefault();
 			}
-			highlight(this, true);
+			forceNewUndo = true; // highlighted in input
 		}
 	}
 	
@@ -1188,7 +1189,7 @@ jush.textarea = (function () {
 		pre.jushUndoPos = -1;
 		pre.keydownCode = 0;
 		pre.onkeydown = keydown;
-		pre.onkeyup = keyup;
+		pre.oninput = input;
 		pre.onpaste = paste;
 		pre.appendChild(document.createTextNode(el.value));
 		highlight(pre);

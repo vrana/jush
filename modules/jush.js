@@ -11,7 +11,7 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 */
 
 var jush = {
-	create_links: true, // string for extra <a> parameters, e.g. ' target="_blank"'
+	create_links: true, // string for extra <a> parameters, e.g. 'target="_blank"'
 	timeout: 1000, // milliseconds
 	custom_links: { }, // { state: [ url, regexp ] }, for example { php : [ 'doc/$&.html', /\b(getData|setData)\b/g ] }
 	api: { }, // { state: { function: description } }, for example { php: { array: 'Create an array' } }
@@ -127,7 +127,7 @@ var jush = {
 	create_link: function (link, s, attrs) {
 		return '<a'
 			+ (this.create_links && link ? ' href="' + link + '" class="jush-help"' : '')
-			+ (typeof this.create_links == 'string' ? this.create_links : '')
+			+ (typeof this.create_links == 'string' ? ' ' + this.create_links : '')
 			+ (attrs || '')
 			+ '>' + s + '</a>'
 		;
