@@ -160,10 +160,8 @@ jush.textarea = (function () {
 		}
 	}
 	
-	function keyup() {
-		if (this.keydownCode != 229) { // 229 - IME composition
-			highlight(this);
-		}
+	function input() {
+		highlight(this);
 	}
 	
 	function paste(event) {
@@ -198,7 +196,7 @@ jush.textarea = (function () {
 		pre.jushUndoPos = -1;
 		pre.keydownCode = 0;
 		pre.onkeydown = keydown;
-		pre.onkeyup = keyup;
+		pre.oninput = input;
 		pre.onpaste = paste;
 		pre.appendChild(document.createTextNode(el.value));
 		highlight(pre);
