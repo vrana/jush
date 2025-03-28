@@ -130,7 +130,7 @@ var jush = {
 	create_link: function (link, s, attrs) {
 		return '<a'
 			+ (this.create_links && link ? ' href="' + link + '" class="jush-help"' : '')
-			+ (typeof this.create_links == 'string' ? ' ' + this.create_links : '')
+			+ (typeof this.create_links == 'string' ? ' ' + this.create_links.replace(/^\s+/, '') : '')
 			+ (attrs || '')
 			+ '>' + s + '</a>'
 		;
