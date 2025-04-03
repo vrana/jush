@@ -300,6 +300,7 @@ jush.textarea = (function () {
 		if ((event.ctrlKey || event.metaKey) && event.target.href) {
 			open(event.target.href);
 		}
+		closeAutocomplete();
 	}
 	
 	let pre;
