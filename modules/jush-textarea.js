@@ -119,7 +119,7 @@ jush.textarea = (function () {
 					acEl.selectedIndex = select;
 					return false;
 				}
-				if (/^(Enter|Tab)$/.test(event.key)) {
+				if (/^(Enter|Tab)$/.test(event.key) && !event.shiftKey) {
 					insertAutocomplete(this);
 					return false;
 				}
@@ -129,7 +129,7 @@ jush.textarea = (function () {
 				if (event.key == ' ') {
 					openAutocomplete(this);
 				}
-			} else if (autocomplete.openBy && (autocomplete.openBy.test(event.key) || event.key == 'Backspace')) {
+			} else if (autocomplete.openBy && (autocomplete.openBy.test(event.key) || event.key == 'Backspace' || (event.key == 'Enter' && event.shiftKey))) {
 				openAc = true;
 			} else if (/^(Escape|ArrowLeft|ArrowRight|Home|End)$/.test(event.key)) {
 				closeAutocomplete();
