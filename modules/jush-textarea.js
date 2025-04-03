@@ -192,11 +192,10 @@ jush.textarea = (function () {
 					pre.innerText.substring(pos)
 				);
 				if (Object.keys(ac).length) {
-					let offset, select = 0;
+					let select = 0;
 					for (const word in ac) {
 						const option = document.createElement('option');
-						offset = ac[word];
-						option.value = offset;
+						option.value = ac[word];
 						option.textContent = word;
 						acEl.append(option);
 						if (prevSelected && prevSelected.textContent == word) {
@@ -204,17 +203,24 @@ jush.textarea = (function () {
 						}
 					}
 					acEl.selectedIndex = select;
-					
-					const range2 = range.cloneRange();
-					range2.setStart(range.startContainer, Math.max(0, range.startOffset - offset)); // autocompletions currently couldn't cross container boundary
-					const span = document.createElement('span'); // collapsed ranges have empty bounding rect
-					range2.insertNode(span);
-					acEl.style.left = span.offsetLeft + 'px';
-					acEl.style.top = (span.offsetTop + 20) + 'px';
-					span.remove();
+					positionAutocomplete();
 					acEl.style.display = '';
 				}
 			}
+		}
+	}
+	
+	function positionAutocomplete() {
+		const sel = getSelection();
+		if (sel.rangeCount && acEl.options.length) {
+			const range = sel.getRangeAt(0);
+			const range2 = range.cloneRange();
+			range2.setStart(range.startContainer, Math.max(0, range.startOffset - acEl.options[0].value)); // autocompletions currently couldn't cross container boundary
+			const span = document.createElement('span'); // collapsed ranges have empty bounding rect
+			range2.insertNode(span);
+			acEl.style.left = span.offsetLeft + 'px';
+			acEl.style.top = (span.offsetTop + 20) + 'px';
+			span.remove();
 		}
 	}
 	
@@ -298,6 +304,7 @@ jush.textarea = (function () {
 	
 	let pre;
 	let autocomplete = () => ({});
+	addEventListener('resize', positionAutocomplete);
 	
 	return function textarea(el, autocompleter) {
 		if (!window.getSelection) {
