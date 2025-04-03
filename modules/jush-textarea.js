@@ -205,18 +205,13 @@ jush.textarea = (function () {
 					}
 					acEl.selectedIndex = select;
 					
-					const preRect = pre.getBoundingClientRect();
-					let x = pre.offsetLeft + 4; // 4 = border + padding
-					let y = pre.offsetTop + 4;
 					const range2 = range.cloneRange();
 					range2.setStart(range.startContainer, Math.max(0, range.startOffset - offset)); // autocompletions currently couldn't cross container boundary
-					let rect = range2.getBoundingClientRect();
-					if (rect.x) {
-						x += rect.x - preRect.x - 4;
-						y += rect.y - preRect.y - 4;
-					}
-					acEl.style.left = x + 'px';
-					acEl.style.top = (y + 20) + 'px';
+					const span = document.createElement('span'); // collapsed ranges have empty bounding rect
+					range2.insertNode(span);
+					acEl.style.left = span.offsetLeft + 'px';
+					acEl.style.top = (span.offsetTop + 20) + 'px';
+					span.remove();
 					acEl.style.display = '';
 				}
 			}
