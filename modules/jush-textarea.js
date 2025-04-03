@@ -188,8 +188,8 @@ jush.textarea = (function () {
 			if (state) {
 				const ac = autocomplete(
 					state,
-					pre.textContent.substring(0, pos),
-					pre.textContent.substring(pos)
+					pre.innerText.substring(0, pos),
+					pre.innerText.substring(pos)
 				);
 				if (Object.keys(ac).length) {
 					let offset, select = 0;
