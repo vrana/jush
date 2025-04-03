@@ -336,7 +336,7 @@ jush.textarea = (function () {
 		pre.appendChild(document.createTextNode(el.value));
 		highlight(pre);
 		if (el.spellcheck === false) {
-			document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
+			pre.spellcheck = false;
 		}
 		el.before(pre);
 		el.before(acEl);
