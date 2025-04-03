@@ -1,6 +1,14 @@
 jush.textarea = (function () {
 	//! IE sometimes inserts empty <p> in start of a string when newline is entered inside
 	
+	function findSelPos(pre) {
+		var sel = getSelection();
+		if (sel.rangeCount) {
+			var range = sel.getRangeAt(0);
+			return findPosition(pre, range.startContainer, range.startOffset);
+		}
+	}
+
 	function findPosition(el, container, offset) {
 		var pos = { pos: 0 };
 		findPositionRecurse(el, container, offset, pos);
@@ -72,6 +80,12 @@ jush.textarea = (function () {
 		}
 		var html = jush.highlight(lang, text).replace(/\n/g, '<br>');
 		setHTML(pre, html, text, end);
+		if (openAc) {
+			openAutocomplete(pre);
+			openAc = false;
+		} else {
+			closeAutocomplete();
+		}
 	}
 	
 	function setHTML(pre, html, text, pos) {
@@ -91,9 +105,38 @@ jush.textarea = (function () {
 	}
 	
 	function keydown(event) {
-		event = event || window.event;
-		this.keydownCode = event.keyCode;
-		if ((event.ctrlKey || event.metaKey) && !event.altKey) {
+		const ctrl = (event.ctrlKey || event.metaKey);
+		if (!event.altKey) {
+			if (!ctrl && acEl.options.length) {
+				const select =
+					(event.key == 'ArrowDown' ? Math.min(acEl.options.length - 1, acEl.selectedIndex + 1) :
+					(event.key == 'ArrowUp' ? Math.max(0, acEl.selectedIndex - 1) :
+					(event.key == 'PageDown' ? Math.min(acEl.options.length - 1, acEl.selectedIndex + acEl.size) :
+					(event.key == 'PageUp' ? Math.max(0, acEl.selectedIndex - acEl.size) :
+					null))))
+				;
+				if (select !== null) {
+					acEl.selectedIndex = select;
+					return false;
+				}
+				if (/^(Enter|Tab)$/.test(event.key)) {
+					insertAutocomplete(this);
+					return false;
+				}
+			}
+			
+			if (ctrl) {
+				if (event.key == ' ') {
+					openAutocomplete(this);
+				}
+			} else if (autocomplete.openBy && (autocomplete.openBy.test(event.key) || event.key == 'Backspace')) {
+				openAc = true;
+			} else if (/^(Escape|ArrowLeft|ArrowRight|Home|End)$/.test(event.key)) {
+				closeAutocomplete();
+			}
+		}
+		
+		if (ctrl && !event.altKey) {
 			var isUndo = (event.keyCode == 90); // 90 - z
 			var isRedo = (event.keyCode == 89 || (event.keyCode == 90 && event.shiftKey)); // 89 - y
 			if (isUndo || isRedo) {
@@ -115,13 +158,93 @@ jush.textarea = (function () {
 		}
 	}
 	
-	function setLastPos(pre) {
-		var sel = getSelection();
+	const acEl = document.createElement('select');
+	acEl.size = 8;
+	acEl.className = 'jush-autocomplete';
+	acEl.style.position = 'absolute';
+	acEl.style.zIndex = 1;
+	acEl.onclick = () => {
+		insertAutocomplete(pre);
+	};
+	openAc = false;
+	closeAutocomplete();
+
+	function findState(node) {
+		let match;
+		while (node && (!/^(CODE|PRE)$/.test(node.tagName) || !(match = node.className.match(/(^|\s)jush-(\w+)/)))) {
+			node = node.parentElement;
+		}
+		return (match ? match[2] : '');
+	}
+
+	function openAutocomplete(pre) {
+		const prevSelected = acEl.options[acEl.selectedIndex];
+		closeAutocomplete();
+		const sel = getSelection();
 		if (sel.rangeCount) {
-			var range = sel.getRangeAt(0);
-			if (pre.lastPos === undefined) {
-				pre.lastPos = findPosition(pre, range.endContainer, range.endOffset);
+			const range = sel.getRangeAt(0);
+			const pos = findSelPos(pre);
+			const state = findState(range.startContainer);
+			if (state) {
+				const ac = autocomplete(
+					state,
+					pre.textContent.substring(0, pos),
+					pre.textContent.substring(pos)
+				);
+				if (Object.keys(ac).length) {
+					let offset, select = 0;
+					for (const word in ac) {
+						const option = document.createElement('option');
+						offset = ac[word];
+						option.value = offset;
+						option.textContent = word;
+						acEl.append(option);
+						if (prevSelected && prevSelected.textContent == word) {
+							select = acEl.options.length - 1;
+						}
+					}
+					acEl.selectedIndex = select;
+					
+					const preRect = pre.getBoundingClientRect();
+					let x = pre.offsetLeft + 4; // 4 = border + padding
+					let y = pre.offsetTop + 4;
+					const range2 = range.cloneRange();
+					range2.setStart(range.startContainer, Math.max(0, range.startOffset - offset)); // autocompletions currently couldn't cross container boundary
+					let rect = range2.getBoundingClientRect();
+					if (rect.x) {
+						x += rect.x - preRect.x - 4;
+						y += rect.y - preRect.y - 4;
+					}
+					acEl.style.left = x + 'px';
+					acEl.style.top = (y + 20) + 'px';
+					acEl.style.display = '';
+				}
 			}
+		}
+	}
+	
+	function closeAutocomplete() {
+		acEl.options.length = 0;
+		acEl.style.display = 'none';
+	}
+	
+	function insertAutocomplete(pre) {
+		const sel = getSelection();
+		const range = sel.rangeCount && sel.getRangeAt(0);
+		if (range) {
+			const insert = acEl.options[acEl.selectedIndex].textContent;
+			const offset = +acEl.options[acEl.selectedIndex].value;
+			forceNewUndo = true;
+			pre.lastPos = findSelPos(pre);
+			range.setStart(range.startContainer, Math.max(0, range.startOffset - offset));
+			document.execCommand('insertText', false, insert);
+			openAutocomplete(pre);
+		}
+	}
+	
+	function setLastPos(pre) {
+		if (pre.lastPos === undefined) {
+			pre.lastPos = findSelPos(pre);
 		}
 	}
 	
@@ -132,12 +255,7 @@ jush.textarea = (function () {
 		pre.lastPos = undefined;
 		var innerHTML = pre.innerHTML;
 		if (innerHTML != pre.lastHTML) {
-			var end;
-			var sel = getSelection();
-			if (sel.rangeCount) {
-				var range = sel.getRangeAt(0);
-				end = findPosition(pre, range.startContainer, range.startOffset);
-			}
+			var end = findSelPos(pre);
 			innerHTML = innerHTML.replace(/<br>((<\/[^>]+>)*<\/?div>)(?!$)/gi, function (all, rest) {
 				if (end) {
 					end--;
@@ -168,7 +286,6 @@ jush.textarea = (function () {
 	}
 	
 	function paste(event) {
-		event = event || window.event;
 		if (event.clipboardData) {
 			setLastPos(this);
 			if (document.execCommand('insertHTML', false, jush.htmlspecialchars(event.clipboardData.getData('text')))) { // Opera doesn't support insertText
@@ -184,11 +301,17 @@ jush.textarea = (function () {
 		}
 	}
 	
-	return function textarea(el) {
+	let pre;
+	let autocomplete = () => ({});
+	
+	return function textarea(el, autocompleter) {
 		if (!window.getSelection) {
 			return;
 		}
-		var pre = document.createElement('pre');
+		if (autocompleter) {
+			autocomplete = autocompleter;
+		}
+		pre = document.createElement('pre');
 		pre.contentEditable = true;
 		pre.className = el.className + ' jush';
 		pre.style.border = '1px inset #ccc';
@@ -203,7 +326,6 @@ jush.textarea = (function () {
 		pre.jushTextarea = el;
 		pre.jushUndo = [ ];
 		pre.jushUndoPos = -1;
-		pre.keydownCode = 0;
 		pre.onkeydown = keydown;
 		pre.oninput = input;
 		pre.onpaste = paste;
@@ -213,10 +335,15 @@ jush.textarea = (function () {
 		if (el.spellcheck === false) {
 			document.documentElement.spellcheck = false; // doesn't work when set on pre or its parent in Firefox
 		}
-		el.parentNode.insertBefore(pre, el);
-		if (document.activeElement === el && !/firefox/i.test(navigator.userAgent)) { // clicking on focused element makes Firefox to lose focus
+		el.before(pre);
+		el.before(acEl);
+		if (document.activeElement === el) {
 			pre.focus();
+			if (!el.value) {
+				openAutocomplete(pre);
+			}
 		}
+		acEl.style.font = getComputedStyle(pre).font;
 		el.style.display = 'none';
 		return pre;
 	};
