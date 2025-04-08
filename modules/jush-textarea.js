@@ -72,6 +72,19 @@ jush.textarea = (function () {
 		}
 	}
 	
+	function setSelPos(pre, pos) {
+		if (pos) {
+			var start = findOffset(pre, pos);
+			if (start) {
+				var range = document.createRange();
+				range.setStart(start.container, start.offset);
+				var sel = getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
+		}
+	}
+
 	function setText(pre, text, end) {
 		var lang = 'txt';
 		if (text.length < 1e4) { // highlighting is slow with most languages
@@ -92,16 +105,7 @@ jush.textarea = (function () {
 		pre.innerHTML = html;
 		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
 		pre.jushTextarea.value = text;
-		if (pos) {
-			var start = findOffset(pre, pos);
-			if (start) {
-				var range = document.createRange();
-				range.setStart(start.container, start.offset);
-				var sel = getSelection();
-				sel.removeAllRanges();
-				sel.addRange(range);
-			}
-		}
+		setSelPos(pre, pos);
 	}
 	
 	function keydown(event) {
@@ -213,6 +217,7 @@ jush.textarea = (function () {
 	function positionAutocomplete() {
 		const sel = getSelection();
 		if (sel.rangeCount && acEl.options.length) {
+			const pos = findSelPos(pre);
 			const range = sel.getRangeAt(0);
 			const range2 = range.cloneRange();
 			range2.setStart(range.startContainer, Math.max(0, range.startOffset - acEl.options[0].value)); // autocompletions currently couldn't cross container boundary
@@ -221,6 +226,7 @@ jush.textarea = (function () {
 			acEl.style.left = span.offsetLeft + 'px';
 			acEl.style.top = (span.offsetTop + 20) + 'px';
 			span.remove();
+			setSelPos(pre, pos); // required on iOS
 		}
 	}
 	
