@@ -155,7 +155,7 @@ var jush = {
 						var link = (/^https?:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
-							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break; // toLowerCase() - case sensitive after #
+							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()).replace(/\\/g, '-'); break; // toLowerCase() - case sensitive after #
 							case 'phpini': link = link.replace(/\$1/g, (/^suhosin\./.test(arguments[i])) ? arguments[i] : arguments[i].toLowerCase().replace(/_/g, '-')); break;
 							case 'php_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W+/, '')); break;
 							case 'js_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W*(.)/, function (match, p1) { return p1.toUpperCase(); })); break;
@@ -170,7 +170,7 @@ var jush = {
 							case 'pgsqlset': link = link.replace(/\$1/g, arguments[i].replace(/_/g, '-').toUpperCase()); break;
 							case 'cnf': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
-							default: link = link.replace(/\$1/g, arguments[i]);
+							default: link = link.replace(/\$1/g, arguments[i]).replace(/\\/g, '-');
 						}
 						var title = '';
 						if (jush.api[state]) {
@@ -338,7 +338,7 @@ var jush = {
 						var m2 = this.links[key][k].exec(m[2]);
 						if (m2) {
 							if (m2[1]) {
-								link = m2[1].toLowerCase();
+								link = m2[1].toLowerCase().replace(/\\/g, '-'); // \ is PHP namespace;
 							}
 							k_link = k;
 							if (key != 'att') {
