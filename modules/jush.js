@@ -330,26 +330,19 @@ var jush = {
 			if (!out) {
 				if (this.links && this.links[key] && m[2]) {
 					if (/^tag/.test(key)) {
-						this.last_tag = m[2].toUpperCase();
+						this.last_tag = m[2].toLowerCase();
 					}
-					var link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m[2]) ? m[2].toUpperCase() : m[2].toLowerCase());
+					var link = m[2].toLowerCase();
 					var k_link = '';
-					var att_tag = (this.att_mapping[link + '-' + this.last_tag] ? this.att_mapping[link + '-' + this.last_tag] : this.last_tag);
 					for (var k in this.links[key]) {
-						if (key == 'att' && this.links[key][k].test(link + '-' + att_tag) && !/^https?:/.test(k)) {
-							link += '-' + att_tag;
+						var m2 = this.links[key][k].exec(m[2]);
+						if (m2) {
+							if (m2[1]) {
+								link = m2[1].toLowerCase();
+							}
 							k_link = k;
-							break;
-						} else {
-							var m2 = this.links[key][k].exec(m[2]);
-							if (m2) {
-								if (m2[1]) {
-									link = (/^tag/.test(key) && !/^(ins|del)$/i.test(m2[1]) ? m2[1].toUpperCase() : m2[1].toLowerCase());
-								}
-								k_link = k;
-								if (key != 'att') {
-									break;
-								}
+							if (key != 'att') {
+								break;
 							}
 						}
 					}
@@ -358,7 +351,11 @@ var jush = {
 					}
 					if (k_link) {
 						s = (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '');
-						s += this.create_link((/^https?:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link)).replace(/\$val/, (/^https?:/.test(k_link) ? link.toLowerCase() : link)), this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
+						s += this.create_link(
+							(/^https?:/.test(k_link) ? k_link : this.urls[key].replace(/\$key/, k_link))
+								.replace(/\$val/, (/^https?:/.test(k_link) ? link.toLowerCase() : link))
+								.replace(/\$tag/, this.last_tag),
+							this.htmlspecialchars(escape ? escape(m[2]) : m[2])); //! use jush.api
 						s += (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : '');
 					}
 				}
@@ -394,31 +391,6 @@ var jush = {
 		}
 		states.shift();
 		return [ ret.join(''), states ];
-	},
-
-	att_mapping: {
-		'align-APPLET': 'IMG', 'align-IFRAME': 'IMG', 'align-INPUT': 'IMG', 'align-OBJECT': 'IMG',
-		'align-COL': 'TD', 'align-COLGROUP': 'TD', 'align-TBODY': 'TD', 'align-TFOOT': 'TD', 'align-TH': 'TD', 'align-THEAD': 'TD', 'align-TR': 'TD',
-		'border-OBJECT': 'IMG',
-		'cite-BLOCKQUOTE': 'Q',
-		'cite-DEL': 'INS',
-		'color-BASEFONT': 'FONT',
-		'face-BASEFONT': 'FONT',
-		'height-INPUT': 'IMG',
-		'height-TD': 'TH',
-		'height-OBJECT': 'IMG',
-		'label-MENU': 'OPTION',
-		'longdesc-IFRAME': 'FRAME',
-		'name-FIELDSET': 'FORM',
-		'name-TEXTAREA': 'BUTTON',
-		'name-IFRAME': 'FRAME',
-		'name-OBJECT': 'INPUT',
-		'src-IFRAME': 'FRAME',
-		'type-AREA': 'A',
-		'type-LINK': 'A',
-		'width-INPUT': 'IMG',
-		'width-OBJECT': 'IMG',
-		'width-TD': 'TH'
 	},
 
 	/** Replace <&> by HTML entities

@@ -6,7 +6,7 @@
 	if (!source.value && location.hash) {
 		source.value = location.hash.substr(1);
 	}
-	source.onkeyup = function highlight() {
+	source.oninput = function highlight() {
 		if (value == source.value) {
 			return;
 		}
@@ -16,10 +16,9 @@
 		result.className = 'jush-' + language;
 		result.innerHTML = jush.highlight(language, source.value);
 	};
-	source.onchange = source.onkeyup;
 	source.form['language'].onchange = function () {
 		value = '';
-		source.onkeyup();
+		source.oninput();
 	}
-	source.onkeyup();
+	source.oninput();
 })();
