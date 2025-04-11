@@ -65,7 +65,7 @@ jush.api.js = {
 	'window.setTimeout': 'Evaluates an expression after a specified number of milliseconds (fn, milisec)'
 };
 
-jush.api.php = {
+jush.api.php2 = {
 	apache_child_terminate: 'Terminate apache process after this request (): bool',
 	apache_get_modules: 'Get a list of loaded Apache modules (): array',
 	apache_get_version: 'Fetch Apache version (): string',
