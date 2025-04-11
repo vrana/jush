@@ -370,7 +370,8 @@ var jush = {
 				}
 			} else {
 				if (state == 'php_met' && this.last_class) {
-					s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s);
+					var title = (jush.api['php2'] ? jush.api['php2'][(this.last_class + '::' + s).toLowerCase()] : '');
+					s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase(), s, (title ? ' title="' + this.htmlspecialchars_quo(title) + '"' : ''));
 				}
 				ret.push(s);
 				for (var i = Math.min(states.length, +key.substr(1)); i--; ) {
