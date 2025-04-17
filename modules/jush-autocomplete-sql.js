@@ -47,7 +47,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		const allTables = Object.keys(tablesColumns);
 		const usedTables = findTables(query); // tables used by the current query
 		const uniqueColumns = {};
-		for (const table of usedTables) {
+		for (const table of Object.values(usedTables)) {
 			for (const column of tablesColumns[table]) {
 				uniqueColumns[column] = 0;
 			}
@@ -56,9 +56,9 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		if (columns.length > 50) {
 			columns.length = 0;
 		}
-		if (usedTables.length > 1) {
-			for (const table of usedTables) {
-				columns.push(table + '.');
+		if (Object.keys(usedTables).length > 1) {
+			for (const alias in usedTables) {
+				columns.push(alias + '.');
 			}
 		}
 		
@@ -75,9 +75,15 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		
 		const thisColumns = []; // columns in the current table ('table.')
 		const match = context.match(escRe('`?(\\w+)`?\\.$'));
-		if (match && tablesColumns[match[1]]) {
-			thisColumns.push(...tablesColumns[match[1]]);
-			preferred['\.'] = thisColumns;
+		if (match) {
+			let table = match[1];
+			if (!tablesColumns[table]) {
+				table = usedTables[table];
+			}
+			if (tablesColumns[table]) {
+				thisColumns.push(...tablesColumns[table]);
+				preferred['\\.'] = thisColumns;
+			}
 		}
 
 		if (query.includes(esc[0]) && !/^\w/.test(before)) { // if there's any ` in the query, use ` everywhere unless the user starts typing letters
@@ -113,24 +119,27 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
 	}
 
-	/** Change first ` to esc[0], second to esc[1] */
+	/** Change even ` to esc[0], odd to esc[1] */
 	function escRe(re, flags) {
-		return new RegExp(re
-			.replace(/`/, (esc[0] == '[' ? '\\' : '') + esc[0])
-			.replace(/`/, (esc[1] == ']' ? '\\' : '') + esc[1]), flags);
+		let i = 0;
+		return new RegExp(re.replace(/`/g, () => (esc[0] == '[' ? '\\' : '') + esc[i++ % 2]), flags);
 	}
-	
-	function findTables(query) { //! aliases
-		const matches = query.matchAll(escRe('\\b(FROM|INTO|UPDATE|JOIN)\\s+(\\w+|`.+?`)', 'gi')); //! handle `abc``def`
-		const result = [];
+
+	/** @return Object<string, string> key is alias, value is actual table */
+	function findTables(query) {
+		const matches = query.matchAll(escRe('\\b(FROM|JOIN|INTO|UPDATE)\\s+(\\w+|`.+?`)((\\s+AS)?\\s+((?!(LEFT|INNER|JOIN|ON|USING|WHERE|GROUP|HAVING|ORDER|LIMIT)\\b)\\w+|`.+?`))?', 'gi')); //! handle `abc``def`
+		const result = {};
 		for (const match of matches) {
 			const table = match[2].replace(escRe('^`|`$', 'g'), '');
+			const alias = (match[5] ? match[5].replace(escRe('^`|`$', 'g'), '') : table);
 			if (tablesColumns[table]) {
-				result.push(table);
+				result[alias] = table;
 			}
 		}
-		if (!result.length) {
-			return Object.keys(tablesColumns);
+		if (!Object.keys(result).length) {
+			for (const table in tablesColumns) {
+				result[table] = table;
+			}
 		}
 		return result;
 	}
