@@ -73,10 +73,10 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		const context = before.replace(escRe('[\\w`]+$'), ''); // in 'UPDATE tab.`co', context is 'UPDATE tab.'
 		before = before.replace(escRe('.*[^\\w`]', 's'), ''); // in 'UPDATE tab.`co', before is '`co'
 		
-		let thisColumns = []; // columns in the current table ('table.')
+		const thisColumns = []; // columns in the current table ('table.')
 		const match = context.match(escRe('`?(\\w+)`?\\.$'));
-		if (match) {
-			thisColumns = [...tablesColumns[match[1]]];
+		if (match && tablesColumns[match[1]]) {
+			thisColumns.push(...tablesColumns[match[1]]);
 			preferred['\.'] = thisColumns;
 		}
 
