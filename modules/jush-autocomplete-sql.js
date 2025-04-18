@@ -119,7 +119,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
 	}
 
-	/** Change even ` to esc[0], odd to esc[1] */
+	/** Change odd ` to esc[0], even to esc[1] */
 	function escRe(re, flags) {
 		let i = 0;
 		return new RegExp(re.replace(/`/g, () => (esc[0] == '[' ? '\\' : '') + esc[i++ % 2]), flags);
