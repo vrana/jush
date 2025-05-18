@@ -18,9 +18,9 @@
 .jush { color: var(--text-color); }
 .jush-htm_com, .jush-com, .jush-com_code, .jush-one, .jush-php_doc, .jush-php_com, .jush-php_one, .jush-js_one, .jush-js_doc { color: gray; }
 .jush-php, .jush-php_new, .jush-php_fun { color: var(--php-color); background-color: var(--php-bg-color); }
-.jush-php_quo, .jush-quo, .jush-quo_one, .jush-php_eot, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sql_eot { color: var(--string-color); }
-.jush-php_apo { color: var(--string-plain-color); }
-.jush-php_quo_var, .jush-php_var, .jush-sql_var { font-style: italic; }
+.jush-php_quo, .jush-php_eot, .jush-js_bac { color: var(--string-color); }
+.jush-php_apo, .jush-quo, .jush-quo_one, .jush-apo, .jush-sql_apo, .jush-sqlite_apo, .jush-sql_quo, .jush-sql_eot { color: var(--string-plain-color); }
+.jush-php_quo_var, .jush-php_var, .jush-sql_var, .jush-js_bac .jush-js { font-style: italic; }
 .jush-php_apo .jush-php_quo_var, .jush-php_apo .jush-php_var { font-style: normal; }
 .jush-php_halt2 { background-color: var(--bg-color); color: var(--text-color); }
 .jush-tag_css, .jush-att_css .jush-att_quo, .jush-att_css .jush-att_apo, .jush-att_css .jush-att_val { color: var(--text-color); background-color: var(--css-bg-color); }
