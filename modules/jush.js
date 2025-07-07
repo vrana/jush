@@ -13,12 +13,12 @@ unnecessary escaping (e.g. echo "\'" or ='&quot;') is removed
 var jush = {
 	create_links: true, // string for extra <a> parameters, e.g. 'target="_blank"'
 	timeout: 1000, // milliseconds
-	custom_links: { }, // { state: [ url, regexp ] }, for example { php : [ 'doc/$&.html', /\b(getData|setData)\b/g ] }
+	custom_links: { }, // { state: { url: regexp } }, for example { php : { 'doc/$&.html': /\b(getData|setData)\b/g } }
 	api: { }, // { state: { function: description } }, for example { php: { array: 'Create an array' } }
-	
+
 	php: /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i, // asp_tags=0, short_open_tag=1
 	num: /(?:0x[0-9a-f]+)|(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?/i,
-	
+
 	regexps: undefined,
 	subpatterns: { },
 
@@ -55,7 +55,7 @@ var jush = {
 	highlight_html: function (language, html) {
 		var original = html.replace(/<br(\s+[^>]*)?>/gi, '\n');
 		var highlighted = jush.highlight(language, jush.html_entity_decode(original.replace(/<[^>]*>/g, ''))).replace(/(^|\n| ) /g, '$1&nbsp;');
-		
+
 		var inject = { };
 		var pos = 0;
 		var last_offset = 0;
@@ -66,7 +66,7 @@ var jush = {
 			}
 			last_offset = offset + str.length;
 		});
-		
+
 		pos = 0;
 		highlighted = highlighted.replace(/([^&<]*)(?:(&[^;]+;)|(?:<[^>]+>)+|$)/g, function (str, text, entity) {
 			for (var i = text.length; i >= 0; i--) {
@@ -114,7 +114,7 @@ var jush = {
 		};
 		highlight();
 	},
-	
+
 	link_manual: function (language, text) {
 		var code = document.createElement('code');
 		code.innerHTML = this.highlight(language, text);
@@ -182,13 +182,21 @@ var jush = {
 			});
 		}
 		if (this.custom_links[state]) {
-			s = s.replace(this.custom_links[state][1], function (str) {
-				var offset = arguments[arguments.length - 2];
-				if (/<[^>]*$/.test(s.substr(0, offset))) {
-					return str; // don't create links inside tags
-				}
-				return '<a href="' + jush.htmlspecialchars_quo(jush.custom_links[state][0].replace('$&', encodeURIComponent(str))) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
-			});
+			if (Array.isArray(this.custom_links[state])) { // backwards compatibility
+				var url = this.custom_links[state][0];
+				var re = this.custom_links[state][1];
+				this.custom_links[state] = {};
+				this.custom_links[state][url] = re;
+			}
+			for (var url in this.custom_links[state]) {
+				s = s.replace(this.custom_links[state][url], function (str) {
+					var offset = arguments[arguments.length - 2];
+					if (/<[^>]*$/.test(s.substr(0, offset))) {
+						return str; // don't create links inside tags
+					}
+					return '<a href="' + jush.htmlspecialchars_quo(url.replace('$&', encodeURIComponent(str))) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
+				});
+			}
 		}
 		return s;
 	},
@@ -220,7 +228,7 @@ var jush = {
 		this.subpatterns[key] = subpatterns;
 		this.regexps[key] = new RegExp(re.join('|'), 'g');
 	},
-	
+
 	highlight_states: function (states, text, in_php, escape) {
 		if (!this.regexps) {
 			this.regexps = { };
@@ -265,7 +273,7 @@ var jush = {
 			if (!key) {
 				return [ 'regexp not found', [ ] ];
 			}
-			
+
 			if (in_php && key == 'php') {
 				continue;
 			}
@@ -273,7 +281,7 @@ var jush = {
 			var out = (key.charAt(0) == '_');
 			var division = match.index + (key == 'php_halt2' ? match[0].length : 0);
 			var s = text.substring(start, division);
-			
+
 			// highlight children
 			var prev_state = states[states.length - 2];
 			if (/^(att_quo|att_apo|att_val)$/.test(state) && (/^(att_js|att_css|att_http)$/.test(prev_state) || /^\s*javascript:/i.test(s))) { // javascript: - easy but without own state //! should be checked only in %URI;
@@ -324,7 +332,7 @@ var jush = {
 			child_states = s_states[1];
 			s = this.keywords_links(state, s);
 			ret.push(s);
-			
+
 			s = text.substring(division, match.index + match[0].length);
 			s = (m.length < 3 ? (s ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(s) : s) + '</span>' : '') : (m[1] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[1]) : m[1]) + '</span>' : '') + this.htmlspecialchars(escape ? escape(m[2]) : m[2]) + (m[3] ? '<span class="jush-op">' + this.htmlspecialchars(escape ? escape(m[3]) : m[3]) + '</span>' : ''));
 			if (!out) {
@@ -401,19 +409,19 @@ var jush = {
 	htmlspecialchars: function (string) {
 		return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	},
-	
+
 	htmlspecialchars_quo: function (string) {
 		return jush.htmlspecialchars(string).replace(/"/g, '&quot;'); // jush - this.htmlspecialchars_quo is passed as reference
 	},
-	
+
 	htmlspecialchars_apo: function (string) {
 		return jush.htmlspecialchars(string).replace(/'/g, '&#39;');
 	},
-	
+
 	htmlspecialchars_quo_apo: function (string) {
 		return jush.htmlspecialchars_quo(string).replace(/'/g, '&#39;');
 	},
-	
+
 	/** Decode HTML entities
 	* @param string
 	* @return string
@@ -423,7 +431,7 @@ var jush = {
 			return String.fromCharCode(p1 ? p1 : parseInt(p2, 16));
 		}).replace(/&amp;/g, '&');
 	},
-	
+
 	/** Add backslash before backslash
 	* @param string
 	* @return string
@@ -431,15 +439,15 @@ var jush = {
 	addslashes: function (string) {
 		return string.replace(/\\/g, '\\$&');
 	},
-	
+
 	addslashes_apo: function (string) {
 		return string.replace(/[\\']/g, '\\$&');
 	},
-	
+
 	addslashes_quo: function (string) {
 		return string.replace(/[\\"]/g, '\\$&');
 	},
-	
+
 	/** Remove backslash before \"'
 	* @param string
 	* @return string
@@ -461,7 +469,7 @@ jush.tr = { // transitions - key: go inside this state, _2: go outside 2 levels 
 	esc: { _1: /./ }, //! php_quo allows [0-7]{1,3} and x[0-9A-Fa-f]{1,2}
 	one: { _1: /(?=\n)/ },
 	num: { _1: /()/ },
-	
+
 	sql_apo: { esc: /\\/, _0: /''/, _1: /'/ },
 	sql_quo: { esc: /\\/, _0: /""/, _1: /"/ },
 	sql_var: { _1: /(?=[^_.$a-zA-Z0-9])/ },
