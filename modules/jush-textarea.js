@@ -243,7 +243,8 @@ jush.textarea = (function () {
 			const offset = +acEl.options[acEl.selectedIndex].value;
 			forceNewUndo = true;
 			pre.lastPos = findSelPos(pre);
-			range.setStart(range.startContainer, Math.max(0, range.startOffset - offset));
+			const start = findOffset(pre, pre.lastPos - offset);
+			range.setStart(start.container, start.offset);
 			document.execCommand('insertText', false, insert);
 			openAutocomplete(pre);
 		}
