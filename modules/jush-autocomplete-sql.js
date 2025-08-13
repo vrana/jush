@@ -9,7 +9,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 	* value: list of autocomplete words; '?' means to not use the word if it's already in the current query
 	*/
 	const keywordsDefault = {
-		'^': ['SELECT', 'INSERT INTO', 'UPDATE', 'DELETE FROM', 'EXPLAIN'],
+		'^': ['SELECT', 'INSERT INTO', 'UPDATE', 'DELETE FROM', 'TRUNCATE', 'EXPLAIN'],
 		'^EXPLAIN ': ['SELECT'],
 		'^INSERT ': ['IGNORE'],
 		'^INSERT .+\\) ': ['?VALUES', 'ON DUPLICATE KEY UPDATE'],
@@ -63,7 +63,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		}
 		
 		const preferred = {
-			'\\b(FROM|INTO|^UPDATE|JOIN) ': allTables, // all tables including the current ones (self-join)
+			'\\b(FROM|INTO|^UPDATE|JOIN|TRUNCATE) ': allTables, // all tables including the current ones (self-join)
 			'\\b(^INSERT|USING) [^(]*\\(([^)]+, )?': columns, // offer columns right after '(' or after ','
 			'(^UPDATE .+ SET| DUPLICATE KEY UPDATE| BY) (.+, )?': columns,
 			' (WHERE|HAVING|AND|OR|ON|=) ': columns,
