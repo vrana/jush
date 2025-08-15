@@ -275,6 +275,7 @@ jush.textarea = (function () {
 				return rest;
 			});
 			pre.innerHTML = innerHTML
+				.replace(/^<br\b[^>]*>$/i, '') // Firefox, Chrome
 				.replace(/<(br|div)\b[^>]*>/gi, '\n') // Firefox, Chrome
 				.replace(/&nbsp;(<\/[pP]\b)/g, '$1') // IE
 				.replace(/<\/p\b[^>]*>($|<p\b[^>]*>)/gi, '\n') // IE
