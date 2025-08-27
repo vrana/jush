@@ -18,7 +18,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		'^DELETE FROM \\w+ ': ['WHERE'],
 		' JOIN \\w+(( AS)? (?!(ON|USING|AS) )\\w+)? ': ['ON', 'USING'],
 		'\\bSELECT ': ['*', 'DISTINCT'],
-		'\\bSELECT .+ ': ['?FROM'],
+		'\\bSELECT .*[^,] ': ['?FROM'],
 		'\\bSELECT (?!.* (WHERE|GROUP BY|HAVING|ORDER BY|LIMIT) ).+ FROM .+ ': ['INNER JOIN', 'LEFT JOIN', '?WHERE'],
 		'\\bSELECT (?!.* (HAVING|ORDER BY|LIMIT|OFFSET) ).+ FROM .+ ': ['?GROUP BY'],
 		'\\bSELECT (?!.* (ORDER BY|LIMIT|OFFSET) ).+ FROM .+ ': ['?HAVING'],
