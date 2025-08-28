@@ -68,7 +68,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			'(^UPDATE .+ SET| DUPLICATE KEY UPDATE| BY) (.+, )?': columns,
 			' (WHERE|HAVING|AND|OR|ON|=) ': columns,
 		};
-		keywordsDefault['\\bSELECT( DISTINCT)? (?!.* FROM )(.+, )?'] = columns; // this is not in preferred because we prefer '*'
+		keywordsDefault['\\bSELECT( DISTINCT)? (?!.* FROM )(.*, )?'] = columns; // this is not in preferred because we prefer '*'
 		
 		const context = before.replace(escRe('[\\w`]+$'), ''); // in 'UPDATE tab.`co', context is 'UPDATE tab.'
 		before = before.replace(escRe('.*[^\\w`]', 's'), ''); // in 'UPDATE tab.`co', before is '`co'
