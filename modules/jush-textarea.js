@@ -176,7 +176,11 @@ jush.textarea = (function () {
 
 	function findState(node) {
 		let match;
-		while (node && (!/^(CODE|PRE)$/.test(node.tagName) || !(match = node.className.match(/(^|\s)jush-(\w+)/)))) {
+		while (
+			node
+			&& !(node.className && (match = (node.className.match(/(^|\s)jush-(\w+)/))))
+			&& !/^(CODE|PRE)$/.test(node.tagName)
+		) {
 			node = node.parentElement;
 		}
 		return (match ? match[2] : '');
