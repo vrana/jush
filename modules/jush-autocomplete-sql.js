@@ -43,6 +43,8 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			.trimStart()
 		;
 		after = after.replace(/;.*/s, ''); // strip next query
+		// strip subquery or a next query if edited query is not terminated yet 
+		after = after.replace(/\b(CREATE|ALTER|RENAME|DROP|TRUNCATE|SELECT|INSERT|UPDATE|DELETE|USE|DELIMITER|EXPLAIN)(\s.*|$)/s, '');
 		const query = before + after;
 		const allTables = Object.keys(tablesColumns);
 		const usedTables = findTables(query); // tables used by the current query
