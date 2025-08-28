@@ -248,7 +248,9 @@ jush.textarea = (function () {
 			const start = findOffset(pre, pre.lastPos - offset);
 			range.setStart(start.container, start.offset);
 			document.execCommand('insertText', false, insert);
-			openAutocomplete(pre);
+			if (insert.match(/ $/)) {
+				openAutocomplete(pre);
+			}
 		}
 	}
 	
