@@ -23,6 +23,9 @@ jush.textarea = (function () {
 			}
 			pos.pos += child.textContent.length;
 		} else if (child == container) {
+			if (/^div$/i.test(child.tagName)) {
+				pos.pos++;
+			}
 			for (var i = 0; i < offset; i++) {
 				findPositionRecurse(child.childNodes[i], container, offset, pos);
 			}
