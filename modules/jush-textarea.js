@@ -226,7 +226,7 @@ jush.textarea = (function () {
 			const span = document.createElement('span'); // collapsed ranges have empty bounding rect
 			range2.insertNode(span);
 			acEl.style.left = span.offsetLeft + 'px';
-			acEl.style.top = (span.offsetTop + 20) + 'px';
+			acEl.style.top = (span.offsetTop - pre.scrollTop + 20) + 'px';
 			span.remove();
 			setSelPos(pre, pos); // required on iOS
 		}
