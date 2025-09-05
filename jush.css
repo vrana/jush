@@ -15,7 +15,7 @@
 	--php-sql-bg-color: #ffbbb0;
 }
 
-.jush { color: var(--text-color); }
+.jush { color: var(--text-color); white-space: pre; }
 .jush-htm_com, .jush-com, .jush-com_code, .jush-one, .jush-php_doc, .jush-php_com, .jush-php_one, .jush-js_one, .jush-js_doc { color: gray; }
 .jush-php, .jush-php_new, .jush-php_fun { color: var(--php-color); background-color: var(--php-bg-color); }
 .jush-php_quo, .jush-php_eot, .jush-js_bac { color: var(--string-color); }

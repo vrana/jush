@@ -54,7 +54,7 @@ var jush = {
 	*/
 	highlight_html: function (language, html) {
 		var original = html.replace(/<br(\s+[^>]*)?>/gi, '\n');
-		var highlighted = jush.highlight(language, jush.html_entity_decode(original.replace(/<[^>]*>/g, ''))).replace(/(^|\n| ) /g, '$1&nbsp;');
+		var highlighted = jush.highlight(language, jush.html_entity_decode(original.replace(/<[^>]*>/g, '')));
 
 		var inject = { };
 		var pos = 0;
@@ -98,12 +98,7 @@ var jush = {
 				var match = /(^|\s)(?:jush|language(?=-\S))($|\s|-(\S+))/.exec(pre[i].className); // https://www.w3.org/TR/html5/text-level-semantics.html#the-code-element
 				if (match) {
 					var language = match[3] ? match[3] : 'htm';
-					var s = '<span class="jush"><span class="jush-' + language + '">' + jush.highlight_html(language, pre[i].innerHTML.replace(/\t/g, tab.length ? tab : '\t')) + '</span></span>'; // span - enable style for class="language-"
-					if (pre[i].outerHTML && /^pre$/i.test(pre[i].tagName)) {
-						pre[i].outerHTML = pre[i].outerHTML.match(/[^>]+>/)[0] + s + '</' + pre[i].tagName + '>';
-					} else {
-						pre[i].innerHTML = s.replace(/\n/g, '<br />');
-					}
+					pre[i].innerHTML = '<span class="jush"><span class="jush-' + language + '">' + jush.highlight_html(language, pre[i].innerHTML.replace(/\t/g, tab.length ? tab : '\t')) + '</span></span>'; // span - enable style for class="language-"
 				}
 				i++;
 				if (jush.timeout && window.setTimeout && (new Date() - start) > jush.timeout) {
