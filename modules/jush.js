@@ -44,7 +44,7 @@ var jush = {
 	highlight: function (language, text) {
 		this.last_tag = '';
 		this.last_class = '';
-		return this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml|txt)$/.test(language))[0];
+		return '<span class="jush">' + this.highlight_states([ language ], text.replace(/\r\n?/g, '\n'), !/^(htm|tag|xml|txt)$/.test(language))[0] + '</span>';
 	},
 
 	/** Highlight html
