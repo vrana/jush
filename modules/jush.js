@@ -186,7 +186,7 @@ var jush = {
 			for (var url in this.custom_links[state]) {
 				s = s.replace(this.custom_links[state][url], function (str) {
 					var offset = arguments[arguments.length - 2];
-					if (/<[^>]*$/.test(s.substr(0, offset))) {
+					if (/<[^>]*$/.test(s.substr(0, offset)) || /^[^<]*<\/a>/.test(s.substr(offset))) {
 						return str; // don't create links inside tags
 					}
 					return '<a href="' + jush.htmlspecialchars_quo(url.replace('$&', encodeURIComponent(str))) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
