@@ -104,7 +104,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 							}
 						}
 						if (keyword.length > before.length && keyword.toUpperCase().startsWith(before.toUpperCase())) {
-							const isCol = (keywords[re] == columns || keywords[re] == thisColumns);
+							const isCol = (keyword == "*" || keywords[re] == columns || keywords[re] == thisColumns || keywords[re] == allTables);
 							ac[keyword + (isCol ? '' : ' ')] = before.length;
 						}
 					}
