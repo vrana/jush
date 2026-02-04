@@ -9,16 +9,18 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 	* value: list of autocomplete words; '?' means to not use the word if it's already in the current query
 	*/
 	const keywordsDefault = {
-		'^': ['SELECT', 'INSERT INTO', 'UPDATE', 'DELETE FROM', 'EXPLAIN'],
+		'^': ['SELECT', 'INSERT INTO', 'UPDATE', 'DELETE FROM', 'TRUNCATE', 'DROP', 'EXPLAIN'],
 		'^EXPLAIN ': ['SELECT'],
 		'^INSERT ': ['IGNORE'],
 		'^INSERT .+\\) ': ['?VALUES', 'ON DUPLICATE KEY UPDATE'],
 		'^UPDATE \\w+ ': ['SET'],
 		'^UPDATE \\w+ SET .+ ': ['?WHERE'],
 		'^DELETE FROM \\w+ ': ['WHERE'],
+		'^DROP ': ['TABLE', 'TEMPORARY TABLE', 'VIEW'],
+		'^DROP( TEMPORARY)? TABLE ': ['IF EXISTS'],
 		' JOIN \\w+(( AS)? (?!(ON|USING|AS) )\\w+)? ': ['ON', 'USING'],
 		'\\bSELECT ': ['*', 'DISTINCT'],
-		'\\bSELECT .+ ': ['?FROM'],
+		'\\bSELECT .*[^,] ': ['?FROM'],
 		'\\bSELECT (?!.* (WHERE|GROUP BY|HAVING|ORDER BY|LIMIT) ).+ FROM .+ ': ['INNER JOIN', 'LEFT JOIN', '?WHERE'],
 		'\\bSELECT (?!.* (HAVING|ORDER BY|LIMIT|OFFSET) ).+ FROM .+ ': ['?GROUP BY'],
 		'\\bSELECT (?!.* (ORDER BY|LIMIT|OFFSET) ).+ FROM .+ ': ['?HAVING'],
@@ -63,7 +65,8 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		}
 		
 		const preferred = {
-			'\\b(FROM|INTO|^UPDATE|JOIN) ': allTables, // all tables including the current ones (self-join)
+			'\\b(FROM|INTO|^UPDATE|JOIN|TRUNCATE) ': allTables, // all tables including the current ones (self-join)
+			'\\b(TABLE|VIEW)( IF EXISTS)? (.+, )?': allTables,
 			'\\b(^INSERT|USING) [^(]*\\(([^)]+, )?': columns, // offer columns right after '(' or after ','
 			'(^UPDATE .+ SET| DUPLICATE KEY UPDATE| BY) (.+, )?': columns,
 			' (WHERE|HAVING|AND|OR|ON|=) ': columns,
