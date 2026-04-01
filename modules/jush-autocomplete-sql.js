@@ -86,7 +86,8 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			}
 		}
 
-		if (query.includes(esc[0]) && !/^\w/.test(before)) { // if there's any ` in the query, use ` everywhere unless the user starts typing letters
+		
+		if (!/^\w/.test(before)) { // escape columns and tables if necessary, unless the user starts typing letters
 			allTables.forEach(addEsc);
 			columns.forEach(addEsc);
 			thisColumns.forEach(addEsc);
@@ -114,9 +115,12 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		
 		return ac;
 	}
-	
-	function addEsc(val, key, array) {
-		array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
+
+	/** escape table names and column names if they contain special characters */
+	function addEsc(val, key, array){
+	  if (/[^A-Za-z0-9_]/.test(val)){
+	    array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
+	  }
 	}
 
 	/** Change odd ` to esc[0], even to esc[1] */
