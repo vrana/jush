@@ -86,12 +86,11 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			}
 		}
 
+		// escape columns and tables if necessary
+		allTables.forEach(addEsc);
+		columns.forEach(addEsc);
+		thisColumns.forEach(addEsc);
 		
-		if (!/^\w/.test(before)) { // escape columns and tables if necessary, unless the user starts typing letters
-			allTables.forEach(addEsc);
-			columns.forEach(addEsc);
-			thisColumns.forEach(addEsc);
-		}
 		
 		const ac = {};
 		for (const keywords of [preferred, keywordsDefault]) {
@@ -104,7 +103,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 								continue;
 							}
 						}
-						if (keyword.length > before.length && keyword.toUpperCase().startsWith(before.toUpperCase())) {
+						if (keyword.length > before.length && keyword.toUpperCase().includes(before.toUpperCase())) {
 							const isCol = (keywords[re] == columns || keywords[re] == thisColumns);
 							ac[keyword + (isCol ? '' : ' ')] = before.length;
 						}
@@ -112,7 +111,6 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 				}
 			}
 		}
-		
 		return ac;
 	}
 
