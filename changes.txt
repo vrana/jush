@@ -1,4 +1,4 @@
-JUSH 2.2.0-dev:
+JUSH 2.2.0:
 Add textarea autocomplete
 Add autocomplete for SQL
 
