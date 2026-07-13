@@ -27,6 +27,8 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		' ORDER BY (?!.* (LIMIT|OFFSET) ).+ ': ['DESC'],
 	};
 	
+	let forceEscape = false;
+	
 	/** Get list of strings for autocompletion
 	* @param string
 	* @param string
@@ -87,11 +89,10 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			}
 		}
 
-		if (query.includes(esc[0]) && !/^\w/.test(before)) { // if there's any ` in the query, use ` everywhere unless the user starts typing letters
-			allTables.forEach(addEsc);
-			columns.forEach(addEsc);
-			thisColumns.forEach(addEsc);
-		}
+		forceEscape = query.includes(esc[0]) && !/^\w/.test(before); // if there's any ` in the query, use ` everywhere unless the user starts typing letters
+		allTables.forEach(addEsc);
+		columns.forEach(addEsc);
+		thisColumns.forEach(addEsc);
 		
 		const ac = {};
 		for (const keywords of [preferred, keywordsDefault]) {
@@ -117,7 +118,9 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 	}
 	
 	function addEsc(val, key, array) {
-		array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
+		if (forceEscape || !/^[a-z_]\w*\.?$/i.test(val)) {
+			array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');
+		}
 	}
 
 	/** Change odd ` to esc[0], even to esc[1] */
