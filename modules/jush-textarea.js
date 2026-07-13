@@ -176,7 +176,7 @@ jush.textarea = (function () {
 
 	function findState(node) {
 		let match;
-		while (node && (!/^(CODE|PRE)$/.test(node.tagName) || !(match = node.className.match(/(^|\s)jush-(\w+)/)))) {
+		while (node && !(match = (node.className || '').match(/(^|\s)jush-(\w+)/))) {
 			node = node.parentElement;
 		}
 		return (match ? match[2] : '');
@@ -224,9 +224,10 @@ jush.textarea = (function () {
 			const range2 = range.cloneRange();
 			range2.setStart(range.startContainer, Math.max(0, range.startOffset - acEl.options[0].value)); // autocompletions currently couldn't cross container boundary
 			const span = document.createElement('span'); // collapsed ranges have empty bounding rect
+			span.innerHTML = ' ';
 			range2.insertNode(span);
 			acEl.style.left = span.offsetLeft + 'px';
-			acEl.style.top = (span.offsetTop + 20) + 'px';
+			acEl.style.top = (span.offsetTop - pre.scrollTop + span.offsetHeight * 1.2) + 'px';
 			span.remove();
 			setSelPos(pre, pos); // required on iOS
 		}
@@ -250,7 +251,9 @@ jush.textarea = (function () {
 				range.setStart(start.container, start.offset);
 			}
 			document.execCommand('insertText', false, insert);
-			openAutocomplete(pre);
+			if (/ $/.test(insert)) {
+				openAutocomplete(pre);
+			}
 		}
 	}
 	
