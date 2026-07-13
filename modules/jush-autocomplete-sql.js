@@ -34,11 +34,11 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 	* @return Object<string, number> keys are words, values are offsets
 	*/
 	function autocomplete(state, before, after) {
-		if (/^(one|com|sql_apo|sqlite_apo)$/.test(state)) {
+		if (/^(one|com|sql_apo|sqlite_apo|op)$/.test(state)) {
 			return {};
 		}
 		before = before
-			.replace(/\/\*.*?\*\/|\s--[^\n]*/s, ' ') // replace comments with whitespace
+			.replace(/\/\*.*?\*\/|(^|\s)--[^\n]*/s, ' ') // replace comments with whitespace
 			.replace(/'[^']+'/, '0') // replace string with placeholder
 			.replace(/.*;/s, '') // strip previous query
 			.trimStart()
@@ -73,7 +73,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		
 		const context = before.replace(escRe('[\\w`]+$'), ''); // in 'UPDATE tab.`co', context is 'UPDATE tab.'
 		before = before.replace(escRe('.*[^\\w`]', 's'), ''); // in 'UPDATE tab.`co', before is '`co'
-		
+
 		const thisColumns = []; // columns in the current table ('table.')
 		const match = context.match(escRe('`?(\\w+)`?\\.$'));
 		if (match) {
