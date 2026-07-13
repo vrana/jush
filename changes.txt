@@ -1,6 +1,12 @@
+JUSH 2.2.1:
+Fix autocomplete bugs
+
 JUSH 2.2.0:
 Add textarea autocomplete
 Add autocomplete for SQL
+Highlight PHP 8.4
+HTML, CSS: Link MDN
+Highlight IGDB
 
 JUSH 2.1.3:
 Split dark mode
