@@ -38,7 +38,8 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			return {};
 		}
 		before = before
-			.replace(/\/\*.*?\*\/|\s--[^\n]*|'[^']+'/s, '') // strip comments and strings
+			.replace(/\/\*.*?\*\/|\s--[^\n]*/s, ' ') // replace comments with whitespace
+			.replace(/'[^']+'/, '0') // replace string with placeholder
 			.replace(/.*;/s, '') // strip previous query
 			.trimStart()
 		;
