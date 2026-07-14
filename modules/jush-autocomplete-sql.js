@@ -36,7 +36,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 	* @return Object<string, number> keys are words, values are offsets
 	*/
 	function autocomplete(state, before, after) {
-		if (/^(one|com|sql_apo|sqlite_apo|op)$/.test(state)) {
+		if (/^(one|com|sql_apo|sqlite_apo)$/.test(state)) {
 			return {};
 		}
 		before = before
