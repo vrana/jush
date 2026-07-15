@@ -1,3 +1,6 @@
+JUSH 2.2.2-dev:
+MySQL: Highlight vector type and functions
+
 JUSH 2.2.1:
 Fix autocomplete bugs
 
