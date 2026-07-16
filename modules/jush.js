@@ -224,6 +224,16 @@ var jush = {
 		this.regexps[key] = new RegExp(re.join('|'), 'g');
 	},
 
+	build_links2: function (key, url, prefix, suffix, paths) {
+		this.urls[key] = [url];
+		var regexps = [];
+		for (var path in paths) {
+			this.urls[key].push(path);
+			regexps.push(paths[path].source);
+		}
+		this.links2[key] = new RegExp(prefix.source + '(?:' + regexps.join('|') + ')' + suffix.source, suffix.flags);
+	},
+
 	highlight_states: function (states, text, in_php, escape) {
 		if (!this.regexps) {
 			this.regexps = { };
