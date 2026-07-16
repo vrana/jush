@@ -129,6 +129,11 @@ jush.textarea = (function () {
 				}
 			}
 			
+			if (!event.shiftKey && /^(Delete|Backspace)$/.test(event.key) && getSelection().toString().length >= this.innerText.replace(/\n$/, '').length) { // native delete of long text is slow in Chrome 150
+				this.innerText = '';
+				return false;
+			}
+			
 			if (ctrl) {
 				if (event.key == ' ') {
 					openAutocomplete(this);
