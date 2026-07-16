@@ -1,4 +1,5 @@
 JUSH 2.2.2-dev:
+Speed up highlighting many elements
 MySQL: Highlight vector type and functions
 MySQL: Highlight inet4 and inet6 types
 

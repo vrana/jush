@@ -86,7 +86,7 @@ var jush = {
 	* @param number number of spaces for tab, 0 for tab itself, defaults to 4
 	*/
 	highlight_tag: function (tag, tab_width) {
-		var pre = (typeof tag == 'string' ? document.getElementsByTagName(tag) : tag);
+		var pre = (typeof tag == 'string' ? Array.prototype.slice.call(document.getElementsByTagName(tag)) : tag);
 		var tab = '';
 		for (var i = (tab_width !== undefined ? tab_width : 4); i--; ) {
 			tab += ' ';
