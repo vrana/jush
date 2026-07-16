@@ -17,7 +17,12 @@
 <tr><th>Oracle </th><td id="oracle"></td></tr>
 </table>
 
-<script src="jush.js"></script>
+<script src="modules/jush.js"></script>
+<script src="modules/jush-sql.js"></script>
+<script src="modules/jush-sqlite.js"></script>
+<script src="modules/jush-pgsql.js"></script>
+<script src="modules/jush-mssql.js"></script>
+<script src="modules/jush-oracle.js"></script>
 <script>
 function highlight(source) {
 	for (var lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
