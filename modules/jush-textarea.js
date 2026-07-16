@@ -296,9 +296,9 @@ jush.textarea = (function () {
 			}
 		}
 	}
-	
+
 	function input() {
-		highlight(this);
+		setTimeout(() => highlight(this));
 	}
 	
 	function paste(event) {

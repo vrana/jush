@@ -2,6 +2,7 @@ JUSH 2.2.2-dev:
 Speed up highlighting many elements
 MySQL: Highlight vector type and functions
 MySQL: Highlight inet4 and inet6 types
+Textarea: defer highlighting to speed up typing and deleting
 
 JUSH 2.2.1:
 Fix autocomplete bugs
