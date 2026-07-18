@@ -63,7 +63,7 @@ for (var callback in tests) {
 		var test = tests[callback][i];
 		var highlighted = jush[callback](test[0], test[1]);
 		if (highlighted !== test[2]) {
-			console.log(highlighted.replace(/['\\]/g, '\\$&'));
+			console.log(highlighted.replace(/['\\]/g, '\\$&').replace(/\n/g, '\\n'));
 			html.push('<b class="error">error:</b>');
 		}
 		html.push('<pre class="jush-' + test[0] + '">' + highlighted + '</pre>');
