@@ -47,6 +47,9 @@ tests.highlight = [
 	['http', 'HTTP/1.1 302 Found\nLocation: /', '<span class="jush">HTTP/1.1 <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.3" class="jush-help">302 Found</a>\n<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30" class="jush-help">Location</a>: /</span>'],
 	['phpini', 'display_errors = On\n; comment', '<span class="jush"><a href="https://www.php.net/errorfunc.configuration#ini.display-errors" class="jush-help">display_errors</a> = On\n<span class="jush-one"><span class="jush-op">;</span> comment</span></span>'],
 	['txt', 'plain <?php echo 1; ?> text', '<span class="jush">plain &lt;?php echo 1; ?&gt; text</span>'],
+
+	['simpledb', 'SELECT * FROM domain WHERE id = 1', '<span class="jush"><a href="https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/QuotingRulesSelect.html" class="jush-help">SELECT</a> * <a>FROM</a> domain <a href="https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SimpleQueriesSelect.html" class="jush-help">WHERE</a> id = 1</span>'],
+	['igdb', 'POST games; fields *;', '<span class="jush"><a href="https://api-docs.igdb.com/#endpoints" class="jush-help">POST</a> games; <a href="https://api-docs.igdb.com/#fields" class="jush-help">fields</a> *;</span>'],
 ];
 
 tests.highlight_html = [
