@@ -2,7 +2,7 @@ JUSH 2.2.3:
 Convert jush-help from Windows Script Host to Node
 PHP: Highlight after heredoc/nowdoc
 Text: Do not highlight PHP
-SQLite: Highlight STRICT and WITHOUT ROWID
+Highlight SQLite 3.44
 
 JUSH 2.2.2:
 Speed up highlighting many elements
