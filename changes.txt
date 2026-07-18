@@ -1,4 +1,5 @@
 JUSH 2.2.3:
+PHP: Highlight after heredoc/nowdoc
 Text: Do not highlight PHP
 SQLite: Highlight STRICT and WITHOUT ROWID
 

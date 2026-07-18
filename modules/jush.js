@@ -375,8 +375,8 @@ var jush = {
 				ret.push('<span class="jush-' + key + '">', s);
 				states.push(key);
 				if (state == 'php_eot') {
-					this.tr.php_eot2._2 = new RegExp('(\n)(' + match[1] + ')(;?\n)');
-					this.build_regexp('php_eot2', (match[2] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
+					this.tr.php_eot2._2 = new RegExp('(\n)(' + match[2] + ')(?=;?\n)');
+					this.build_regexp('php_eot2', (match[3] == "'" ? { _2: this.tr.php_eot2._2 } : this.tr.php_eot2));
 				} else if (state == 'pgsql_eot') {
 					this.tr.pgsql_eot2._2 = new RegExp('\\$' + match[0].replace(/\$/, '\\$'));
 					this.build_regexp('pgsql_eot2', this.tr.pgsql_eot2);
