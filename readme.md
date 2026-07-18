@@ -37,11 +37,11 @@ Alternatively call `jush.highlight(language, text)` to syntax highlight single t
 
 ## Command-line help reference
 
-It is also possible to use JUSH for opening the appropriate documentation in a browser. On Windows, it is possible to run:
+It is also possible to use JUSH for opening the appropriate documentation in a browser:
 
 ```
-Syntax: WScript jush-help.wsf filename line column [tabsize] [word]
-Example: WScript jush-help.wsf readme.html 2 2
+Syntax: node jush-help.js filename line column [tabsize] [word]
+Example: node jush-help.js demo.html 2 2
 ```
 
-The example should open a browser with documentation of the `<html>` tag which is at position 2:2 of this file.
+The example should open a browser with documentation of the `<html>` tag which is at position 2:2 of [demo.html](demo.html).
