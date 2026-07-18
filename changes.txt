@@ -1,3 +1,6 @@
+JUSH 2.2.3:
+SQLite: Highlight STRICT and WITHOUT ROWID
+
 JUSH 2.2.2:
 Speed up highlighting many elements
 MySQL: Highlight vector type and functions
