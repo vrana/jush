@@ -246,7 +246,7 @@ var jush = {
 			}
 		}
 		var state = states[states.length - 1];
-		if (!this.tr[state]) {
+		if (!Object.keys(this.tr[state] || {}).length) {
 			return [ this.htmlspecialchars(text), states ];
 		}
 		var ret = [ ]; // return

@@ -46,7 +46,7 @@ tests.highlight = [
 	['cnf', 'Listen 80\nphp_flag display_errors On', '<span class="jush"><a href="https://httpd.apache.org/docs/current/mod/mpm_common.html#listen" class="jush-help">Listen</a> 80<span class="jush-cnf_phpini"><span class="jush-op">\n</span><a href="https://www.php.net/configuration.changes#configuration.changes.apache" class="jush-help">php_flag</a><span class="jush-op"> </span><a href="https://www.php.net/errorfunc.configuration#ini.display-errors" class="jush-help">display_errors</a><span class="jush-cnf_phpini_val"><span class="jush-op"> </span>On</span></span></span>'],
 	['http', 'HTTP/1.1 302 Found\nLocation: /', '<span class="jush">HTTP/1.1 <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.3" class="jush-help">302 Found</a>\n<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30" class="jush-help">Location</a>: /</span>'],
 	['phpini', 'display_errors = On\n; comment', '<span class="jush"><a href="https://www.php.net/errorfunc.configuration#ini.display-errors" class="jush-help">display_errors</a> = On\n<span class="jush-one"><span class="jush-op">;</span> comment</span></span>'],
-	['txt', 'plain <?php echo 1; ?> text', '<span class="jush">plain <span class="jush-php"><span class="jush-op">&lt;?php</span><span class="jush-php2"> <span class="jush-php_echo"><a href="https://www.php.net/function.echo" class="jush-help">echo</a> <span class="jush-num"><span class="jush-op">1</span></span><span class="jush-op">;</span></span> <span class="jush-op">?&gt;</span></span></span> text</span>'],
+	['txt', 'plain <?php echo 1; ?> text', '<span class="jush">plain &lt;?php echo 1; ?&gt; text</span>'],
 ];
 
 tests.highlight_html = [
