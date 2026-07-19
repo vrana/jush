@@ -45,3 +45,11 @@ Example: node jush-help.js demo.html 2 2
 ```
 
 The example should open a browser with documentation of the `<html>` tag which is at position 2:2 of [demo.html](demo.html).
+
+## Updating language references
+
+The `update/` directory holds scripts which sync a language module's list of keywords, functions and classes from an upstream reference file. For example, [update/php.php](update/php.php) rebuilds the class and function lists in `modules/jush-php.js` from a `php.api` file (from [scite-files](https://github.com/moltenform/scite-files/blob/main/files/files/api_files/php.api)):
+
+```
+php update/php.php path/to/php.api
+```
