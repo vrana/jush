@@ -29,6 +29,18 @@ function mdn_section($markdown, $title) {
 	return ($match[1] ?? '');
 }
 
+// Escape a string to be used in a single-quoted JS string
+function js_escape($s) {
+	return str_replace(['\\', "'"], ['\\\\', "\\'"], $s);
+}
+
+// Store a tooltip in a jush.api block, skipping empty ones
+function add_api(array &$block, $key, $tooltip) {
+	if ($tooltip != '') {
+		$block[$key] = $tooltip;
+	}
+}
+
 // Replace the |-separated list between $prefix and $suffix in $subject, reporting the diff
 function set_list($subject, $prefix, $suffix, array $names, $label) {
 	$start = strpos($subject, $prefix);
@@ -46,4 +58,24 @@ function set_list($subject, $prefix, $suffix, array $names, $label) {
 	fwrite(STDERR, "Added $label: " . implode(', ', array_diff($names, $old_names)) . "\n");
 	fwrite(STDERR, "Removed $label: " . implode(', ', array_diff($old_names, $names)) . "\n");
 	return substr_replace($subject, implode('|', $names), $start, $end - $start);
+}
+
+// Replace all entries in a jush.api block between $prefix and $suffix
+function set_block($subject, $prefix, $suffix, array $entries) {
+	$start = strpos($subject, $prefix);
+	if ($start === false) {
+		fwrite(STDERR, "Can't find $prefix\n");
+		exit(1);
+	}
+	$start += strlen($prefix);
+	$end = strpos($subject, $suffix, $start);
+	if ($end === false) {
+		fwrite(STDERR, "Can't find end of $prefix block\n");
+		exit(1);
+	}
+	$lines = '';
+	foreach ($entries as $name => $tooltip) {
+		$lines .= "\n\t'$name': '$tooltip',";
+	}
+	return substr_replace($subject, $lines, $start, $end - $start);
 }

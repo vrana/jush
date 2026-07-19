@@ -14,10 +14,6 @@ $api = read_file($api_file);
 $jush = read_file($jush_file);
 $jush_api = read_file($jush_api_file);
 
-function js_escape($s) {
-	return str_replace(['\\', "'"], ['\\\\', "\\'"], $s);
-}
-
 // Join a signature ("(int $x): bool", "()" for a no-arg constructor) and a description
 // into a JS-escaped tooltip.
 function tooltip($signature, $description) {
@@ -25,13 +21,6 @@ function tooltip($signature, $description) {
 		return js_escape($description);
 	}
 	return js_escape($signature) . '\n' . js_escape($description); // '\n' is a literal backslash-n inside the JS string
-}
-
-// Store a tooltip in a jush.api block, skipping empty ones (e.g. DOMNamedNodeMap).
-function add_api(array &$block, $key, $tooltip) {
-	if ($tooltip != '') {
-		$block[$key] = $tooltip;
-	}
 }
 
 $class_names = []; // for the linked lists in jush-php.js (methods and magic methods are not linked)
@@ -79,28 +68,8 @@ $jush = set_list($jush, "'function.\$1': /(return|(?:include|require)(?:_once)?|
 
 file_put_contents($jush_file, $jush);
 
-// Replace all entries in a jush.api.* block with freshly generated ones.
-function set_block($jush_api, $prefix, array $entries) {
-	$start = strpos($jush_api, $prefix);
-	if ($start === false) {
-		fwrite(STDERR, "Can't find $prefix in jush-api.js\n");
-		exit(1);
-	}
-	$start += strlen($prefix);
-	$end = strpos($jush_api, "\n});", $start);
-	if ($end === false) {
-		fwrite(STDERR, "Can't find end of $prefix block in jush-api.js\n");
-		exit(1);
-	}
-	$lines = '';
-	foreach ($entries as $name => $tooltip) {
-		$lines .= "\n\t'$name': '$tooltip',";
-	}
-	return substr_replace($jush_api, $lines, $start, $end - $start);
-}
-
-$jush_api = set_block($jush_api, 'jush.api.php2 = jush.api.lowercase_keys({', $api_php2);
-$jush_api = set_block($jush_api, 'jush.api.php_fun = jush.api.lowercase_keys({', $api_php_fun);
-$jush_api = set_block($jush_api, 'jush.api.php_new = jush.api.lowercase_keys({', $api_php_new);
+$jush_api = set_block($jush_api, 'jush.api.php2 = jush.api.lowercase_keys({', "\n});", $api_php2);
+$jush_api = set_block($jush_api, 'jush.api.php_fun = jush.api.lowercase_keys({', "\n});", $api_php_fun);
+$jush_api = set_block($jush_api, 'jush.api.php_new = jush.api.lowercase_keys({', "\n});", $api_php_new);
 
 file_put_contents($jush_api_file, $jush_api);
