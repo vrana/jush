@@ -5,6 +5,7 @@ PHP: Highlight after heredoc/nowdoc
 HTTP: Use MDN
 Text: Do not highlight PHP
 Highlight SQLite 3.53
+Highlight PostgreSQL 18
 Highlight PHP 8.5
 
 JUSH 2.2.2:

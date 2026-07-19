@@ -161,7 +161,7 @@ var jush = {
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, '')); break;
 							case 'sqliteset': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'sqlitestatus': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
-							case 'pgsql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, (i == 1 ? '-' : ''))); break;
+							case 'pgsql': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/(^|\s+)/g, (url[i-1] == 'sql-$1.html' ? '' : '-'))); break;
 							case 'pgsqlset': link = link.replace(/\$1/g, arguments[i].replace(/_/g, '-').toUpperCase()); break;
 							case 'cnf': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'js': link = link.replace(/\$1/g, arguments[i].replace(/\./g, '/')); break;
