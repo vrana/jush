@@ -4,7 +4,7 @@ HTML: Highlight <h[1-6]>, add new tags and attrs
 PHP: Highlight after heredoc/nowdoc
 HTTP: Use MDN
 Text: Do not highlight PHP
-Highlight SQLite 3.44
+Highlight SQLite 3.53
 Highlight PHP 8.5
 
 JUSH 2.2.2:
