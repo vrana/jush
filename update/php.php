@@ -4,27 +4,15 @@
 // https://github.com/moltenform/scite-files/blob/main/files/files/api_files/php.api
 // Usage: php update/php.php [path/to/php.api]
 
+require __DIR__ . '/functions.inc.php';
+
 $api_file = ($argv[1] ?? 'php.api');
 $jush_file = __DIR__ . '/../modules/jush-php.js';
 $jush_api_file = __DIR__ . '/../jush-api.js';
 
-$api = file_get_contents($api_file);
-if ($api === false) {
-	fwrite(STDERR, "Can't read $api_file\n");
-	exit(1);
-}
-
-$jush = file_get_contents($jush_file);
-if ($jush === false) {
-	fwrite(STDERR, "Can't read $jush_file\n");
-	exit(1);
-}
-
-$jush_api = file_get_contents($jush_api_file);
-if ($jush_api === false) {
-	fwrite(STDERR, "Can't read $jush_api_file\n");
-	exit(1);
-}
+$api = read_file($api_file);
+$jush = read_file($jush_file);
+$jush_api = read_file($jush_api_file);
 
 function js_escape($s) {
 	return str_replace(['\\', "'"], ['\\\\', "\\'"], $s);
@@ -84,24 +72,6 @@ foreach (preg_split('~\r?\n~', $api) as $line) {
 	} elseif ($name != '__halt_compiler') { // magic method
 		add_api($api_php_fun, $js_name, tooltip($match[2], $description));
 	}
-}
-
-function set_list($jush, $prefix, $suffix, array $names, $label) {
-	$start = strpos($jush, $prefix);
-	if ($start === false) {
-		fwrite(STDERR, "Can't find start of $label list in jush-php.js\n");
-		exit(1);
-	}
-	$start += strlen($prefix);
-	$end = strpos($jush, $suffix, $start);
-	if ($end === false) {
-		fwrite(STDERR, "Can't find end of $label list in jush-php.js\n");
-		exit(1);
-	}
-	$old_names = explode('|', substr($jush, $start, $end - $start));
-	fwrite(STDERR, "Added $label: " . implode(', ', array_diff($names, $old_names)) . "\n");
-	fwrite(STDERR, "Removed $label: " . implode(', ', array_diff($old_names, $names)) . "\n");
-	return substr_replace($jush, implode('|', $names), $start, $end - $start);
 }
 
 $jush = set_list($jush, 'var php_class = /(', ')/;', array_keys($class_names), 'classes');
