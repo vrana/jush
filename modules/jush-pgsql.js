@@ -4,10 +4,10 @@ jush.tr.pgsql_eot2 = { }; // pgsql_eot2._2 to be set in pgsql_eot handler
 jush.tr.pgsql_pgsqlset = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: jush.num, _1: /;|$/ };
 jush.tr.pgsqlset = { _0: /$/ };
 
-jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/static/$key';
+jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/$key';
 jush.links.pgsql_pgsqlset = { 'sql-$val.html': /.+/ };
 
-jush.build_links2('pgsql', 'https://www.postgresql.org/docs/current/static/$key', /(\b)/, /(\b)/gi, {
+jush.build_links2('pgsql', 'https://www.postgresql.org/docs/current/$key', /(\b)/, /(\b)/gi, {
 	'sql-alteropclass.html': /(ALTER\s+OPERATOR\s+CLASS)/,
 	'sql-alteropfamily.html': /(ALTER\s+OPERATOR\s+FAMILY)/,
 	'sql-altertsconfig.html': /(ALTER\s+TEXT\s+SEARCH\s+CONFIGURATION)/,
@@ -62,7 +62,7 @@ jush.build_links2('pgsql', 'https://www.postgresql.org/docs/current/static/$key'
 	'functions-statistics.html': /((?:pg_mcv_list_items)(?=\s*\(|$))/,
 }); // collisions: IN, ANY, SOME, ALL (array), trunc, md5, abbrev
 
-jush.build_links2('pgsqlset', 'https://www.postgresql.org/docs/current/static/runtime-config-$key.html#GUC-$1', /(\b)/, /(\b)/gi, {
+jush.build_links2('pgsqlset', 'https://www.postgresql.org/docs/current/runtime-config-$key.html#GUC-$1', /(\b)/, /(\b)/gi, {
 	'client': /(DateStyle|IntervalStyle|TimeZone|bytea_output|check_function_bodies|client_encoding|client_min_messages|createrole_self_grant|default_table_access_method|default_tablespace|default_text_search_config|default_toast_compression|default_transaction_deferrable|default_transaction_isolation|default_transaction_read_only|dynamic_library_path|event_triggers|extension_control_path|extra_float_digits|gin_fuzzy_search_limit|gin_pending_list_limit|icu_validation_level|idle_in_transaction_session_timeout|idle_session_timeout|jit_provider|lc_messages|lc_monetary|lc_numeric|lc_time|local_preload_libraries|lock_timeout|restrict_nonsystem_relation_kind|row_security|search_path|session_preload_libraries|session_replication_role|shared_preload_libraries|statement_timeout|temp_tablespaces|timezone_abbreviations|transaction_deferrable|transaction_isolation|transaction_read_only|transaction_timeout|xmlbinary|xmloption)/,
 	'compatible': /(allow_alter_system|array_nulls|backslash_quote|escape_string_warning|lo_compat_privileges|standard_conforming_strings|synchronize_seqscans|transform_null_equals)/,
 	'connection': /(authentication_timeout|bonjour|bonjour_name|client_connection_check_interval|gss_accept_delegation|krb_caseins_users|krb_server_keyfile|listen_addresses|max_connections|md5_password_warnings|oauth_validator_libraries|password_encryption|port|reserved_connections|scram_iterations|ssl|ssl_ca_file|ssl_cert_file|ssl_ciphers|ssl_crl_dir|ssl_crl_file|ssl_dh_params_file|ssl_groups|ssl_key_file|ssl_max_protocol_version|ssl_min_protocol_version|ssl_passphrase_command|ssl_passphrase_command_supports_reload|ssl_prefer_server_ciphers|ssl_tls13_ciphers|superuser_reserved_connections|tcp_keepalives_count|tcp_keepalives_idle|tcp_keepalives_interval|tcp_user_timeout|unix_socket_directories|unix_socket_group|unix_socket_permissions)/,
