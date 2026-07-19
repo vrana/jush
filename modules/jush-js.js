@@ -15,7 +15,7 @@ jush.tr.js_key = { php: jush.php, quo: /"/, apo: /'/, js_bac: /`/, js_one: /\/\/
 jush.tr.js_bac = { php: jush.php, esc: /\\/, js: /\$\{/, _1: /`/ };
 
 jush.urls.js_write = 'https://developer.mozilla.org/en/docs/DOM/$key.$val';
-jush.urls.js_http = 'https://www.w3.org/TR/XMLHttpRequest/#the-$val-$key';
+jush.urls.js_http = 'https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/$val';
 
 jush.links.js_write = { 'document': /^(write|writeln)$/ };
 jush.links.js_http = { 'method': /^(setRequestHeader|getResponseHeader)$/ };
@@ -33,14 +33,15 @@ jush.build_links2('js', 'https://developer.mozilla.org/en/$key', /(\b)/, /(\b)/g
 	'DOM/form.$1': /(elements|name|acceptCharset|action|enctype|encoding|method|submit|reset)/,
 	'DOM/table.$1': /(caption|tHead|tFoot|rows|tBodies|align|bgColor|border|cellPadding|cellSpacing|frame|rules|summary|width|createTHead|deleteTHead|createTFoot|deleteTFoot|createCaption|deleteCaption|insertRow|deleteRow)/,
 	'DOM/window.$1': /(content|closed|controllers|crypto|defaultStatus|directories|document|frameElement|frames|history|innerHeight|innerWidth|location|locationbar|menubar|name|navigator|opener|outerHeight|outerWidth|pageXOffset|pageYOffset|parent|personalbar|pkcs11|screen|availTop|availLeft|availHeight|availWidth|colorDepth|height|left|pixelDepth|top|width|scrollbars|scrollMaxX|scrollMaxY|scrollX|scrollY|self|sidebar|status|statusbar|toolbar|window|alert|atob|back|btoa|captureEvents|clearInterval|clearTimeout|close|confirm|dump|escape|find|forward|getAttention|getComputedStyle|getSelection|home|moveBy|moveTo|open|openDialog|print|prompt|releaseEvents|resizeBy|resizeTo|scroll|scrollBy|scrollByLines|scrollByPages|scrollTo|setInterval|setTimeout|sizeToContent|stop|unescape|updateCommands|onabort|onclose|ondragdrop|onerror|onload|onpaint|onreset|onscroll|onselect|onsubmit|onunload)/,
-	'https://www.w3.org/TR/XMLHttpRequest/': /(XMLHttpRequest)/,
+	'Web/API/XMLHttpRequest': /(XMLHttpRequest)/,
+	'Web/API/XMLHttpRequest/$1': /(?<=\.)(abort|getAllResponseHeaders|getResponseHeader|overrideMimeType|send|setRequestHeader)/,
 	'JavaScript/Reference/Global_Objects/Array/$1': /(?<=\.)(at|concat|copyWithin|entries|every|fill|filter|find|findIndex|findLast|findLastIndex|flat|flatMap|forEach|includes|indexOf|join|keys|lastIndexOf|length|map|pop|push|reduce|reduceRight|reverse|shift|slice|some|sort|splice|toLocaleString|toReversed|toSorted|toSpliced|toString|unshift|values|with)/,
 	'JavaScript/Reference/Global_Objects/Date/$1': /(?<=\.)(getDate|getDay|getFullYear|getHours|getMilliseconds|getMinutes|getMonth|getSeconds|getTime|getTimezoneOffset|getUTCDate|getUTCDay|getUTCFullYear|getUTCHours|getUTCMilliseconds|getUTCMinutes|getUTCMonth|getUTCSeconds|getYear|setDate|setFullYear|setHours|setMilliseconds|setMinutes|setMonth|setSeconds|setTime|setUTCDate|setUTCFullYear|setUTCHours|setUTCMilliseconds|setUTCMinutes|setUTCMonth|setUTCSeconds|setYear|toDateString|toISOString|toJSON|toLocaleDateString|toLocaleString|toLocaleTimeString|toString|toTemporalInstant|toTimeString|toUTCString|valueOf)/,
 	'JavaScript/Reference/Global_Objects/Function/$1': /(?<=\.)(apply|arguments|bind|call|caller|displayName|length|name|prototype|toString)/,
 	'JavaScript/Reference/Global_Objects/Number/$1': /(?<=\.)(toExponential|toFixed|toLocaleString|toPrecision|toString|valueOf)/,
 	'JavaScript/Reference/Global_Objects/RegExp/$1': /(?<=\.)(compile|dotAll|exec|flags|global|hasIndices|ignoreCase|lastIndex|multiline|source|sticky|test|toString|unicode|unicodeSets)/,
 	'JavaScript/Reference/Global_Objects/String/$1': /(?<=\.)(anchor|at|big|blink|bold|charAt|charCodeAt|codePointAt|concat|endsWith|fixed|fontcolor|fontsize|includes|indexOf|isWellFormed|italics|lastIndexOf|length|link|localeCompare|match|matchAll|normalize|padEnd|padStart|repeat|replace|replaceAll|search|slice|small|split|startsWith|strike|sub|substr|substring|sup|toLocaleLowerCase|toLocaleUpperCase|toLowerCase|toString|toUpperCase|toWellFormed|trim|trimEnd|trimStart|valueOf)/,
-}); // collisions: bgColor, height, width, length, name
+}); // collisions: bgColor, height, width, length, name, open
 
 jush.build_links2('js_doc', 'https://code.google.com/p/jsdoc-toolkit/wiki/Tag$key', /(^[ \t]*|\n\s*\*\s*|(?={))/, /(\b)/g, {
 	'$1': /(@(?:augments|author|borrows|class|constant|constructor|constructs|default|deprecated|description|event|example|field|fileOverview|function|ignore|inner|lends|memberOf|name|namespace|param|private|property|public|requires|returns|see|since|static|throws|type|version)|\{@link)/,

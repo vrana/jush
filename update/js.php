@@ -81,10 +81,24 @@ foreach (read_dirs("$reference/statements") as $dir) {
 	}
 }
 
+$xhr_methods = []; // XMLHttpRequest instance methods, e.g. send
+$xhr_path = "$argv[1]/files/en-us/web/api/xmlhttprequest";
+add_api($api, 'XMLHttpRequest', description(read_file("$xhr_path/index.md")));
+foreach (read_dirs($xhr_path) as $dir) {
+	$md = read_file("$xhr_path/$dir/index.md");
+	$member = basename(front_matter($md, 'slug'));
+	// open collides with window.open
+	if (front_matter($md, 'page-type') == 'web-api-instance-method' && $member != 'open') {
+		$xhr_methods[] = $member;
+	}
+}
+sort($xhr_methods);
+
 $jush = read_file($jush_file);
 // static members first so that e.g. Math\.abs wins over Math
 $jush = set_list($jush, "'JavaScript/Reference/Global_Objects/\$1': /(", ")/,", array_merge($statics, $objects), 'globals');
 $jush = set_list($jush, "'JavaScript/Reference/Statements/\$1': /(", ")/,", $statements, 'statements');
+$jush = set_list($jush, "'Web/API/XMLHttpRequest/\$1': /(?<=\\.)(", ")/,", $xhr_methods, 'XMLHttpRequest methods');
 preg_match_all("~'JavaScript/Reference/Global_Objects/(\w+)/\\\$1'~", $jush, $matches);
 foreach ($matches[1] as $object) {
 	sort($instances[$object]);
