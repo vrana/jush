@@ -351,7 +351,7 @@ var jush = {
 						var m2 = this.links[key][k].exec(m[2]);
 						if (m2) {
 							if (m2[1]) {
-								link = m2[1].toLowerCase().replace(/\\/g, '-'); // \ is PHP namespace;
+								link = (key == 'js_http' ? m2[1] : m2[1].toLowerCase().replace(/\\/g, '-')); // \ is PHP namespace
 							}
 							k_link = k;
 							if (key != 'att') {
