@@ -12,12 +12,6 @@ $sgml = "$argv[1]/doc/src/sgml";
 $jush_file = __DIR__ . '/../modules/jush-pgsql.js';
 $jush = read_file($jush_file);
 
-// Report added and removed names of a wholesale regenerated list
-function report_diff($label, array $old, array $new) {
-	fwrite(STDERR, "Added $label: " . implode(', ', array_diff($new, $old)) . "\n");
-	fwrite(STDERR, "Removed $label: " . implode(', ', array_diff($old, $new)) . "\n");
-}
-
 // Turn statement names into regexp alternatives, a phrase before its own prefix (SELECT\s+INTO before SELECT)
 function phrases_regexp(array $names) {
 	usort($names, function ($a, $b) {

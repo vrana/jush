@@ -61,9 +61,18 @@ function set_list($subject, $prefix, $suffix, array $names, $label) {
 		exit(1);
 	}
 	$old_names = explode('|', substr($subject, $start, $end - $start));
-	fwrite(STDERR, "Added $label: " . implode(', ', array_diff($names, $old_names)) . "\n");
-	fwrite(STDERR, "Removed $label: " . implode(', ', array_diff($old_names, $names)) . "\n");
+	report_diff($label, $old_names, $names);
 	return substr_replace($subject, implode('|', $names), $start, $end - $start);
+}
+
+// Report added and removed names of a wholesale regenerated list
+function report_diff($label, array $old, array $new) {
+	if (array_diff($new, $old)) {
+		fwrite(STDERR, "Added $label: " . implode(', ', array_diff($new, $old)) . "\n");
+	}
+	if (array_diff($old, $new)) {
+		fwrite(STDERR, "Removed $label: " . implode(', ', array_diff($old, $new)) . "\n");
+	}
 }
 
 // Replace all entries in a jush.api block between $prefix and $suffix
