@@ -13,6 +13,12 @@ function read_dirs($path) {
 	return $return;
 }
 
+// Get the value of a front matter field
+function front_matter($markdown, $field) {
+	preg_match("~^$field: (.*)~m", $markdown, $match);
+	return trim($match[1] ?? '');
+}
+
 // Read a file or exit with an error
 function read_file($file) {
 	$return = file_get_contents($file);

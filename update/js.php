@@ -13,12 +13,6 @@ $reference = "$argv[1]/files/en-us/web/javascript/reference";
 $jush_file = __DIR__ . '/../modules/jush-js.js';
 $jush_api_file = __DIR__ . '/../jush-api.js';
 
-// Get the value of a front matter field
-function front_matter($markdown, $field) {
-	preg_match("~^$field: (.*)~m", $markdown, $match);
-	return trim($match[1] ?? '');
-}
-
 // Get the summary paragraph of a page as a plain-text JS-escaped tooltip
 function description($markdown) {
 	$markdown = preg_replace('~\A---.*?\n---\n~s', '', $markdown);
