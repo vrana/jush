@@ -1,5 +1,6 @@
 JUSH 3.0.0:
 Convert jush-help from Windows Script Host to Node
+HTML: Highlight <h[1-6]>, add new tags and attrs
 PHP: Highlight after heredoc/nowdoc
 Text: Do not highlight PHP
 Highlight SQLite 3.44
