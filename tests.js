@@ -77,7 +77,7 @@ for (var callback in tests) {
 			console.log(highlighted.replace(/['\\]/g, '\\$&').replace(/\n/g, '\\n'));
 			html.push('<b class="error">error:</b>');
 		}
-		html.push('<pre class="jush-' + test[0] + '">' + highlighted + '</pre>');
+		html.push('<p><b class="lang">' + test[0] + '</b> <code class="jush-' + test[0] + '">' + highlighted + '</code></p>');
   }
 }
 
