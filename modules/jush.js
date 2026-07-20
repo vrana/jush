@@ -144,10 +144,19 @@ var jush = {
 		if (this.links2 && this.links2[state]) {
 			var url = this.urls[state];
 			var links2 = this.links2[state];
+			var maria = /mariadb/.test(url[0]);
 			s = s.replace(links2, function (str, match1) {
 				for (var i=arguments.length - 4; i > 1; i--) {
 					if (arguments[i]) {
-						var link = (/^https?:/.test(url[i-1]) || !url[i-1] ? url[i-1] : url[0].replace(/\$key/g, url[i-1]));
+						var key = url[i-1];
+						if (/^sql(set|status)?$/.test(state)) { // keys may be 'mysql-key maria-key'
+							var keys = key.split(' ');
+							key = (maria ? (keys.length > 1 ? keys[1] : keys[0].replace('.html', '/')) : keys[0]);
+							if (key == '-') {
+								return str; // the other vendor doesn't know this name at all
+							}
+						}
+						var link = (/^https?:/.test(key) || !key ? key : url[0].replace(/\$key/g, key));
 						switch (state) {
 							case 'php': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;
 							case 'php_new': link = link.replace(/\$1/g, arguments[i].toLowerCase()).replace(/\\/g, '-'); break; // toLowerCase() - case sensitive after #
@@ -155,8 +164,8 @@ var jush = {
 							case 'php_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W+/, '')); break;
 							case 'js_doc': link = link.replace(/\$1/g, arguments[i].replace(/^\W*(.)/, function (match, p1) { return p1.toUpperCase(); })); break;
 							case 'http': link = link.replace(/\$1/g, arguments[i].replace(/^(\d{3})\b.*/, '$1')); break; // status code links use only the number
-							case 'sql': link = link.replace(/\$1/g, arguments[i].replace(/\b(ALTER|CREATE|DROP|RENAME|SHOW)\s+SCHEMA\b/, '$1 DATABASE').toLowerCase().replace(/\s+|_/g, '-')); break;
-							case 'sqlset': link = link.replace(/\$1/g, (links2.test(arguments[i].replace(/_/g, '-')) ? arguments[i].replace(/_/g, '-') : arguments[i]).toLowerCase()); break;
+							case 'sql': link = link.replace(/\$1/g, arguments[i].replace(/\b(ALTER|CREATE|DROP|RENAME|SHOW)\s+SCHEMA\b/, '$1 DATABASE').toLowerCase().replace((maria ? /\s+/g : /\s+|_/g), '-')); break; // MariaDB keeps underscores in slugs
+							case 'sqlset': link = link.replace(/\$1/g, (maria ? arguments[i] : (links2.test(arguments[i].replace(/_/g, '-')) ? arguments[i].replace(/_/g, '-') : arguments[i])).toLowerCase()); break;
 							case 'sqlstatus': link = link.replace(/\$1/g, (/mariadb/.test(url[0]) ? arguments[i].toLowerCase() : arguments[i])); break;
 							case 'sqlite': link = link.replace(/\$1/g, arguments[i].toLowerCase().replace(/\s+/g, '')); break;
 							case 'sqliteset': link = link.replace(/\$1/g, arguments[i].toLowerCase()); break;

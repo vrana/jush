@@ -40,6 +40,7 @@ tests.highlight = [
 	['sql', '/*!40101 SELECT 1 */', '<span class="jush"><span class="jush-com_code"><span class="jush-op">/*!40101</span></span><span class="jush-sql_code"> <a href="https://dev.mysql.com/doc/mysql/en/select.html" class="jush-help" target="_blank">SELECT</a> <span class="jush-num"><span class="jush-op">1</span></span> <span class="jush-com_code"><span class="jush-op">*/</span></span></span></span>'],
 	['sql', 'SELECT `col`, @var, \'It\'\'s\'', '<span class="jush"><span class="jush-sql_code"><a href="https://dev.mysql.com/doc/mysql/en/select.html" class="jush-help" target="_blank">SELECT</a> <span class="jush-bac"><span class="jush-op">`</span>col<span class="jush-op">`</span></span>, <span class="jush-sql_var"><span class="jush-op">@</span>var</span>, <span class="jush-sql_apo"><span class="jush-op">\'</span>It<span class="jush-op">\'\'</span>s<span class="jush-op">\'</span></span></span></span>'],
 	['sql', 'SELECT * FROM tab JOIN `tab2`', '<span class="jush"><span class="jush-sql_code"><a href="https://dev.mysql.com/doc/mysql/en/select.html" class="jush-help" target="_blank">SELECT</a> * <a target="_blank">FROM</a> <a href="?table=tab" class="jush-custom">tab</a> <a href="https://dev.mysql.com/doc/mysql/en/join.html" class="jush-help" target="_blank">JOIN</a> <span class="jush-bac"><span class="jush-op">`</span><a href="?table=tab2" class="jush-custom">tab2</a><span class="jush-op">`</span></span></span></span>'],
+	['sql', 'AUTO_INCREMENT inet4', '<span class="jush"><span class="jush-sql_code"><a href="https://dev.mysql.com/doc/mysql/en/example-auto-increment.html" class="jush-help" target="_blank">AUTO_INCREMENT</a> inet4</span></span>'],
 	['sqlite', 'SELECT 1, \'SQLite\'', '<span class="jush"><a href="https://www.sqlite.org/lang_select.html" class="jush-help" target="_blank">SELECT</a> <span class="jush-num"><span class="jush-op">1</span></span>, <span class="jush-sqlite_apo"><span class="jush-op">\'</span>SQLite<span class="jush-op">\'</span></span></span>'],
 	['sqlite', 'CREATE TABLE t (id INTEGER) STRICT, WITHOUT ROWID', '<span class="jush"><a href="https://www.sqlite.org/lang_createtable.html" class="jush-help" target="_blank">CREATE TABLE</a> t (id <a href="https://www.sqlite.org/datatype3.html" class="jush-help" target="_blank">INTEGER</a>) <a href="https://www.sqlite.org/stricttables.html" class="jush-help" target="_blank">STRICT</a>, <a href="https://www.sqlite.org/withoutrowid.html" class="jush-help" target="_blank">WITHOUT ROWID</a></span>'],
 	['sqlite', 'WITH RECURSIVE cte AS (SELECT 1) SELECT * FROM cte', '<span class="jush"><a href="https://www.sqlite.org/lang_with.html" class="jush-help" target="_blank">WITH</a> <a target="_blank">RECURSIVE</a> cte <a target="_blank">AS</a> (<a href="https://www.sqlite.org/lang_select.html" class="jush-help" target="_blank">SELECT</a> <span class="jush-num"><span class="jush-op">1</span></span>) <a href="https://www.sqlite.org/lang_select.html" class="jush-help" target="_blank">SELECT</a> * <a target="_blank">FROM</a> cte</span>'],
@@ -83,5 +84,23 @@ for (var callback in tests) {
 		html.push('<p><b class="lang">' + test[0] + '</b> <code class="jush-' + test[0] + '">' + highlighted + '</code></p>');
   }
 }
+
+// MariaDB flavor - Adminer's syntaxHighlighting() replaces the base URL at runtime
+var mariaTests = [
+	['sql', 'SELECT 1', '<span class="jush"><span class="jush-sql_code"><a href="https://mariadb.com/kb/en/select/" class="jush-help" target="_blank">SELECT</a> <span class="jush-num"><span class="jush-op">1</span></span></span></span>'],
+	['sql', 'AUTO_INCREMENT inet4', '<span class="jush"><span class="jush-sql_code"><a href="https://mariadb.com/kb/en/auto_increment/" class="jush-help" target="_blank">AUTO_INCREMENT</a> <a href="https://mariadb.com/kb/en/inet4/" class="jush-help" target="_blank">inet4</a></span></span>'],
+];
+
+jush.urls.sql[0] = jush.urls.sql[0].replace('dev.mysql.com/doc/mysql', 'mariadb.com/kb');
+for (var i = 0; i < mariaTests.length; i++) {
+	var test = mariaTests[i];
+	var highlighted = jush.highlight(test[0], test[1]);
+	if (highlighted !== test[2]) {
+		console.log(highlighted.replace(/['\\]/g, '\\$&').replace(/\n/g, '\\n'));
+		html.push('<b class="error">error:</b>');
+	}
+	html.push('<p><b class="lang">' + test[0] + ' (MariaDB)</b> <code class="jush-' + test[0] + '">' + highlighted + '</code></p>');
+}
+jush.urls.sql[0] = jush.urls.sql[0].replace('mariadb.com/kb', 'dev.mysql.com/doc/mysql');
 
 document.getElementById('result').innerHTML = html.join('\n');
