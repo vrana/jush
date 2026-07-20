@@ -26,9 +26,9 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		'\\bSELECT (?!.* (OFFSET) ).+ FROM .+ ': ['?LIMIT', '?OFFSET'],
 		' ORDER BY (?!.* (LIMIT|OFFSET) ).+ ': ['DESC'],
 	};
-	
+
 	let forceEscape = false;
-	
+
 	/** Get list of strings for autocompletion
 	* @param string
 	* @param string
@@ -64,7 +64,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 				columns.push(alias + '.');
 			}
 		}
-		
+
 		const preferred = {
 			'\\b(FROM|INTO|^UPDATE|JOIN|^TRUNCATE) ': allTables, // all tables including the current ones (self-join)
 			'\\b(^INSERT|USING) [^(]*\\(([^)]+, )?': columns, // offer columns right after '(' or after ','
@@ -72,7 +72,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 			' (WHERE|HAVING|AND|OR|ON|=) ': columns,
 		};
 		keywordsDefault['\\bSELECT( DISTINCT)? (?!.* FROM )(.+, )?'] = columns; // this is not in preferred because we prefer '*'
-		
+
 		const context = before.replace(escRe('[\\w`]+$'), ''); // in 'UPDATE tab.`co', context is 'UPDATE tab.'
 		before = before.replace(escRe('.*[^\\w`]', 's'), ''); // in 'UPDATE tab.`co', before is '`co'
 
@@ -93,7 +93,7 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 		allTables.forEach(addEsc);
 		columns.forEach(addEsc);
 		thisColumns.forEach(addEsc);
-		
+
 		const ac = {};
 		for (const keywords of [preferred, keywordsDefault]) {
 			for (const re in keywords) {
@@ -113,10 +113,10 @@ jush.autocompleteSql = function (esc, tablesColumns) {
 				}
 			}
 		}
-		
+
 		return ac;
 	}
-	
+
 	function addEsc(val, key, array) {
 		if (forceEscape || !/^[a-z_]\w*\.?$/i.test(val)) {
 			array[key] = esc[0] + val.replace(/\.?$/, esc[1] + '$&');

@@ -1,9 +1,9 @@
 (function ($) {
-	
+
 	// include jush.js here
-	
+
 	$.jush = jush;
-	
+
 	/** Highlight element content
 	* @param [string]
 	* @return jQuery
@@ -20,5 +20,5 @@
 			$this.html(jush.highlight(lang, $this.text()));
 		});
 	}
-	
+
 })(jQuery);

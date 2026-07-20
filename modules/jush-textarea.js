@@ -1,6 +1,6 @@
 jush.textarea = (function () {
 	//! IE sometimes inserts empty <p> in start of a string when newline is entered inside
-	
+
 	function findSelPos(pre) {
 		var sel = getSelection();
 		if (sel.rangeCount) {
@@ -41,11 +41,11 @@ jush.textarea = (function () {
 			}
 		}
 	}
-	
+
 	function findOffset(el, pos) {
 		return findOffsetRecurse(el, { pos: pos });
 	}
-	
+
 	function findOffsetRecurse(child, pos) {
 		if (child.nodeType == 3) { // 3 - TEXT_NODE
 			if (child.textContent.length >= pos.pos) {
@@ -71,7 +71,7 @@ jush.textarea = (function () {
 			}
 		}
 	}
-	
+
 	function setSelPos(pre, pos) {
 		if (pos) {
 			var start = findOffset(pre, pos);
@@ -100,14 +100,14 @@ jush.textarea = (function () {
 			closeAutocomplete();
 		}
 	}
-	
+
 	function setHTML(pre, html, text, pos) {
 		pre.innerHTML = html;
 		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
 		pre.jushTextarea.value = text;
 		setSelPos(pre, pos);
 	}
-	
+
 	function keydown(event) {
 		const ctrl = (event.ctrlKey || event.metaKey);
 		if (!event.altKey) {
@@ -128,12 +128,12 @@ jush.textarea = (function () {
 					return false;
 				}
 			}
-			
+
 			if (!event.shiftKey && /^(Delete|Backspace)$/.test(event.key) && getSelection().toString().length >= this.innerText.replace(/\n$/, '').length) { // native delete of long text is slow in Chrome 150
 				this.innerText = '';
 				return false;
 			}
-			
+
 			if (ctrl) {
 				if (event.key == ' ') {
 					openAutocomplete(this);
@@ -144,7 +144,7 @@ jush.textarea = (function () {
 				closeAutocomplete();
 			}
 		}
-		
+
 		if (ctrl && !event.altKey) {
 			var isUndo = (event.keyCode == 90); // 90 - z
 			var isRedo = (event.keyCode == 89 || (event.keyCode == 90 && event.shiftKey)); // 89 - y
@@ -166,7 +166,7 @@ jush.textarea = (function () {
 			setLastPos(this);
 		}
 	}
-	
+
 	const maxSize = 8;
 	const acEl = document.createElement('select');
 	acEl.size = maxSize;
@@ -220,7 +220,7 @@ jush.textarea = (function () {
 			}
 		}
 	}
-	
+
 	function positionAutocomplete() {
 		const sel = getSelection();
 		if (sel.rangeCount && acEl.options.length) {
@@ -237,12 +237,12 @@ jush.textarea = (function () {
 			setSelPos(pre, pos); // required on iOS
 		}
 	}
-	
+
 	function closeAutocomplete() {
 		acEl.options.length = 0;
 		acEl.style.display = 'none';
 	}
-	
+
 	function insertAutocomplete(pre) {
 		const sel = getSelection();
 		const range = sel.rangeCount && sel.getRangeAt(0);
@@ -261,15 +261,15 @@ jush.textarea = (function () {
 			}
 		}
 	}
-	
+
 	function setLastPos(pre) {
 		if (pre.lastPos === undefined) {
 			pre.lastPos = findSelPos(pre);
 		}
 	}
-	
+
 	var forceNewUndo = true;
-	
+
 	function highlight(pre) {
 		var start = pre.lastPos;
 		pre.lastPos = undefined;
@@ -305,7 +305,7 @@ jush.textarea = (function () {
 	function input() {
 		setTimeout(() => highlight(this));
 	}
-	
+
 	function paste(event) {
 		if (event.clipboardData) {
 			setLastPos(this);
@@ -315,18 +315,18 @@ jush.textarea = (function () {
 			forceNewUndo = true; // highlighted in input
 		}
 	}
-	
+
 	function click(event) {
 		if ((event.ctrlKey || event.metaKey) && event.target.href) {
 			open(event.target.href);
 		}
 		closeAutocomplete();
 	}
-	
+
 	let pre;
 	let autocomplete = () => ({});
 	addEventListener('resize', positionAutocomplete);
-	
+
 	return function textarea(el, autocompleter) {
 		if (!window.getSelection) {
 			return;
