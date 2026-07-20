@@ -382,10 +382,18 @@ $lines .= "\t'\$1.html': /(" . schema_regexp(phrases_regexp($shared_statements))
 list($jush, $old_region) = set_region($jush, 'statements', $lines);
 $old_statements = [];
 foreach (block_entries($old_region) as $regexp) {
+	$regexp = str_replace('(?!\()', '', $regexp);
+	if (preg_match('~^\((.*)\)$~s', $regexp, $match)) {
+		$regexp = $match[1];
+	}
 	$old_statements = array_merge($old_statements, array_filter(expand_phrases($regexp), function ($phrase) {
-		return preg_match('~^[A-Z0-9_ ]+$~', $phrase);
+		// the SCHEMA variants only exist in the regexps, the doc pages use DATABASE
+		return preg_match('~^[A-Z0-9_ ]+$~', $phrase) && !preg_match('~\bSCHEMAS?\b~', $phrase);
 	}));
 }
+// the region also holds the MariaDB-only functions
+preg_match_all('~\(\?:([\w|]+)\)\(\?=~', $old_region, $matches);
+$old_maria_functions = ($matches[1] ? explode('|', implode('|', $matches[1])) : []);
 $new_statements = array_merge($shared_statements, $mysql_only_statements, $maria_only_statements, ...array_values($statement_exceptions ?: [[]]));
 sort($old_statements);
 sort($new_statements);
@@ -399,9 +407,9 @@ foreach ($function_groups as $key => $names) {
 	$lines .= "\t'$key': /(" . implode('|', $names) . ")(?=\\s*\\(|\$)/,\n";
 }
 list($jush, $old_region) = set_region($jush, 'functions', $lines);
-$old_functions = [];
+$old_functions = $old_maria_functions;
 foreach (block_entries($old_region) as $regexp) {
-	preg_match_all('~\w{2,}~', str_replace(['(?:', '(?=\\s*\\(|$)'], '', $regexp), $matches);
+	preg_match_all('~\w+~', str_replace(['(?:', '(?=\\s*\\(|$)'], '', $regexp), $matches);
 	$old_functions = array_merge($old_functions, $matches[0]);
 }
 $new_functions = array_merge($maria_only_functions, ...array_values($function_groups ?: [[]]));
@@ -494,7 +502,13 @@ foreach ($maria_pages as $page => $names) {
 }
 $lines .= "\t'server-status-variables.html#statvar_\$1 server-status-variables/#\$1': /(.+)/,\n";
 list($block, $start, $end) = find_block($jush, 'sqlstatus');
-report_diff('status pages', array_keys(block_entries($block)), array_merge([''], array_keys($maria_pages)));
+$old_pages = [];
+foreach (array_keys(block_entries($block)) as $key) {
+	if (preg_match('~(?:^|\s)([\w-]+)/#~', $key, $match)) {
+		$old_pages[] = $match[1];
+	}
+}
+report_diff('status pages', array_unique($old_pages), array_keys($maria_pages));
 $jush = substr_replace($jush, rtrim($lines, "\n"), $start, $end - $start);
 
 file_put_contents($jush_file, $jush);
