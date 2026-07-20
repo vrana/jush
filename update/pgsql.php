@@ -12,20 +12,6 @@ $sgml = "$argv[1]/doc/src/sgml";
 $jush_file = __DIR__ . '/../modules/jush-pgsql.js';
 $jush = read_file($jush_file);
 
-// Turn statement names into regexp alternatives, a phrase before its own prefix (SELECT\s+INTO before SELECT)
-function phrases_regexp(array $names) {
-	usort($names, function ($a, $b) {
-		if (strpos($a, "$b ") === 0) {
-			return -1;
-		}
-		if (strpos($b, "$a ") === 0) {
-			return 1;
-		}
-		return strcmp($a, $b);
-	});
-	return str_replace(' ', '\\s+', implode('|', $names));
-}
-
 // Get statement names from a regexp alternation, expanding ALTER\s+USER(?:\s+MAPPING)? style options
 function statement_names($alternation) {
 	$return = [];

@@ -47,6 +47,20 @@ function add_api(array &$block, $key, $tooltip) {
 	}
 }
 
+// Turn statement names into regexp alternatives, a phrase before its own prefix (SELECT\s+INTO before SELECT)
+function phrases_regexp(array $names) {
+	usort($names, function ($a, $b) {
+		if (strpos($a, "$b ") === 0) {
+			return -1;
+		}
+		if (strpos($b, "$a ") === 0) {
+			return 1;
+		}
+		return strcmp($a, $b);
+	});
+	return str_replace(' ', '\\s+', implode('|', $names));
+}
+
 // Replace the |-separated list between $prefix and $suffix in $subject, reporting the diff
 function set_list($subject, $prefix, $suffix, array $names, $label) {
 	$start = strpos($subject, $prefix);

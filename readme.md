@@ -53,3 +53,9 @@ The `update/` directory holds scripts which sync a language module's list of key
 ```
 php update/php.php path/to/php.api
 ```
+
+[update/sql.php](update/sql.php) rebuilds the MySQL/MariaDB lists in `modules/jush-sql.js` from the MySQL online manual (the index pages are cached in the given directory) and a checkout of [mariadb-docs](https://github.com/mariadb-corporation/mariadb-docs):
+
+```
+php update/sql.php path/to/mysql-cache path/to/mariadb-docs
+```
