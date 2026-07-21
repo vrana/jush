@@ -18,6 +18,7 @@ var jush = {
 
 	php: /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i, // asp_tags=0, short_open_tag=1
 	num: /(?:0x[0-9a-f]+)|(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?/i,
+	embedded: /^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/, // states embedding another language
 
 	regexps: undefined,
 	subpatterns: { },
@@ -336,11 +337,11 @@ var jush = {
 					s_states = this.highlight_states(child_states, s, true, f);
 				} else {
 					s = this.htmlspecialchars(s);
-					s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ];
+					s_states = [ (escape ? escape(s) : s), (!out || !this.embedded.test(state) ? child_states : [ ]) ];
 				}
 			} else {
 				s = this.htmlspecialchars(s);
-				s_states = [ (escape ? escape(s) : s), (!out || !/^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
+				s_states = [ (escape ? escape(s) : s), (!out || !this.embedded.test(state) ? child_states : [ ]) ]; // reset child states when leaving construct
 			}
 			s = s_states[0];
 			child_states = s_states[1];
