@@ -9,6 +9,8 @@ jush.urls.cnf_http = 'https://httpd.apache.org/docs/current/mod/$key.html#$val';
 jush.urls.cnf_php = 'https://www.php.net/$key';
 jush.urls.cnf_phpini = 'https://www.php.net/configuration.changes#$key';
 
+jush.slugs.cnf = function (name) { return name.toLowerCase(); };
+
 jush.links.cnf_http = { 'mod_cache': /CacheIgnoreHeaders/i, 'mod_headers': /.+/ };
 jush.links.cnf_php = { 'configuration.file': /.+/ };
 jush.links.cnf_phpini = { 'configuration.changes.apache': /.+/ };

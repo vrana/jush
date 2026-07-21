@@ -53,6 +53,11 @@
 	jush.urls.php_met = 'https://www.php.net/$key';
 	jush.urls.php_halt = 'https://www.php.net/$key.halt-compiler';
 
+	jush.slugs.php = function (name) { return name.toLowerCase(); };
+	jush.slugs.php_new = function (name) { return name.toLowerCase().replace(/\\/g, '-'); }; // toLowerCase() - case sensitive after #
+	jush.slugs.php_doc = function (name) { return name.replace(/^\W+/, ''); };
+	jush.slugs.phpini = function (name) { return (/^suhosin\./.test(name) ? name : name.toLowerCase().replace(/_/g, '-')); };
+
 	jush.links.php_new = {
 		'https://www.php.net/language.oop5.basic#language.oop5.basic.$val': /^(class|new|extends)$/i,
 		'https://www.php.net/language.oop5.interfaces#language.oop5.interfaces.$val': /^(implements|interface)$/i,

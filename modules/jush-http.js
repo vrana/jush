@@ -1,5 +1,6 @@
 jush.tr.http = { _0: /$/ };
 
+jush.slugs.http = function (name) { return name.replace(/^(\d{3})\b.*/, '$1'); }; // status code links use only the number
 
 jush.build_links2('http', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/$key', /(^(?:HTTP\/[0-9.]+\s+)?)/, /(:|$|(?= ))/gim, {
 	'Status/$1': /(\d{3}\b.*)/,

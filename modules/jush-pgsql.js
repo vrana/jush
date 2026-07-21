@@ -7,6 +7,9 @@ jush.tr.pgsqlset = { _0: /$/ };
 jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/$key';
 jush.links.pgsql_pgsqlset = { 'sql-$val.html': /.+/ };
 
+jush.slugs.pgsql = function (name, key) { return name.toLowerCase().replace(/(^|\s+)/g, (key == 'sql-$1.html' ? '' : '-')); };
+jush.slugs.pgsqlset = function (name) { return name.replace(/_/g, '-').toUpperCase(); };
+
 jush.build_links2('pgsql', 'https://www.postgresql.org/docs/current/$key', /(\b)/, /(\b)/gi, {
 	'sql-alteropclass.html': /(ALTER\s+OPERATOR\s+CLASS)/,
 	'sql-alteropfamily.html': /(ALTER\s+OPERATOR\s+FAMILY)/,

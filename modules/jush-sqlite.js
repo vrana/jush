@@ -4,6 +4,11 @@ jush.tr.sqliteset = { _0: /$/ };
 jush.tr.sqlitestatus = { _0: /$/ };
 
 jush.urls.sqlite_sqliteset = 'https://www.sqlite.org/$key';
+
+jush.slugs.sqlite = function (name) { return name.toLowerCase().replace(/\s+/g, ''); };
+jush.slugs.sqliteset = function (name) { return name.toLowerCase(); };
+jush.slugs.sqlitestatus = jush.slugs.sqliteset;
+
 jush.build_links2('sqlite', 'https://www.sqlite.org/$key', /(\b)/, /(\b)/gi, {
 	'lang_$1.html': /(ALTER\s+TABLE|ANALYZE|ATTACH|COPY|DELETE|DETACH|DROP\s+INDEX|DROP\s+TABLE|DROP\s+TRIGGER|DROP\s+VIEW|EXPLAIN|INSERT|CONFLICT|REINDEX|REPLACE|SELECT|UPDATE|TRANSACTION|VACUUM|WITH)/,
 	'lang_createvtab.html': /(CREATE\s+VIRTUAL\s+TABLE)/,

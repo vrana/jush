@@ -9,6 +9,15 @@ jush.tr.com_code = { _1: /()/ };
 jush.urls.sql_sqlset = 'https://dev.mysql.com/doc/mysql/en/$key';
 jush.links.sql_sqlset = { 'set-statement.html': /.+/ };
 
+jush.link_key.sql = jush.link_key.sqlset = jush.link_key.sqlstatus = function (key, url) { // keys may be 'mysql-key maria-key'
+	var keys = key.split(' ');
+	return (/mariadb/.test(url[0]) ? (keys.length > 1 ? keys[1] : keys[0].replace('.html', '/')) : keys[0]);
+};
+
+jush.slugs.sql = function (name, key, url) { return name.replace(/\b(ALTER|CREATE|DROP|RENAME|SHOW)\s+SCHEMA\b/, '$1 DATABASE').toLowerCase().replace((/mariadb/.test(url[0]) ? /\s+/g : /\s+|_/g), '-'); }; // MariaDB keeps underscores in slugs
+jush.slugs.sqlset = function (name, key, url) { return (/mariadb/.test(url[0]) ? name : (jush.links2.sqlset.test(name.replace(/_/g, '-')) ? name.replace(/_/g, '-') : name)).toLowerCase(); };
+jush.slugs.sqlstatus = function (name, key, url) { return (/mariadb/.test(url[0]) ? name.toLowerCase() : name); };
+
 jush.build_links2('sql', 'https://dev.mysql.com/doc/mysql/en/$key', /(\b)/, /(\b)/gi, {
 	'alter-event.html': /(ALTER(?:\s+DEFINER\s*=\s*\S+)?\s+EVENT)/,
 	'alter-table.html': /(ALTER(?:\s+ONLINE|\s+OFFLINE)?(?:\s+IGNORE)?\s+TABLE)/,
