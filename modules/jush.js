@@ -207,7 +207,7 @@ var jush = {
 
 	build_regexp: function (key, tr1) {
 		var re = [ ];
-		subpatterns = [ '' ];
+		var subpatterns = [ '' ];
 		for (var k in tr1) {
 			var in_bra = false;
 			subpatterns.push(k);
