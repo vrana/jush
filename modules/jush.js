@@ -132,7 +132,7 @@ var jush = {
 		;
 	},
 
-	keywords_links: function (state, s) {
+	keywords_links: function (state, s, next) {
 		if (/^js(_write|_code)+$/.test(state)) {
 			state = 'js';
 		}
@@ -175,15 +175,19 @@ var jush = {
 				this.custom_links[state] = {};
 				this.custom_links[state][url] = re;
 			}
+			next = next || '';
+			var append = this.htmlspecialchars(next || ''); // lookahead context, e.g. '"(' following a quoted routine name
+			s += append;
 			for (var url in this.custom_links[state]) {
 				s = s.replace(this.custom_links[state][url], function (str) {
 					var offset = arguments[arguments.length - 2];
-					if (/<[^>]*$/.test(s.substr(0, offset)) || /^[^<]*<\/a>/.test(s.substr(offset))) {
-						return str; // don't create links inside tags
+					if (offset + str.length > s.length - append.length || /<[^>]*$/.test(s.substr(0, offset)) || /^[^<]*<\/a>/.test(s.substr(offset))) {
+						return str; // don't create links inside tags or in the appended context
 					}
 					return '<a href="' + jush.htmlspecialchars_quo(url.replace('$&', encodeURIComponent(str))) + '" class="jush-custom">' + str + '</a>' // not create_link() - ignores create_links
 				});
 			}
+			s = s.substring(0, s.length - append.length);
 		}
 		return s;
 	},
@@ -327,7 +331,7 @@ var jush = {
 			}
 			s = s_states[0];
 			child_states = s_states[1];
-			s = this.keywords_links(state, s);
+			s = this.keywords_links(state, s, text.substr(match.index, 2)); // 2 - lookahead for closing quote plus parenthesis
 			ret.push(s);
 
 			s = text.substring(division, match.index + match[0].length);
