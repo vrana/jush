@@ -257,7 +257,7 @@ jush.textarea = (function () {
 			}
 			document.execCommand('insertText', false, insert);
 			if (/ $/.test(insert)) {
-				openAutocomplete(pre);
+				setTimeout(() => openAutocomplete(pre));
 			}
 		}
 	}
