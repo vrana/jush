@@ -4,6 +4,7 @@ Fix highlighting in Safari < 16.4 and Firefox < 78
 Highlight keywords leaving the state (e.g. MySQL DO)
 MySQL: Link the longest matching phrase
 CSS: Fix links to MDN
+JS: Highlight true, false and null
 JSDoc: Link tags to jsdoc.app, add new tags
 Highlight JSON
 Highlight Redis 8.10

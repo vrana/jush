@@ -31,6 +31,8 @@ jush.build_links2('js', 'https://developer.mozilla.org/en/$key', /(\.|\b|(?=\.))
 	'JavaScript/Reference/Statements/if...else': /(if|else)/,
 	'JavaScript/Reference/Statements/try...catch': /(try|catch|finally)/,
 	'JavaScript/Reference/Operators/Special/$1': /(delete|in|instanceof|new|this|typeof|void)/,
+	'docs/Web/JavaScript/Reference/Lexical_grammar#boolean_literal': /(true|false)/,
+	'docs/Web/JavaScript/Reference/Operators/null': /(null)/,
 	'DOM/document.$1': /(alinkColor|anchors|applets|bgColor|body|characterSet|compatMode|contentType|cookie|defaultView|designMode|doctype|documentElement|domain|embeds|fgColor|forms|height|images|implementation|lastModified|linkColor|links|plugins|popupNode|referrer|styleSheets|title|tooltipNode|URL|vlinkColor|width|clear|createAttribute|createDocumentFragment|createElement|createElementNS|createEvent|createNSResolver|createRange|createTextNode|createTreeWalker|evaluate|execCommand|getElementById|getElementsByName|importNode|loadOverlay|queryCommandEnabled|queryCommandIndeterm|queryCommandState|queryCommandValue|write|writeln)/,
 	'DOM/element.$1': /(attributes|childNodes|className|clientHeight|clientLeft|clientTop|clientWidth|dir|firstChild|id|innerHTML|lang|lastChild|localName|name|namespaceURI|nextSibling|nodeName|nodeType|nodeValue|offsetHeight|offsetLeft|offsetParent|offsetTop|offsetWidth|ownerDocument|parentNode|prefix|previousSibling|scrollHeight|scrollLeft|scrollTop|scrollWidth|style|tabIndex|tagName|textContent|addEventListener|appendChild|blur|click|cloneNode|dispatchEvent|focus|getAttribute|getAttributeNS|getAttributeNode|getAttributeNodeNS|getElementsByTagName|getElementsByTagNameNS|hasAttribute|hasAttributeNS|hasAttributes|hasChildNodes|insertBefore|item|normalize|removeAttribute|removeAttributeNS|removeAttributeNode|removeChild|removeEventListener|replaceChild|scrollIntoView|setAttribute|setAttributeNS|setAttributeNode|setAttributeNodeNS|supports|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onresize)/,
 	'DOM/event.$1': /(altKey|bubbles|button|cancelBubble|cancelable|clientX|clientY|ctrlKey|currentTarget|detail|eventPhase|explicitOriginalTarget|isChar|layerX|layerY|metaKey|originalTarget|pageX|pageY|relatedTarget|screenX|screenY|shiftKey|target|timeStamp|type|view|which|initEvent|initKeyEvent|initMouseEvent|initUIEvent|stopPropagation|preventDefault)/,
@@ -46,6 +48,14 @@ jush.build_links2('js', 'https://developer.mozilla.org/en/$key', /(\.|\b|(?=\.))
 	'JavaScript/Reference/Global_Objects/RegExp/$1': /(\.)(compile|dotAll|exec|flags|global|hasIndices|ignoreCase|lastIndex|multiline|source|sticky|test|toString|unicode|unicodeSets)/,
 	'JavaScript/Reference/Global_Objects/String/$1': /(\.)(anchor|at|big|blink|bold|charAt|charCodeAt|codePointAt|concat|endsWith|fixed|fontcolor|fontsize|includes|indexOf|isWellFormed|italics|lastIndexOf|length|link|localeCompare|match|matchAll|normalize|padEnd|padStart|repeat|replace|replaceAll|search|slice|small|split|startsWith|strike|sub|substr|substring|sup|toLocaleLowerCase|toLocaleUpperCase|toLowerCase|toString|toUpperCase|toWellFormed|trim|trimEnd|trimStart|valueOf)/,
 }); // collisions: bgColor, height, width, length, name, open - the (\.) members must stay last
+
+// values of object and array literals are not highlighted by the js state
+jush.build_links2('js_val', 'https://developer.mozilla.org/en/$key', /(\b)/, /(\b)/g, {
+	'docs/Web/JavaScript/Reference/Lexical_grammar#boolean_literal': /(true|false)/,
+	'docs/Web/JavaScript/Reference/Operators/null': /(null)/,
+});
+jush.links2.js_arr = jush.links2.js_val;
+jush.urls.js_arr = jush.urls.js_val;
 
 jush.build_links2('js_doc', 'https://jsdoc.app/$key', /(^[ \t]*|\n\s*\*\s*|(?={))/, /(\b)/g, {
 	'tags-$1': /(@(?:abstract|access|alias|async|augments|author|borrows|callback|class|classdesc|constant|constructs|copyright|default|deprecated|description|enum|event|example|exports|external|file|fires|function|generator|global|hideconstructor|ignore|implements|inheritdoc|inner|instance|interface|kind|lends|license|listens|member|memberof|mixes|mixin|module|name|namespace|override|package|param|private|property|protected|public|readonly|requires|returns|see|since|static|summary|this|throws|todo|tutorial|type|typedef|variation|version|yields))/,
