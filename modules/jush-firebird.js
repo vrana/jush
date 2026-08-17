@@ -56,7 +56,7 @@ jush.build_links2('firebird', 'https://firebirdsql.org/file/documentation/html/e
 	'#fblangref50-datatypes-floattypes': /(DOUBLE\s+PRECISION|DECFLOAT|FLOAT|REAL)/,
 	'#fblangref50-datatypes-fixedtypes': /(NUMERIC|DECIMAL)/,
 	'#fblangref50-datatypes-datetime': /(TIMESTAMP|DATE|TIME)/,
-	'#fblangref50-datatypes-chartypes': /(CHARACTER\s+VARYING|VARCHAR|NCHAR|CHAR)/,
+	'#fblangref50-datatypes-chartypes': /(CHARACTER\s+VARYING|CHARACTER|VARCHAR|NCHAR|CHAR)/,
 	'#fblangref50-datatypes-boolean': /(BOOLEAN)/,
 	'#fblangref50-datatypes-bnrytypes': /(BLOB)/,
 	'#fblangref50-functions-datetime': /(CURRENT_DATE|CURRENT_TIME(?:STAMP)?|LOCALTIME(?:STAMP)?)/, // these have anchors in another namespace
