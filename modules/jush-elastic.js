@@ -10,4 +10,11 @@ jush.build_links2('elastic', 'https://www.elastic.co/docs/api/doc/elasticsearch/
 	'indices-update-aliases': /(_aliases)/, // must be before _alias
 	'indices-get-alias': /(_alias)/,
 	'indices-stats': /(_stats)/,
+	// the field types are documented outside the API reference
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number': /(long|integer|short|byte|double|float|half_float|scaled_float)/,
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/boolean': /(boolean)/,
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date': /(date)/,
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text': /(text)/,
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword': /(keyword)/,
+	'https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/binary': /(binary)/,
 });
