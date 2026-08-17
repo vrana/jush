@@ -1,5 +1,7 @@
 jush.tr.clickhouse = { sql_apo: /'/, sqlite_quo: /"/, bac: /`/, one: /--/, com: /\/\*/, num: jush.num };
 
+jush.autocompleting.sql.push('clickhouse', 'sqlite_quo', 'bac'); // sqlite_quo and bac are quoted identifiers
+
 jush.slugs.clickhouse = name => name.toLowerCase(); // the pages of the functions are lowercase
 
 jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key', /(\b)/, /(\b)/gi, {

@@ -4,6 +4,8 @@ jush.tr.pgsql_eot2 = { }; // pgsql_eot2._2 to be set in pgsql_eot handler
 jush.tr.pgsql_pgsqlset = { sql_apo: /'/, sqlite_quo: /"/, pgsql_eot: /\$/, one: /--/, com_nest: /\/\*/, num: jush.num, _1: /;|$/ };
 jush.tr.pgsqlset = { _0: /$/ };
 
+jush.autocompleting.sql.push('pgsql', 'pgsql_pgsqlset', 'pgsql_eot2', 'sqlite_quo'); // pgsql_eot2 is a dollar-quoted body, sqlite_quo is a quoted identifier
+
 jush.urls.pgsql_pgsqlset = 'https://www.postgresql.org/docs/current/$key';
 jush.links.pgsql_pgsqlset = { 'sql-$val.html': /.+/ };
 

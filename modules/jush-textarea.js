@@ -181,7 +181,8 @@ jush.textarea = (function () {
 
 	function findState(node) {
 		let match;
-		while (node && !(match = (node.className || '').match(/(^|\s)jush-(?!op\b)(\w+)/))) {
+		// jush-op, jush-help and jush-custom mark an operator and the links, they are not states
+		while (node && !(match = (node.className || '').match(/(^|\s)jush-(?!(?:op|help|custom)\b)(\w+)/))) {
 			node = node.parentElement;
 		}
 		return (match ? match[2] : '');

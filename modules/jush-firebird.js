@@ -1,5 +1,7 @@
 jush.tr.firebird = { sqlite_apo: /'/, sqlite_quo: /"/, one: /--/, com: /\/\*/, num: jush.num };
 
+jush.autocompleting.sql.push('firebird', 'sqlite_quo'); // sqlite_quo is a quoted identifier
+
 jush.slugs.firebird = name => name.toLowerCase().replace(/_/g, '-'); // the anchors of the functions use dashes
 
 // the whole language reference is a single page, the keys are its anchors

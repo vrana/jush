@@ -20,6 +20,7 @@ var jush = {
 	php: /<\?(?!xml)(?:php)?|<script\s+language\s*=\s*(?:"php"|'php'|php)\s*>/i, // asp_tags=0, short_open_tag=1
 	num: /(?:0x[0-9a-f]+)|(?:\b[0-9]+\.?[0-9]*|\.[0-9]+)(?:e[+-]?[0-9]+)?/i,
 	embedded: /^(att_js|att_css|att_http|css_js|js_write_code|js_http_code|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/, // states embedding another language
+	autocompleting: { sql: [ ] }, // autocompleter => states it completes in, filled by the modules; a language without a module can be added by the consumer
 
 	regexps: undefined,
 	subpatterns: { },

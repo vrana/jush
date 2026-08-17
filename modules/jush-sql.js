@@ -6,6 +6,8 @@ jush.tr.sqlset = { _0: /$/ }; //! jump from SHOW VARIABLES LIKE ''
 jush.tr.sqlstatus = { _0: /$/ }; //! jump from SHOW STATUS LIKE ''
 jush.tr.com_code = { _1: /()/ };
 
+jush.autocompleting.sql.push('sql', 'sql_code', 'sql_sqlset', 'sqlset_val', 'bac'); // bac is a quoted identifier
+
 jush.urls.sql_sqlset = 'https://dev.mysql.com/doc/mysql/en/$key';
 jush.links.sql_sqlset = { 'set-statement.html': /.+/ };
 

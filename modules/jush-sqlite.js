@@ -3,6 +3,8 @@ jush.tr.sqlite_sqliteset = { sqlite_apo: /'/, sqlite_quo: /"/, bra: /\[/, bac: /
 jush.tr.sqliteset = { _0: /$/ };
 jush.tr.sqlitestatus = { _0: /$/ };
 
+jush.autocompleting.sql.push('sqlite', 'sqlite_sqliteset', 'sqlite_quo', 'bra', 'bac'); // sqlite_quo, bra and bac are quoted identifiers
+
 jush.urls.sqlite_sqliteset = 'https://www.sqlite.org/$key';
 
 jush.slugs.sqlite = name => name.toLowerCase().replace(/\s+/g, '');
