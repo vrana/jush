@@ -44,7 +44,7 @@ jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key'
 	'statements/revoke': /(REVOKE)/,
 	'https://clickhouse.com/docs/engines/table-engines': /(ENGINE)/, // the engines are outside the SQL reference
 	'data-types/int-uint': /(U?Int(?:8|16|32|64|128|256))/,
-	'data-types/float': /(Float(?:32|64))/,
+	'data-types/float': /(Float(?:32|64)|BFloat16)/,
 	'data-types/decimal': /(Decimal(?:32|64|128|256)?)/,
 	'data-types/fixedstring': /(FixedString)/,
 	'data-types/string': /(String)/,
@@ -61,6 +61,13 @@ jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key'
 	'data-types/uuid': /(UUID)/,
 	'data-types/json': /(JSON)/,
 	'data-types/boolean': /(Bool)/,
+	'data-types/ipv4': /(IPv4)/,
+	'data-types/ipv6': /(IPv6)/,
+	'data-types/nested-data-structures/nested': /(Nested)/,
+	'data-types/simpleaggregatefunction': /(SimpleAggregateFunction)/, // must be before AggregateFunction
+	'data-types/aggregatefunction': /(AggregateFunction)/,
+	'data-types/variant': /(Variant)/,
+	'data-types/dynamic': /(Dynamic)/,
 	'aggregate-functions/reference/$1': /(count|sum|avg|min|max|any|uniqExact|uniq|groupArray|argMin|argMax|quantile|median|topK)(?=\s*\(|$)/,
 	'functions/type-conversion-functions': /(CAST|toString|toInt(?:8|16|32|64)|toUInt(?:8|16|32|64)|toFloat(?:32|64)|toDecimal(?:32|64)|toDate|toDateTime|toTypeName)(?=\s*\(|$)/,
 	'functions/date-time-functions': /(now|today|yesterday|toYear|toMonth|toDayOfMonth|toHour|toMinute|toSecond|toStartOf\w+|dateDiff|formatDateTime)(?=\s*\(|$)/,
