@@ -19,7 +19,7 @@ jush.build_links2('sqlite', 'https://www.sqlite.org/$key', /(\b)/, /(\b)/gi, {
 	'lang_createtable.html': /(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+TABLE)/,
 	'lang_createtrigger.html': /(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+TRIGGER)/,
 	'lang_createview.html': /(CREATE(?:\s+TEMP|\s+TEMPORARY)?\s+VIEW)/,
-	'stricttables.html': /(STRICT)/,
+	'stricttables.html': /(STRICT|ANY)/,
 	'withoutrowid.html': /(WITHOUT\s+ROWID)/,
 	'gencol.html': /(GENERATED|ALWAYS|STORED|VIRTUAL)/,
 	'windowfunctions.html': /(OVER|PARTITION\s+BY|WINDOW|FILTER)/,
