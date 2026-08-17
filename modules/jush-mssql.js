@@ -264,6 +264,9 @@ jush.build_links2('mssql', 'https://msdn.microsoft.com/library/$key.aspx', /(\b)
 	'ms173846': /(ALTER\s+VIEW)/,
 	'bb895361': /(ALTER\s+WORKLOAD\s+GROUP)/,
 	'ms189778': /(ALTER\s+XML\s+SCHEMA\s+COLLECTION)/,
+	// the types added after the documentation moved from MSDN
+	'https://learn.microsoft.com/sql/t-sql/data-types/json-data-type': /(json)/,
+	'https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type': /(vector)/,
 	// functions
 	'ms189800': /(ABS)(?=\s*\(|$)/,
 	'ms178627': /(ACOS)(?=\s*\(|$)/,
