@@ -131,6 +131,8 @@ jush.textarea = (function () {
 
 			if (!event.shiftKey && /^(Delete|Backspace)$/.test(event.key) && getSelection().toString().length >= this.innerText.replace(/\n$/, '').length) { // native delete of long text is slow in Chrome 150
 				this.innerText = '';
+				forceNewUndo = true; // undo the whole deletion at once
+				this.oninput(); // the assignment fires no input event, so the <textarea> and the undo history would keep the deleted text
 				return false;
 			}
 

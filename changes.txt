@@ -2,6 +2,7 @@ JUSH 3.2.1:
 Highlight ClickHouse and Firebird
 Autocomplete: Offer nothing outside SQL
 Textarea: Detect the state at the caret also inside a link
+Textarea: Update the value after deleting all the text at once
 
 JUSH 3.2.0:
 Autocomplete: Allow restricting the statements offered at the beginning of a query
