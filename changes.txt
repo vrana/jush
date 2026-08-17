@@ -1,4 +1,5 @@
 JUSH 3.2.1:
+Link the data types to the documentation
 Highlight ClickHouse and Firebird
 Autocomplete: Offer nothing outside SQL
 Textarea: Detect the state at the caret also inside a link

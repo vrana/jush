@@ -94,6 +94,7 @@ jush.build_links2('sql', 'https://dev.mysql.com/doc/mysql/en/$key', /(\b)/, /(\b
 	'numeric-type-syntax.html numeric-data-types/': /(bit|tinyint|bool|boolean|smallint|mediumint|int|integer|bigint|float|double\s+precision|double|real|decimal|dec|numeric|fixed)/,
 	'date-and-time-type-syntax.html date-and-time-data-types/': /(date|datetime|timestamp|time|year)/,
 	'string-type-syntax.html string-data-types/': /(char|varchar|binary|varbinary|tinyblob|tinytext|blob|text|mediumblob|mediumtext|longblob|longtext|enum|set)/,
+	'json.html json-data-type/': /(json)/,
 	'spatial-type-overview.html geometry-types/': /(geometry|point|linestring|polygon|multipoint|multilinestring|multipolygon|geometrycollection)/,
 	'vector.html vector/': /(vector)/,
 	'- inet4/': /(inet4)/,
@@ -195,7 +196,7 @@ jush.build_links2('sql', 'https://dev.mysql.com/doc/mysql/en/$key', /(\b)/, /(\b
 	// end functions
 	'row-subqueries.html': /(row)(?=\s*\(|$)/,
 	'fulltext-search.html#function_match': /(match|against)(?=\s*\(|$)/,
-}); // collisions: char, set, union(), allow parenthesis - IN, ANY, ALL, SOME, NOT, AND, OR, XOR
+}); // collisions: char, set, union(), allow parenthesis - IN, ANY, ALL, SOME, NOT, AND, OR, XOR; the uuid type is not linked because of the UUID() function (and MySQL has no such type), binary links to the operator
 
 jush.build_links2('sqlset', 'https://dev.mysql.com/doc/mysql/en/$key', /(\b)/, /((?!-)\b)/gi, {
 	'- aria-system-variables/#$1': /(aria_block_size|aria_checkpoint_interval|aria_checkpoint_log_activity|aria_encrypt_tables|aria_force_start_after_recovery_failures|aria_group_commit|aria_group_commit_interval|aria_log_dir_path|aria_log_file_size|aria_log_purge_type|aria_max_sort_file_size|aria_page_checksum|aria_pagecache_age_threshold|aria_pagecache_buffer_size|aria_pagecache_division_limit|aria_pagecache_file_hash_size|aria_pagecache_segments|aria_recover|aria_recover_options|aria_repair_threads|aria_sort_buffer_size|aria_stats_method|aria_sync_log_dir|aria_used_for_temp_tables)/,
