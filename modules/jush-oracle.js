@@ -124,6 +124,8 @@ jush.build_links2('oracle', 'https://download.oracle.com/docs/cd/B19306_01/serve
 	'statements_10005.htm': /(SET\s+TRANSACTION)/,
 	'statements_10006.htm': /(TRUNCATE)/,
 	'statements_10007.htm': /(UPDATE)/,
+	// the datatypes are described in one section, the ANSI and DB2 names converted to them are not linked
+	'sql_elements001.htm': /(VARCHAR2|NVARCHAR2|NUMBER|LONG\s+RAW|LONG|DATE|BINARY_FLOAT|BINARY_DOUBLE|TIMESTAMP|INTERVAL\s+YEAR|INTERVAL\s+DAY|RAW|ROWID|UROWID|NCHAR|CHAR|NCLOB|CLOB|BLOB|BFILE)/,
 	// functions
 	'functions002.htm': /(abs)/,
 	'functions003.htm': /(acos)/,
