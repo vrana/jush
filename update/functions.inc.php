@@ -19,6 +19,17 @@ function front_matter($markdown, $field) {
 	return trim($match[1] ?? '');
 }
 
+// Get the values of a front matter field holding a YAML list
+function front_matter_list($markdown, $field) {
+	if (!preg_match("~^$field:\n((?:\s+- .*\n)+)~m", $markdown, $match)) {
+		return [];
+	}
+	preg_match_all('~^\s+- (.*)$~m', $match[1], $matches);
+	return array_map(function ($value) {
+		return trim(trim($value), '"\'');
+	}, $matches[1]);
+}
+
 // Read a file or exit with an error
 function read_file($file) {
 	$return = file_get_contents($file);
@@ -107,4 +118,46 @@ function set_block($subject, $prefix, $suffix, array $entries) {
 		$lines .= "\n\t'$name': '$tooltip',";
 	}
 	return substr_replace($subject, $lines, $start, $end - $start);
+}
+
+// Get ['key' => 'regexp source'] of the entries in a build_links2 block
+function block_entries($block) {
+	preg_match_all("~^\t'([^']*)': /(.*)/,~m", $block, $matches, PREG_SET_ORDER);
+	$return = [];
+	foreach ($matches as $match) {
+		$return[$match[1]] = $match[2];
+	}
+	return $return;
+}
+
+// Get the body of a build_links2 block with its start and end offsets
+function find_block($jush, $key) {
+	$start = strpos($jush, "jush.build_links2('$key'");
+	$start = ($start === false ? false : strpos($jush, "{\n", $start));
+	$end = ($start === false ? false : strpos($jush, "\n});", $start));
+	if ($end === false) {
+		fwrite(STDERR, "Can't find the build_links2('$key') block\n");
+		exit(1);
+	}
+	$start += 2;
+	return [substr($jush, $start, $end - $start), $start, $end];
+}
+
+// Expand (?:A|B) and (?:A|B)? groups of a phrase alternation into plain phrases (for diff reporting)
+function expand_phrases($alternation) {
+	$s = str_replace('\\s+', ' ', $alternation);
+	if (preg_match('~^(.*?)\(\?:([^()]*)\)(\??)(.*)$~s', $s, $match)) {
+		$return = [];
+		$options = explode('|', $match[2]);
+		if ($match[3]) {
+			$options[] = '';
+		}
+		foreach ($options as $option) {
+			foreach (expand_phrases($match[1] . $option . $match[4]) as $phrase) {
+				$return[] = preg_replace('~\s+~', ' ', trim($phrase));
+			}
+		}
+		return array_unique($return);
+	}
+	return explode('|', $s);
 }

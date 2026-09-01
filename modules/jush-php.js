@@ -44,7 +44,7 @@
 	jush.urls.php_sql = 'https://www.php.net/$key.$val';
 	jush.urls.php_sqlite = 'https://www.php.net/$key.$val';
 	jush.urls.php_pgsql = 'https://www.php.net/$key.$val';
-	jush.urls.php_mssql = 'https://msdn.microsoft.com/library/$key.aspx';
+	jush.urls.php_mssql = 'https://learn.microsoft.com/sql/$key';
 	jush.urls.php_oracle = 'https://www.php.net/$key.$val';
 	jush.urls.php_echo = 'https://www.php.net/$key.$val';
 	jush.urls.php_phpini = 'https://www.php.net/$key.$val';
@@ -78,7 +78,7 @@
 	jush.links.php_sql = { 'function': new RegExp('^' + sql_function + '$', 'i') };
 	jush.links.php_sqlite = { 'function': new RegExp('^' + sqlite_function + '$', 'i') };
 	jush.links.php_pgsql = { 'function': new RegExp('^' + pgsql_function + '$', 'i') };
-	jush.links.php_mssql = { 'https://www.php.net/function.$val': /^mssql_query$/i, 'cc296181': /^sqlsrv_prepare$/i, 'cc296184': /^sqlsrv_query$/i };
+	jush.links.php_mssql = { 'https://www.php.net/function.$val': /^mssql_query$/i, 'connect/php/sqlsrv-prepare': /^sqlsrv_prepare$/i, 'connect/php/sqlsrv-query': /^sqlsrv_query$/i };
 	jush.links.php_oracle = { 'function': new RegExp('^' + oracle_function + '$', 'i') };
 	jush.links.php_phpini = { 'function': /^(ini_get|ini_set)$/i };
 	jush.links.php_http = { 'function': /^header$/i };
