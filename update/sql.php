@@ -122,42 +122,6 @@ function entry_alternatives($source) {
 	exit(1);
 }
 
-// Whether a phrase of the first list is a prefix of a phrase of the second one
-function prefix_of(array $phrases, array $others) {
-	foreach ($phrases as $phrase) {
-		foreach ($others as $other) {
-			if (strpos($other, "$phrase ") === 0) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-// links2 is a single alternation matching the first alternative, not the longest one, so a phrase must
-// not precede a longer phrase starting with it; phrases_regexp() sorts them inside one entry,
-// this orders the entries so that it holds across them too
-function order_entries(array $entries) { // [line, phrases]
-	$return = [];
-	while ($entries) {
-		foreach ($entries as $i => $entry) {
-			foreach ($entries as $j => $other) {
-				if ($i != $j && prefix_of($entry[1], $other[1])) {
-					continue 2; // a longer phrase is still waiting
-				}
-			}
-			$return[] = $entry;
-			unset($entries[$i]);
-			continue 2;
-		}
-		fwrite(STDERR, "Statement entries shadow each other in a cycle: " . implode(', ', array_map(function ($entry) {
-			return implode('|', $entry[1]);
-		}, $entries)) . "\n");
-		return array_merge($return, $entries);
-	}
-	return $return;
-}
-
 // The entries which can't be ordered - a hand-maintained phrase after the generated region - get
 // a lookahead rejecting the rest of the longer phrases instead
 function set_shadow_lookaheads($jush, $block_key) {

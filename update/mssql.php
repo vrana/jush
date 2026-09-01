@@ -15,6 +15,28 @@ $skip_dirs = ['includes', 'media', 'codesnippet'];
 // Directories the not linked report goes through
 $report_dirs = ['t-sql/statements', 't-sql/data-types', 't-sql/functions'];
 
+// Pages documenting no phrase to highlight, kept out of the not linked report
+$skip_pages = [
+	// @@-prefixed configuration functions, the \b before the entries never matches @
+	't-sql/functions/cpu-busy-transact-sql', 't-sql/functions/dbts-transact-sql',
+	't-sql/functions/fetch-status-transact-sql', 't-sql/functions/version-transact-sql-metadata-functions',
+	// hierarchyid methods, called on a value instead of standing on their own
+	't-sql/data-types/getancestor-database-engine', 't-sql/data-types/getdescendant-database-engine',
+	't-sql/data-types/getlevel-database-engine', 't-sql/data-types/getreparentedvalue-database-engine',
+	't-sql/data-types/getroot-database-engine', 't-sql/data-types/isdescendantof-database-engine',
+	't-sql/data-types/read-database-engine', 't-sql/data-types/tostring-database-engine',
+	't-sql/data-types/write-database-engine',
+	// syntax fragments of ALTER TABLE, not statements
+	't-sql/statements/alter-table-column-constraint-transact-sql', 't-sql/statements/alter-table-column-definition-transact-sql',
+	't-sql/statements/alter-table-computed-column-definition-transact-sql', 't-sql/statements/alter-table-table-constraint-transact-sql',
+	// overviews titled by a construct name
+	't-sql/data-types/constants-transact-sql', 't-sql/data-types/precision-scale-and-length-transact-sql',
+	// cursor and table would take the link from the statements using the same words,
+	// OPENROWSET(BULK ...) is already linked by OPENROWSET
+	't-sql/data-types/cursor-transact-sql', 't-sql/data-types/table-transact-sql',
+	't-sql/functions/openrowset-bulk-transact-sql',
+];
+
 if (!isset($argv[1])) {
 	fwrite(STDERR, "Usage: php update/mssql.php path/to/sql-docs\n");
 	exit(1);
@@ -27,7 +49,8 @@ $jush = read_file($jush_file);
 function title_names($title) {
 	$title = trim($title, '"\'');
 	$title = preg_replace('~\s*\((?:Transact-SQL|SQL Server|Database Engine|Azure[^)]*)\)$~i', '', $title);
-	$title = preg_replace('~\s+(?:Clause|Statement|Data Type|Function)$~i', '', $title);
+	// "Clause" and "Data Type" describe the construct, "Function" is a part of its name (ALTER FUNCTION)
+	$title = preg_replace('~\s+(?:Clause|Data Type)$~i', '', $title);
 	// a page documents several constructs only if each of them is a single word ("char and varchar"),
 	// otherwise the conjunction is a part of a sentence ("Date and time types")
 	$names = preg_split('~,\s*(?:and\s+)?|\s+and\s+|\s+\|\s+~i', $title);
@@ -268,11 +291,11 @@ foreach ($items as $i => list($key, $regexp, $phrases, $suffix)) {
 	$groups[$group][$suffix] = array_merge($groups[$group][$suffix] ?? [], $phrases);
 }
 
-$new_block = '';
+$lines = []; // [line, phrases] for order_entries()
 foreach ($groups as $group => $by_suffix) {
 	if ($group[0] == '=') { // no $1 describes the key, e.g. the page of several data types
 		list($key, $regexp) = $items[substr($group, 1)];
-		$new_block .= "\t'$key': /$regexp/,\n";
+		$lines[] = ["\t'$key': /$regexp/,\n", entry_phrases($regexp)];
 		$keys[$key][] = implode(', ', reset($by_suffix));
 		continue;
 	}
@@ -284,9 +307,14 @@ foreach ($groups as $group => $by_suffix) {
 			: (count($phrases) > 1 ? "(?:$alternation)" : $alternation) . $suffix);
 	}
 	$suffix = (count($by_suffix) < 2 ? key($by_suffix) : '');
-	$new_block .= "\t'$group': /(" . implode('|', $alternatives) . ")$suffix/,\n";
-	$keys[$group][] = implode(', ', array_merge(...array_values($by_suffix)));
+	$phrases = array_merge(...array_values($by_suffix));
+	$lines[] = ["\t'$group': /(" . implode('|', $alternatives) . ")$suffix/,\n", $phrases];
+	$keys[$group][] = implode(', ', $phrases);
 }
+
+// an earlier entry would swallow the beginning of a longer phrase of a later one:
+// bare CLOSE used to take the link of CLOSE MASTER KEY
+$new_block = implode('', array_column(order_entries($lines), 0));
 
 // a duplicate key is not just redundant, the later entry of the object literal drops the earlier one
 foreach ($keys as $key => $entries) {
@@ -302,7 +330,7 @@ file_put_contents($jush_file, $jush);
 
 // Report the pages which could be linked but are not
 foreach ($titles as $name => $slugs) {
-	if (isset($linked[$name]) || count($slugs) > 1) {
+	if (isset($linked[$name]) || count($slugs) > 1 || in_array($slugs[0], $skip_pages)) {
 		continue;
 	}
 	// a construct is titled by its name, either a single identifier ("datetime2") or all caps
