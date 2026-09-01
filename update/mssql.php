@@ -138,12 +138,18 @@ function entry_alternation($regexp) {
 	$return = [];
 	foreach (split_alternation($group[0]) as $alternative) {
 		$suffix = $group[1];
-		if (substr($alternative, 0, 3) == '(?:') { // the alternatives sharing one lookahead
+		if (substr($alternative, 0, 3) == '(?:') { // several alternatives sharing one lookahead
 			$sub = capture_group($alternative);
 			if (!$sub || !preg_match('~^\(\?[=!]~', $sub[1])) {
 				return null;
 			}
 			list($alternative, $suffix) = $sub;
+		} elseif (($pos = strpos($alternative, '(')) !== false) { // a single one binding it directly
+			if (!preg_match('~^\(\?[=!]~', substr($alternative, $pos))) {
+				return null;
+			}
+			$suffix = substr($alternative, $pos);
+			$alternative = substr($alternative, 0, $pos);
 		}
 		foreach (split_alternation($alternative) as $phrase) {
 			$phrase = str_replace('\\s+', ' ', $phrase);
@@ -273,8 +279,9 @@ foreach ($groups as $group => $by_suffix) {
 	$alternatives = [];
 	foreach ($by_suffix as $suffix => $phrases) {
 		$alternation = phrases_regexp($phrases);
-		// a lookahead applies to the alternatives it follows, so they need a group of their own
-		$alternatives[] = ($suffix == '' || count($by_suffix) < 2 ? $alternation : "(?:$alternation)$suffix");
+		// a lookahead binds to the single alternative it follows, so only several of them need a group
+		$alternatives[] = ($suffix == '' || count($by_suffix) < 2 ? $alternation
+			: (count($phrases) > 1 ? "(?:$alternation)" : $alternation) . $suffix);
 	}
 	$suffix = (count($by_suffix) < 2 ? key($by_suffix) : '');
 	$new_block .= "\t'$group': /(" . implode('|', $alternatives) . ")$suffix/,\n";
