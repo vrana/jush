@@ -61,10 +61,10 @@ function add_api(array &$block, $key, $tooltip) {
 // Turn statement names into regexp alternatives, a phrase before its own prefix (SELECT\s+INTO before SELECT, RESTORE-ASKING before RESTORE)
 function phrases_regexp(array $names) {
 	usort($names, function ($a, $b) {
-		if (strpos($a, "$b ") === 0 || strpos($a, "$b-") === 0) {
+		if (stripos($a, "$b ") === 0 || stripos($a, "$b-") === 0) {
 			return -1;
 		}
-		if (strpos($b, "$a ") === 0 || strpos($b, "$a-") === 0) {
+		if (stripos($b, "$a ") === 0 || stripos($b, "$a-") === 0) {
 			return 1;
 		}
 		return strcmp($a, $b);
@@ -166,7 +166,7 @@ function expand_phrases($alternation) {
 function prefix_of(array $phrases, array $others) {
 	foreach ($phrases as $phrase) {
 		foreach ($others as $other) {
-			if (strpos($other, "$phrase ") === 0) {
+			if (stripos($other, "$phrase ") === 0) {
 				return true;
 			}
 		}
@@ -196,4 +196,107 @@ function order_entries(array $entries) { // [line, phrases]
 		return array_merge($return, $entries);
 	}
 	return $return;
+}
+
+// Get the phrases an entry regexp matches
+function entry_phrases($regexp) {
+	$regexp = preg_replace('~\(\?[=!].*~s', '', $regexp); // the (?=\s*\(|$) lookahead of the functions
+	return expand_phrases(preg_replace('~^\((.*)\)$~s', '$1', $regexp)); // the capturing group of the entry
+}
+
+// Get [the body of the group opening $regexp, the rest], null if it doesn't open with a group
+function capture_group($regexp) {
+	if ($regexp == '' || $regexp[0] != '(') {
+		return null;
+	}
+	$depth = 0;
+	for ($i = 0; $i < strlen($regexp); $i++) {
+		$c = $regexp[$i];
+		if ($c == '\\') {
+			$i++;
+		} elseif ($c == '(') {
+			$depth++;
+		} elseif ($c == ')' && !--$depth) {
+			$body = substr($regexp, 1, $i - 1);
+			return [preg_replace('~^\?:~', '', $body), substr($regexp, $i + 1)];
+		}
+	}
+	return null;
+}
+
+// Split an alternation at the top level | characters
+function split_alternation($alternation) {
+	$return = [];
+	$depth = 0;
+	$last = 0;
+	for ($i = 0; $i < strlen($alternation); $i++) {
+		$c = $alternation[$i];
+		if ($c == '\\') {
+			$i++;
+		} elseif ($c == '(') {
+			$depth++;
+		} elseif ($c == ')') {
+			$depth--;
+		} elseif ($c == '|' && !$depth) {
+			$return[] = substr($alternation, $last, $i - $last);
+			$last = $i + 1;
+		}
+	}
+	$return[] = substr($alternation, $last);
+	return $return;
+}
+
+// Get [suffix => phrases] of an entry matching nothing but plain phrases, each optionally behind
+// a lookahead; null for the hand-crafted ones like ((?:var)?binary) which no $1 can describe
+function entry_alternation($regexp) {
+	$group = capture_group($regexp);
+	if (!$group || ($group[1] != '' && !preg_match('~^\(\?[=!]~', $group[1]))) {
+		return null;
+	}
+	$return = [];
+	foreach (split_alternation($group[0]) as $alternative) {
+		$suffix = $group[1];
+		if (substr($alternative, 0, 3) == '(?:') { // several alternatives sharing one lookahead
+			$sub = capture_group($alternative);
+			if (!$sub || !preg_match('~^\(\?[=!]~', $sub[1])) {
+				return null;
+			}
+			list($alternative, $suffix) = $sub;
+		} elseif (($pos = strpos($alternative, '(')) !== false) { // a single one binding it directly
+			if (!preg_match('~^\(\?[=!]~', substr($alternative, $pos))) {
+				return null;
+			}
+			$suffix = substr($alternative, $pos);
+			$alternative = substr($alternative, 0, $pos);
+		}
+		foreach (split_alternation($alternative) as $phrase) {
+			$phrase = str_replace('\\s+', ' ', $phrase);
+			if (!preg_match('~^[A-Za-z_][\w ]*$~', $phrase)) {
+				return null;
+			}
+			$return[$suffix][] = $phrase;
+		}
+	}
+	return $return;
+}
+
+// Get the '<prefix>$1<suffix>' template deriving the key of every phrase, null if there is none
+// The script defines phrase_slug() to match the jush.slugs.<state> of its module
+function key_template($key, array $phrases) {
+	$templates = null;
+	foreach ($phrases as $phrase) {
+		$slug = phrase_slug($phrase);
+		$found = [];
+		// the slug is a whole part of the path, not a piece of a longer word
+		if (preg_match_all('~(?:^|(?<=[/.-]))' . preg_quote($slug, '~') . '(?=$|[/.-])~', $key, $matches, PREG_OFFSET_CAPTURE)) {
+			foreach ($matches[0] as $match) {
+				$found[] = substr_replace($key, '$1', $match[1], strlen($slug));
+			}
+		}
+		$templates = ($templates === null ? $found : array_intersect($templates, $found));
+		if (!$templates) {
+			return null;
+		}
+	}
+	return (count($templates) == 1 ? reset($templates) : null);
 }

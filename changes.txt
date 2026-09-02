@@ -1,6 +1,7 @@
 JUSH 3.2.1:
 Link the data types to the documentation
 MS SQL: Link the current documentation instead of the dead MSDN URLs
+Oracle: Link the current documentation instead of the pages of Oracle 10.2
 Highlight ClickHouse and Firebird
 Autocomplete: Offer nothing outside SQL
 Textarea: Detect the state at the caret also inside a link

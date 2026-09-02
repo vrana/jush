@@ -103,111 +103,9 @@ function read_index($docs, array $doc_dirs, array $skip_dirs) {
 	return [$titles, $f1, $raw];
 }
 
-// Get the phrases an entry regexp matches
-function entry_phrases($regexp) {
-	$regexp = preg_replace('~\(\?[=!].*~s', '', $regexp); // the (?=\s*\(|$) lookahead of the functions
-	return expand_phrases(preg_replace('~^\((.*)\)$~s', '$1', $regexp)); // the capturing group of the entry
-}
-
-// Get [the body of the group opening $regexp, the rest], null if it doesn't open with a group
-function capture_group($regexp) {
-	if ($regexp == '' || $regexp[0] != '(') {
-		return null;
-	}
-	$depth = 0;
-	for ($i = 0; $i < strlen($regexp); $i++) {
-		$c = $regexp[$i];
-		if ($c == '\\') {
-			$i++;
-		} elseif ($c == '(') {
-			$depth++;
-		} elseif ($c == ')' && !--$depth) {
-			$body = substr($regexp, 1, $i - 1);
-			return [preg_replace('~^\?:~', '', $body), substr($regexp, $i + 1)];
-		}
-	}
-	return null;
-}
-
-// Split an alternation at the top level | characters
-function split_alternation($alternation) {
-	$return = [];
-	$depth = 0;
-	$last = 0;
-	for ($i = 0; $i < strlen($alternation); $i++) {
-		$c = $alternation[$i];
-		if ($c == '\\') {
-			$i++;
-		} elseif ($c == '(') {
-			$depth++;
-		} elseif ($c == ')') {
-			$depth--;
-		} elseif ($c == '|' && !$depth) {
-			$return[] = substr($alternation, $last, $i - $last);
-			$last = $i + 1;
-		}
-	}
-	$return[] = substr($alternation, $last);
-	return $return;
-}
-
-// Get [suffix => phrases] of an entry matching nothing but plain phrases, each optionally behind
-// a lookahead; null for the hand-crafted ones like ((?:var)?binary) which no $1 can describe
-function entry_alternation($regexp) {
-	$group = capture_group($regexp);
-	if (!$group || ($group[1] != '' && !preg_match('~^\(\?[=!]~', $group[1]))) {
-		return null;
-	}
-	$return = [];
-	foreach (split_alternation($group[0]) as $alternative) {
-		$suffix = $group[1];
-		if (substr($alternative, 0, 3) == '(?:') { // several alternatives sharing one lookahead
-			$sub = capture_group($alternative);
-			if (!$sub || !preg_match('~^\(\?[=!]~', $sub[1])) {
-				return null;
-			}
-			list($alternative, $suffix) = $sub;
-		} elseif (($pos = strpos($alternative, '(')) !== false) { // a single one binding it directly
-			if (!preg_match('~^\(\?[=!]~', substr($alternative, $pos))) {
-				return null;
-			}
-			$suffix = substr($alternative, $pos);
-			$alternative = substr($alternative, 0, $pos);
-		}
-		foreach (split_alternation($alternative) as $phrase) {
-			$phrase = str_replace('\\s+', ' ', $phrase);
-			if (!preg_match('~^[A-Za-z_][\w ]*$~', $phrase)) {
-				return null;
-			}
-			$return[$suffix][] = $phrase;
-		}
-	}
-	return $return;
-}
-
 // The $1 replacement jush.slugs.mssql derives from a matched phrase
 function phrase_slug($phrase) {
 	return strtolower(preg_replace('~[\s_]+~', '-', trim($phrase)));
-}
-
-// Get the '<prefix>$1<suffix>' template deriving the key of every phrase, null if there is none
-function key_template($key, array $phrases) {
-	$templates = null;
-	foreach ($phrases as $phrase) {
-		$slug = phrase_slug($phrase);
-		$found = [];
-		// the slug is a whole part of the path, not a piece of a longer word
-		if (preg_match_all('~(?:^|(?<=[/-]))' . preg_quote($slug, '~') . '(?=$|[/-])~', $key, $matches, PREG_OFFSET_CAPTURE)) {
-			foreach ($matches[0] as $match) {
-				$found[] = substr_replace($key, '$1', $match[1], strlen($slug));
-			}
-		}
-		$templates = ($templates === null ? $found : array_intersect($templates, $found));
-		if (!$templates) {
-			return null;
-		}
-	}
-	return (count($templates) == 1 ? reset($templates) : null);
 }
 
 list($titles, $f1, $raw) = read_index($docs, $doc_dirs, $skip_dirs);
@@ -284,7 +182,8 @@ foreach ($items as $i => list($key, $regexp, $phrases, $suffix)) {
 $groups = []; // template or "=<index>" for a key which is no function of the phrase => [suffix => phrases]
 foreach ($items as $i => list($key, $regexp, $phrases, $suffix)) {
 	$template = ($suffix === null ? null : key_template($key, $phrases));
-	$group = ($template === null ? "=$i" : $template);
+	// entries with the same key merge too, the object literal would keep only the last one
+	$group = ($suffix === null ? "=$i" : ($template ?? $key));
 	// one directory documents both statements and functions, so the same template comes with and
 	// without the call lookahead; the entry has to hold both, its key can be written only once
 	$suffix = (string) $suffix;
