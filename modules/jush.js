@@ -420,8 +420,10 @@ var jush = {
 					s = this.create_link(this.urls[state].replace(/\$key/, this.last_class) + '.' + s.toLowerCase().replace(/^__/, ''), s, (title ? ' title="' + this.htmlspecialchars_quo(title) + '"' : ''));
 				}
 				ret.push(s);
-				for (let i = Math.min(states.length, +key.slice(1)); i--; ) {
-					ret.push('</span>');
+				for (let i = +key.slice(1); i--; ) {
+					if (states.length > 1) { // the span of states[0] is created by the caller
+						ret.push('</span>');
+					}
 					states.pop();
 				}
 			}

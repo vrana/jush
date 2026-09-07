@@ -1,4 +1,5 @@
 JUSH 3.2.1:
+Fix an extra </span> when the text leaves the initial state
 Link the data types to the documentation
 MS SQL: Link the current documentation instead of the dead MSDN URLs
 Oracle: Link the current documentation instead of the pages of Oracle 10.2
