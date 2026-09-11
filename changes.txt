@@ -1,5 +1,5 @@
 JUSH 3.2.2:
-PostgreSQL: Link the extension names to the documentation
+PostgreSQL: Link the extension names to the documentation, also in CREATE, ALTER and DROP EXTENSION
 
 JUSH 3.2.1:
 Fix an extra </span> when the text leaves the initial state

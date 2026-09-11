@@ -276,11 +276,11 @@ foreach ($pages as $page => $names) {
 sort($merged);
 $lines .= "\t'\$1.html': /(" . implode('|', $merged) . ")/,\n";
 
-// The generated entries go first, the full URLs maintained by hand and the PGXN fallback stay last
+// The generated entries go first, the keywords and full URLs maintained by hand and the PGXN fallback stay last
 list($block, $start, $end) = find_block($jush, 'pgsqlext');
 $old = [];
 foreach (block_entries($block) as $key => $regexp) {
-	if (!preg_match('~^https?:~', $key)) {
+	if ($key != '' && !preg_match('~^https?:~', $key)) {
 		$old = array_merge($old, entry_phrases($regexp));
 	}
 }
@@ -288,7 +288,7 @@ $new = array_merge(...array_values($pages));
 sort($old);
 sort($new);
 report_diff('extensions', $old, $new);
-$block = preg_replace("~^\t'(?!https?:)[^']*': .*\n~m", '', "$block\n");
+$block = preg_replace("~^\t'(?!https?:)[^']+': .*\n~m", '', "$block\n");
 $jush = substr_replace($jush, $lines . rtrim($block, "\n"), $start, $end - $start);
 
 file_put_contents($jush_file, $jush);
