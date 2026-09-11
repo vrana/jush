@@ -194,4 +194,101 @@ foreach ($sections as $key => $names) {
 }
 $jush = substr_replace($jush, $lines, $start, $end - $start);
 
+// Extensions are the contrib modules and procedural languages with a control file. A module page has the module
+// name in xreflabel and a language has its chapter; the others (SPI, transforms) link the section mentioning them first.
+$docs = [];
+foreach (glob("$sgml/*.sgml") as $file) {
+	if (!preg_match('~/release-~', $file)) {
+		$docs[basename($file)] = read_file($file);
+	}
+}
+$modules = []; // xreflabel => [file, id]
+$chapters = [];
+foreach ($docs as $file => $doc) {
+	preg_match_all('~<sect1 id="([\w-]+)" xreflabel="([^"]+)"~', $doc, $matches, PREG_SET_ORDER);
+	foreach ($matches as $match) {
+		$modules[$match[2]] = [$file, $match[1]];
+	}
+	preg_match_all('~<chapter id="(pl\w+)"~', $doc, $matches);
+	$chapters = array_merge($chapters, $matches[1]);
+}
+
+// Get the page of the section mentioning $name first with the anchor of its sect2, null if no section does
+function extension_section(array $docs, $name) {
+	foreach ($docs as $doc) {
+		if (preg_match('~(?<![\w-])' . preg_quote($name, '~') . '(?![\w-])~', $doc, $match, PREG_OFFSET_CAPTURE)) {
+			$before = substr($doc, 0, $match[0][1]);
+			if (preg_match_all('~<sect1 id="([\w-]+)"~', $before, $sect1, PREG_OFFSET_CAPTURE)) {
+				$sect1 = end($sect1[1]);
+				$return = "$sect1[0].html";
+				if (preg_match_all('~<sect2 id="([\w-]+)"~', $before, $sect2, PREG_OFFSET_CAPTURE)) {
+					$sect2 = end($sect2[1]);
+					if ($sect2[1] > $sect1[1] && strpos($before, '</sect2>', $sect2[1]) === false) {
+						$return .= '#' . strtoupper($sect2[0]);
+					}
+				}
+				return $return;
+			}
+		}
+	}
+	return null;
+}
+
+$pages = []; // page => extension names
+$files = array_merge(glob("$argv[1]/contrib/*/*.control"), glob("$argv[1]/src/pl/*/*.control"), glob("$argv[1]/src/pl/*/src/*.control"));
+foreach ($files as $file) {
+	$name = basename($file, '.control');
+	$dir = basename(dirname($file));
+	$module = $modules[$dir] ?? null;
+	$chapter = preg_replace('~3?u$~', '', $name); // plperlu and plpython3u are on the page of their language
+	if ($module && $name != $dir && preg_match('~<sect2 id="(' . $module[1] . '-' . str_replace('_', '-', $name) . ')"~', $docs[$module[0]], $match)) {
+		$page = "$module[1].html#" . strtoupper($match[1]); // e.g. contrib-spi.html#CONTRIB-SPI-AUTOINC
+	} elseif ($module) {
+		$page = "$module[1].html";
+	} elseif (in_array($chapter, $chapters)) {
+		$page = "$chapter.html";
+	} else {
+		$page = extension_section($docs, $name);
+		if (!$page) {
+			fwrite(STDERR, "Can't find the documentation of the extension $name\n");
+			continue;
+		}
+	}
+	$pages[$page][] = $name;
+}
+if (!$pages) {
+	fwrite(STDERR, "Can't find extensions in $argv[1]\n");
+	exit(1);
+}
+
+// The names on the page named after them without underscores merge into one '$1.html' entry
+$merged = [];
+$lines = '';
+ksort($pages);
+foreach ($pages as $page => $names) {
+	sort($names);
+	if (count($names) == 1 && $page == str_replace('_', '', $names[0]) . '.html') {
+		$merged[] = $names[0];
+	} else {
+		$lines .= "\t'$page': /(" . implode('|', $names) . ")/,\n";
+	}
+}
+sort($merged);
+$lines .= "\t'\$1.html': /(" . implode('|', $merged) . ")/,\n";
+
+// The generated entries go first, the full URLs maintained by hand and the PGXN fallback stay last
+list($block, $start, $end) = find_block($jush, 'pgsqlext');
+$old = [];
+foreach (block_entries($block) as $key => $regexp) {
+	if (!preg_match('~^https?:~', $key)) {
+		$old = array_merge($old, entry_phrases($regexp));
+	}
+}
+$new = array_merge(...array_values($pages));
+sort($old);
+sort($new);
+report_diff('extensions', $old, $new);
+$block = preg_replace("~^\t'(?!https?:)[^']*': .*\n~m", '', "$block\n");
+$jush = substr_replace($jush, $lines . rtrim($block, "\n"), $start, $end - $start);
+
 file_put_contents($jush_file, $jush);
