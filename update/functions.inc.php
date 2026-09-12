@@ -21,10 +21,10 @@ function front_matter($markdown, $field) {
 
 // Get the values of a front matter field holding a YAML list
 function front_matter_list($markdown, $field) {
-	if (!preg_match("~^$field:\n((?:\s+- .*\n)+)~m", $markdown, $match)) {
+	if (!preg_match("~^$field:\n((?:[ \t]*- .*\n)+)~m", $markdown, $match)) {
 		return [];
 	}
-	preg_match_all('~^\s+- (.*)$~m', $match[1], $matches);
+	preg_match_all('~^[ \t]*- (.*)$~m', $match[1], $matches);
 	return array_map(function ($value) {
 		return trim(trim($value), '"\'');
 	}, $matches[1]);

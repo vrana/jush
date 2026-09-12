@@ -12,13 +12,6 @@ if (!isset($argv[1])) {
 $content = "$argv[1]/content";
 $jush_file = __DIR__ . '/../modules/jush-js.js';
 
-// Get the items of a front matter list ("synonyms:\n- arg\n- argument"), [] if there is no such field
-function front_matter_list($markdown, $field) {
-	preg_match("~^$field:\n((?:-.*\n)+)~m", $markdown, $match);
-	preg_match_all('~^-\s*(\S+)~m', ($match[1] ?? ''), $matches);
-	return $matches[1];
-}
-
 // Replace the single page entries between $prefix and $suffix, reporting the diff
 function set_entries($subject, $prefix, $suffix, array $entries, $label) {
 	$start = strpos($subject, $prefix);
