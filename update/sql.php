@@ -17,7 +17,7 @@ if (!isset($argv[2])) {
 $mysql_dir = rtrim($argv[1], '/\\');
 $maria_ref = rtrim($argv[2], '/\\') . '/server/reference';
 $jush_file = __DIR__ . '/../modules/jush-sql.js';
-$jush = read_file($jush_file);
+$jush = strip_shadow_lookaheads(read_file($jush_file));
 
 // Variables of plugins are not highlighted, like jush-php.js doesn't highlight PECL extensions
 $skip_pages = [
@@ -109,6 +109,13 @@ function entry_alternatives($source) {
 	}
 	fwrite(STDERR, "Can't parse the entry /$source/\n");
 	exit(1);
+}
+
+// Drop the lookaheads of the previous run so that the diff reports compare plain phrases;
+// set_shadow_lookaheads() writes the ones still needed again at the end
+function strip_shadow_lookaheads($jush) {
+	list($block, $start, $end) = find_block($jush, 'sql');
+	return substr_replace($jush, preg_replace('~\(\?!\\\\s\+\(\?:[^)]*\)\)~', '', $block), $start, $end - $start);
 }
 
 // The entries which can't be ordered - a hand-maintained phrase after the generated region - get
