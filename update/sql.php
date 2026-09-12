@@ -1,7 +1,7 @@
 <?php
 // Updates the linked statements, functions, keywords, system variables and status variables
 // shared by MySQL and MariaDB in modules/jush-sql.js
-// from the MySQL online manual (index pages are cached in the given directory)
+// from the MySQL online manual (index pages are cached in the given directory for a day)
 // and a checkout of https://github.com/mariadb-corporation/mariadb-docs
 // Entry keys are 'mysql-key maria-key' (see jush.keywords_links); '-' means the vendor doesn't know
 // the name at all, an empty part keeps it highlighted as a keyword without a link
@@ -34,21 +34,10 @@ $skip_pages = [
 	'sql-error-log-system-variables-and-options', 'tokudb-status-variables', 'tokudb-system-variables',
 ];
 
-// Get a MySQL manual page from the cache directory, fetching it from dev.mysql.com when missing
+// Get a MySQL manual page from the cache directory, downloading it from dev.mysql.com when stale
 function mysql_page($name) {
 	global $mysql_dir, $mysql_version;
-	$file = "$mysql_dir/$name.html";
-	if (!file_exists($file)) {
-		$url = "https://dev.mysql.com/doc/refman/$mysql_version/en/$name.html";
-		fwrite(STDERR, "Fetching $url\n");
-		$html = file_get_contents($url);
-		if ($html === false) {
-			fwrite(STDERR, "Can't fetch $url\n");
-			exit(1);
-		}
-		file_put_contents($file, $html);
-	}
-	return read_file($file);
+	return cached_download("$mysql_dir/$name.html", "https://dev.mysql.com/doc/refman/$mysql_version/en/$name.html");
 }
 
 // Replace the lines between two generated-region markers, returning the new subject and the old lines

@@ -1,7 +1,7 @@
 <?php
 // Updates the documentation pages linked in modules/jush-oracle.js
 // from the table of contents of the Oracle SQL Language Reference
-// (cached in the given directory, fetched from docs.oracle.com on miss)
+// (cached in the given directory for a day, then downloaded from docs.oracle.com again)
 // Entry keys are the file name of the page, the address of
 // https://docs.oracle.com/en/database/oracle/oracle-database/$version/sqlrf/$key
 
@@ -25,20 +25,12 @@ function phrase_slug($phrase) {
 	return strtoupper(preg_replace('~\s+~', '-', trim($phrase)));
 }
 
-// Get the table of contents from the cache directory, fetching it on miss
+// Get the table of contents from the cache directory, downloading it when stale
 function toc_html($cache_dir, $version) {
-	$file = "$cache_dir/sqlrf-$version-toc.htm";
-	if (!file_exists($file)) {
-		$url = "https://docs.oracle.com/en/database/oracle/oracle-database/$version/sqlrf/toc.htm";
-		fwrite(STDERR, "Fetching $url\n");
-		$html = file_get_contents($url);
-		if ($html === false) {
-			fwrite(STDERR, "Can't fetch $url\n");
-			exit(1);
-		}
-		file_put_contents($file, $html);
-	}
-	return read_file($file);
+	return cached_download(
+		"$cache_dir/sqlrf-$version-toc.htm",
+		"https://docs.oracle.com/en/database/oracle/oracle-database/$version/sqlrf/toc.htm"
+	);
 }
 
 // Get [name => [page]] of the constructs the table of contents lists

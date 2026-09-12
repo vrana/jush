@@ -40,6 +40,26 @@ function read_file($file) {
 	return $return;
 }
 
+// Get a page from the cache file, downloading it when it is missing or a day old
+function cached_download($file, $url) {
+	$cached = (file_exists($file) ? filemtime($file) : 0);
+	if ($cached < time() - 24 * 60 * 60) {
+		fwrite(STDERR, "Fetching $url\n");
+		// dev.mysql.com answers 403 to an unknown user agent, it accepts only the well-known CLI clients
+		$context = stream_context_create(['http' => ['user_agent' => 'curl/8.16.0 jush']]);
+		$page = file_get_contents($url, false, $context);
+		if ($page !== false) {
+			file_put_contents($file, $page);
+		} elseif (!$cached) {
+			fwrite(STDERR, "Can't fetch $url\n");
+			exit(1);
+		} else { // an outage or a bot filter is no reason to throw the documentation away
+			fwrite(STDERR, "Can't fetch $url, using the cached copy\n");
+		}
+	}
+	return read_file($file);
+}
+
 // Get the body of a "## $title" Markdown section, "" if there is no such section
 function mdn_section($markdown, $title) {
 	preg_match('~^## ' . preg_quote($title, '~') . '\n(.*?)(?=^## |\z)~msi', $markdown, $match);
