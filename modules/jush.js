@@ -137,8 +137,8 @@ var jush = {
 		if (/^(php_quo_var|php_php|php_sql|php_sqlite|php_pgsql|php_mssql|php_oracle|php_echo|php_phpini|php_http|php_mail)$/.test(state)) {
 			state = 'php2';
 		}
-		if (state == 'sql_code') {
-			state = 'sql';
+		if (state == 'sql_code' || state == 'pgsql_code') {
+			state = state.slice(0, -5); // the body of a statement is linked as the language itself
 		}
 		if (this.links2 && this.links2[state]) {
 			const url = this.urls[state];

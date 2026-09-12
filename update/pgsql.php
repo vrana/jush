@@ -40,6 +40,9 @@ foreach (glob("$sgml/ref/*.sgml") as $file) {
 	$id = $match[1];
 	preg_match_all('~<refname>([^<]+)</refname>~', $ref, $matches);
 	foreach ($matches[1] as $name) {
+		if ($name == 'SET' || $name == 'SHOW') {
+			continue; // linked together with the configuration parameter by the pgsql_pgsqlset state, SET in the middle of a statement (e.g. UPDATE ... SET) is not the command
+		}
 		if ($id == 'sql-' . strtolower(str_replace(' ', '', $name))) {
 			$phrases[] = $name;
 		} elseif ($id == 'sql-' . strtolower(str_replace(' ', '-', $name))) {
