@@ -1,11 +1,12 @@
 <?php
 // Updates the linked statements, functions, keywords and config variables in modules/jush-pgsql.js
 // from a checkout of the latest stable branch (REL_*_STABLE) of https://github.com/postgres/postgres
+// and the CockroachDB pages of the shared statements and types from a checkout of https://github.com/cockroachdb/docs
 
 require __DIR__ . '/functions.inc.php';
 
-if (!isset($argv[1])) {
-	fwrite(STDERR, "Usage: php update/pgsql.php path/to/postgres\n");
+if (!isset($argv[2])) {
+	fwrite(STDERR, "Usage: php update/pgsql.php path/to/postgres path/to/cockroachdb-docs\n");
 	exit(1);
 }
 $sgml = "$argv[1]/doc/src/sgml";
@@ -293,5 +294,57 @@ sort($new);
 report_diff('extensions', $old, $new);
 $block = preg_replace("~^\t'(?!https?:)[^']+': .*\n~m", '', "$block\n");
 $jush = substr_replace($jush, $lines . rtrim($block, "\n"), $start, $end - $start);
+
+// CockroachDB titles the page of a statement or a type by its name (BEGIN is on begin-transaction.md, TIMESTAMP / TIMESTAMPTZ share one)
+// or keeps the name of the former page in the key (select.html is select-clause.md), the newest version documents the most
+$versions = glob("$argv[2]/src/current/v*", GLOB_ONLYDIR);
+usort($versions, function ($a, $b) {
+	return version_compare(substr(basename($a), 1), substr(basename($b), 1));
+});
+$titles = [];
+$keys = [];
+foreach (glob(end($versions) . '/*.md') as $file) {
+	$markdown = read_file($file);
+	if (front_matter($markdown, 'docs_area') == 'reference.sql') {
+		$page = basename($file, '.md');
+		foreach (explode(' / ', front_matter($markdown, 'title')) as $title) {
+			$titles[strtolower(str_replace(' ', '-', $title))] = $page;
+		}
+		$keys[basename(front_matter($markdown, 'key'), '.html')] = $page;
+	}
+}
+if (!$titles) {
+	fwrite(STDERR, "Can't find the SQL reference in $argv[2]/src/current\n");
+	exit(1);
+}
+$pages = $titles + $keys;
+
+list($block) = find_block($jush, 'pgsql');
+$shared = [];
+$renamed = [];
+foreach (block_entries($block) as $key => $regexp) {
+	if (preg_match('~^(sql|datatype-)~', $key)) {
+		foreach (array_merge(...array_values(entry_alternation($regexp))) as $phrase) {
+			$slug = strtolower(str_replace(' ', '-', $phrase)); // jush.link_key.pgsql
+			$page = ($pages[$slug] ?? null); // the statements and types known only to PostgreSQL have none
+			if ($page == $slug) {
+				$shared[] = $slug;
+			} elseif ($page) {
+				$renamed[] = "'$slug': '$page'";
+			}
+		}
+	}
+}
+$shared = array_unique($shared);
+sort($shared);
+$jush = set_list($jush, "|| (/^(", ")$/", $shared, 'CockroachDB pages');
+$renamed = array_unique($renamed);
+sort($renamed);
+if (!preg_match('~const renamed = \{ (.*) \};~', $jush, $match, PREG_OFFSET_CAPTURE)) {
+	fwrite(STDERR, "Can't find the renamed CockroachDB pages\n");
+	exit(1);
+}
+report_diff('renamed CockroachDB pages', explode(', ', $match[1][0]), $renamed);
+$jush = substr_replace($jush, implode(', ', $renamed), $match[1][1], strlen($match[1][0]));
 
 file_put_contents($jush_file, $jush);

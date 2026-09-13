@@ -162,6 +162,25 @@ for (const state of ['sql', 'sqlset', 'sqlstatus']) {
 	jush.urls[state][0] = jush.urls[state][0].replace('mariadb.com/kb', 'dev.mysql.com/doc/mysql');
 }
 
+// CockroachDB flavor - Adminer's syntaxHighlighting() replaces the base URL at runtime
+const cockroachTests = [
+	['pgsql', 'BEGIN; SELECT concat(\'a\')', '<span class="jush"><span class="jush-pgsql_code"><a href="https://docs.cockroachlabs.com/docs/v25.4/begin-transaction" class="jush-help" target="_blank">BEGIN</a><span class="jush-op">;</span></span><span class="jush-pgsql_code"> <a href="https://docs.cockroachlabs.com/docs/v25.4/select-clause" class="jush-help" target="_blank">SELECT</a> <a href="https://docs.cockroachlabs.com/docs/v25.4/functions-and-operators#concat" class="jush-help" target="_blank">concat</a>(<span class="jush-sql_apo"><span class="jush-op">\'</span>a<span class="jush-op">\'</span></span>)</span></span>'],
+	['pgsql', 'CREATE TABLE t (i integer, d timestamptz)', '<span class="jush"><span class="jush-pgsql_code"><a href="https://docs.cockroachlabs.com/docs/v25.4/create-table" class="jush-help" target="_blank">CREATE TABLE</a> t (i <a href="https://docs.cockroachlabs.com/docs/v25.4/data-types" class="jush-help" target="_blank">integer</a>, d <a href="https://docs.cockroachlabs.com/docs/v25.4/timestamp" class="jush-help" target="_blank">timestamptz</a>)</span></span>'],
+	['pgsql', 'VACUUM', '<span class="jush"><span class="jush-pgsql_code"><a target="_blank">VACUUM</a></span></span>'], // PostgreSQL only
+];
+
+const pgsqlUrl = jush.urls.pgsql[0];
+jush.urls.pgsql[0] = 'https://docs.cockroachlabs.com/docs/v25.4/$key';
+for (const test of cockroachTests) {
+	const highlighted = jush.highlight(test[0], test[1]);
+	if (highlighted !== test[2]) {
+		console.log(highlighted.replace(/['\\]/g, '\\$&').replace(/\n/g, '\\n'));
+		html.push('<b class="error">error:</b>');
+	}
+	html.push('<p><b class="lang">' + test[0] + ' (CockroachDB)</b> <code class="jush-' + test[0] + '">' + highlighted + '</code></p>');
+}
+jush.urls.pgsql[0] = pgsqlUrl;
+
 // SQL autocomplete
 const tables = {
 	albums: ['id', 'interpret', 'title'],

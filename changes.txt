@@ -1,7 +1,7 @@
 JUSH 3.2.2:
 PostgreSQL: Link the extension names to the documentation, also in CREATE, ALTER and DROP EXTENSION
 PostgreSQL: Treat SET as the command only at the beginning of a statement
-Update the linked names from the documentation
+CockroachDB: Link the documentation when the base URL of the PostgreSQL links points to it
 
 JUSH 3.2.1:
 Fix an extra </span> when the text leaves the initial state

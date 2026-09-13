@@ -18,6 +18,18 @@ jush.slugs.pgsql = (name, key) => name.toLowerCase().replace(/(^|\s+)/g, (key ==
 jush.slugs.pgsqlset = name => name.replace(/_/g, '-').toUpperCase();
 jush.slugs.pgsqlext = (name, key) => (key == '$1.html' ? name.replace(/_/g, '') : name); // pg_stat_statements is on pgstatstatements.html, PGXN keeps the name
 
+// Adminer replaces the base URL by the CockroachDB documentation, it has a page of each statement and type it shares with PostgreSQL; update/pgsql.php generates the lists
+jush.link_key.pgsql = (key, url, name) => {
+	if (!key || !/cockroachlabs/.test(url[0])) {
+		return key;
+	}
+	const slug = name.toLowerCase().replace(/\s+/g, '-');
+	const renamed = { 'begin': 'begin-transaction', 'commit': 'commit-transaction', 'rollback': 'rollback-transaction', 'select': 'select-clause', 'timestamptz': 'timestamp' };
+	return (/^functions-/.test(key) ? 'functions-and-operators#' + slug // each function has an anchor
+		: renamed[slug] || (/^(alter-database|alter-default-privileges|alter-function|alter-index|alter-policy|alter-procedure|alter-role|alter-schema|alter-sequence|alter-table|alter-type|alter-user|alter-view|bit|call|copy|create-database|create-function|create-index|create-policy|create-procedure|create-role|create-schema|create-sequence|create-statistics|create-table|create-table-as|create-trigger|create-type|create-user|create-view|date|delete|do|drop-database|drop-function|drop-index|drop-policy|drop-procedure|drop-role|drop-schema|drop-sequence|drop-table|drop-trigger|drop-type|drop-user|drop-view|explain|grant|inet|insert|interval|jsonb|point|polygon|reassign-owned|release-savepoint|revoke|savepoint|serial|set-transaction|time|timestamp|truncate|tsquery|tsvector|update|uuid)$/.test(slug) ? slug : (/^datatype-/.test(key) ? 'data-types' : ''))
+	);
+};
+
 jush.build_links2('pgsql', 'https://www.postgresql.org/docs/current/$key', /(\b)/, /(\b)/gi, {
 	'sql-alteropclass.html': /(ALTER\s+OPERATOR\s+CLASS)/,
 	'sql-alteropfamily.html': /(ALTER\s+OPERATOR\s+FAMILY)/,

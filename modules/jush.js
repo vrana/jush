@@ -155,7 +155,7 @@ var jush = {
 						}
 						prefix = (match1 ? match1 : '') + prefix;
 						if (link_key) {
-							key = link_key(key, url);
+							key = link_key(key, url, arguments[i]);
 							if (key == '-') { // the other vendor doesn't know this phrase, it may still know its beginning
 								const last_word = arguments[i].search(/\s+\S*$/);
 								if (last_word < 0) {
@@ -525,4 +525,4 @@ jush.urls = { };
 jush.links = { };
 jush.links2 = { }; // first and last () is used as delimiter
 jush.slugs = { }; // { state: function (name, key, url) } returning the $1 replacement in doc links; default keeps name with \ replaced by -
-jush.link_key = { }; // { state: function (key, url) } resolving the matched key in jush.urls; '-' means no link
+jush.link_key = { }; // { state: function (key, url, name) } resolving the matched key in jush.urls; '-' means no link
