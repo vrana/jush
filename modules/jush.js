@@ -261,14 +261,12 @@ var jush = {
 	},
 
 	highlight_states: function (states, text, in_php, escape) {
-		if (!this.regexps) {
-			this.regexps = { };
-			for (const key in this.tr) {
-				this.build_regexp(key, this.tr[key]);
-			}
-		} else {
-			for (const key in this.tr) {
+		this.regexps = this.regexps || { };
+		for (const key in this.tr) {
+			if (this.regexps[key]) {
 				this.regexps[key].lastIndex = 0;
+			} else { // also a state of a module loaded after the first highlighting
+				this.build_regexp(key, this.tr[key]);
 			}
 		}
 		let state = states[states.length - 1];
