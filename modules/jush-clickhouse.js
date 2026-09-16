@@ -4,6 +4,15 @@ jush.autocompleting.sql.push('clickhouse', 'sqlite_quo', 'bac'); // sqlite_quo a
 
 jush.slugs.clickhouse = name => name.toLowerCase(); // the pages of the functions are lowercase
 
+jush.link_key.clickhouse = (key, url, name) => { // the type names are case sensitive, the same name in lowercase is the function building the value
+	const functions = {
+		'data-types/array': 'functions/array-functions',
+		'data-types/map': 'functions/tuple-map-functions',
+		'data-types/tuple': 'functions/tuple-functions',
+	};
+	return (functions[key] && name == name.toLowerCase() ? functions[key] : key);
+};
+
 jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key', /(\b)/, /(\b)/gi, {
 	'statements/select': /(SELECT)/,
 	'statements/select/with': /(WITH)/,
