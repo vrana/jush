@@ -52,6 +52,8 @@ jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key'
 	'data-types/datetime64': /(DateTime64)/,
 	'data-types/datetime': /(DateTime)/,
 	'data-types/date': /(Date)/,
+	'data-types/time64': /(Time64)/,
+	'data-types/time': /(Time)/,
 	'data-types/enum': /(Enum(?:8|16)?)/,
 	'data-types/array': /(Array)/,
 	'data-types/tuple': /(Tuple)/,
@@ -63,6 +65,7 @@ jush.build_links2('clickhouse', 'https://clickhouse.com/docs/sql-reference/$key'
 	'data-types/boolean': /(Bool)/,
 	'data-types/ipv4': /(IPv4)/,
 	'data-types/ipv6': /(IPv6)/,
+	'data-types/geo#$1': /(MultiLineString|MultiPolygon|MultiPoint|LineString|Polygon|Point|Ring)/, // the longer names must be first
 	'data-types/nested-data-structures/nested': /(Nested)/,
 	'data-types/simpleaggregatefunction': /(SimpleAggregateFunction)/, // must be before AggregateFunction
 	'data-types/aggregatefunction': /(AggregateFunction)/,
