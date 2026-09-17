@@ -11,21 +11,27 @@
 
 <table cellspacing="0">
 <tr><th>MySQL</th><td id="sql"></td></tr>
-<tr><th>SQLite</th><td id="sqlite"></td></tr>
 <tr><th>PostgreSQL</th><td id="pgsql"></td></tr>
-<tr><th>MS SQL </th><td id="mssql"></td></tr>
-<tr><th>Oracle </th><td id="oracle"></td></tr>
+<tr><th>SQLite</th><td id="sqlite"></td></tr>
+<tr><th>MS SQL</th><td id="mssql"></td></tr>
+<tr><th>Oracle</th><td id="oracle"></td></tr>
+<tr><th>ClickHouse</th><td id="clickhouse"></td></tr>
+<tr><th>Firebird</th><td id="firebird"></td></tr>
+<tr><th>SimpleDB</th><td id="simpledb"></td></tr>
 </table>
 
 <script src="modules/jush.js"></script>
 <script src="modules/jush-sql.js"></script>
-<script src="modules/jush-sqlite.js"></script>
 <script src="modules/jush-pgsql.js"></script>
+<script src="modules/jush-sqlite.js"></script>
 <script src="modules/jush-mssql.js"></script>
 <script src="modules/jush-oracle.js"></script>
+<script src="modules/jush-clickhouse.js"></script>
+<script src="modules/jush-firebird.js"></script>
+<script src="modules/jush-simpledb.js"></script>
 <script>
 function highlight(source) {
-	for (const lang in { sql: 1, sqlite: 1, pgsql: 1, mssql: 1, oracle: 1 }) {
+	for (const lang of ['sql', 'pgsql', 'sqlite', 'mssql', 'oracle', 'clickhouse', 'firebird', 'simpledb']) {
 		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
 	}
 	location.hash = encodeURIComponent(source);

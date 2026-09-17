@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-JUSH (JavaScript Syntax Highlighter) highlights the full stack of a PHP web app in the browser: HTML5, PHP, multiple SQL dialects (MySQL, MS SQL, Oracle, PostgreSQL, SQLite, ClickHouse, Firebird, SimpleDB), Redis commands, Elasticsearch queries, JavaScript, JSON, CSS3, HTTP headers, php.ini, and Apache config.
+JUSH (JavaScript Syntax Highlighter) highlights the full stack of a PHP web app in the browser: HTML5, PHP, multiple SQL dialects (MySQL, PostgreSQL, SQLite, MS SQL, Oracle, ClickHouse, Firebird, SimpleDB), Redis commands, Elasticsearch queries, JavaScript, JSON, CSS3, HTTP headers, php.ini, and Apache config.
 Its distinguishing features are highlighting arbitrarily mixed/embedded languages (PHP inside HTML attributes, SQL inside a PHP string, JS in `onclick=`, etc.) and linking recognized identifiers (functions, keywords) to their official documentation.
 This repo is used as a Git submodule by Adminer (and other projects by the same author) for SQL/PHP highlighting.
 
