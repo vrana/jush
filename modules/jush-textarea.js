@@ -5,7 +5,9 @@ jush.textarea = (function () {
 		const sel = getSelection();
 		if (sel.rangeCount) {
 			const range = sel.getRangeAt(0);
-			return findPosition(pre, range.startContainer, range.startOffset);
+			if (pre.contains(range.startContainer)) { // a selection elsewhere would move to the end of pre
+				return findPosition(pre, range.startContainer, range.startOffset);
+			}
 		}
 	}
 

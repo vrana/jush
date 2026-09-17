@@ -1,3 +1,6 @@
+JUSH 3.2.3:
+Textarea: Keep the selection outside the textarea when highlighting it
+
 JUSH 3.2.2:
 PostgreSQL: Link the extension names to the documentation, also in CREATE, ALTER and DROP EXTENSION
 PostgreSQL: Treat SET as the command only at the beginning of a statement
