@@ -73,9 +73,13 @@ var jush = {
 		pos = 0;
 		highlighted = highlighted.replace(/([^&<]*)(?:(&[^;]+;)|(?:<[^>]+>)+|$)/g, (str, text, entity) => {
 			for (let i = text.length; i >= 0; i--) {
-				if (inject[pos + i]) {
-					str = str.slice(0, i) + inject[pos + i] + str.slice(i);
+				let tags = inject[pos + i];
+				if (tags) {
 					delete inject[pos + i];
+					if (str[i] == '<') { // the closing tags go before the tags of the highlighted code, the rest after them to nest properly
+						[, tags, inject[pos + i]] = /^((?:<\/[^>]+>)*)([\s\S]*)/.exec(tags);
+					}
+					str = str.slice(0, i) + tags + str.slice(i);
 				}
 			}
 			pos += text.length + (entity ? 1 : 0);

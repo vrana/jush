@@ -1,4 +1,5 @@
 JUSH 3.2.3:
+Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
 Textarea: Keep the selection outside the textarea when highlighting it
 
 JUSH 3.2.2:
