@@ -79,6 +79,9 @@ foreach (explode("\n", $block) as $line) {
 }
 
 foreach ($items as $i => list($key, $regexp, $phrases, $suffix)) {
+	if ($key == '') { // the keywords with no page, regenerated below
+		continue;
+	}
 	if (preg_match('~^https?:~', $key)) { // a hand-maintained address, e.g. a desupported function
 		foreach ($phrases as $phrase) {
 			$linked[strtoupper(preg_replace('~\s+~', ' ', trim($phrase)))] = true;
@@ -124,7 +127,7 @@ foreach ($items as $i => list($key, $regexp, $phrases, $suffix)) {
 
 $lines = []; // [line, phrases] for order_entries()
 foreach ($groups as $group => $by_suffix) {
-	if ($group[0] == '=') { // no $1 describes the key, e.g. the page of several data types
+	if (substr($group, 0, 1) == '=') { // no $1 describes the key, e.g. the page of several data types; the '' of the keywords is empty
 		list($key, $regexp) = $items[substr($group, 1)];
 		$lines[] = ["\t'$key': /$regexp/,\n", entry_phrases($regexp)];
 		$keys[$key][] = implode(', ', reset($by_suffix));
@@ -152,6 +155,32 @@ foreach ($keys as $key => $entries) {
 // an earlier entry would swallow the beginning of a longer phrase of a later one
 $new_block = implode('', array_column(order_entries($lines), 0));
 $jush = substr_replace($jush, rtrim($new_block, "\n"), $start, $end - $start);
+
+// The '' entry holds the reserved words with no page: subtract single words linked by other entries
+// (e.g. SELECT or BETWEEN) but keep words linked only as part of a phrase (e.g. BY in ORDER\s+BY)
+$html = cached_download(
+	"$cache_dir/sqlrf-$version-reserved.htm",
+	"https://docs.oracle.com/en/database/oracle/oracle-database/$version/sqlrf/Oracle-SQL-Reserved-Words.html"
+);
+preg_match_all('~<p><code[^>]*>([A-Z][A-Z0-9_]*)(?:\s*\*)?</code>~', $html, $matches); // * marks the ANSI reserved words
+if (!$matches[1]) {
+	fwrite(STDERR, "No reserved words found\n");
+	exit(1);
+}
+$keywords = array_merge($matches[1], ['END', 'FETCH', 'NULLS', 'OFFSET', 'USING', 'WHEN']); // not reserved but common in queries
+$covered = [];
+foreach (block_entries(find_block($jush, 'oracle')[0]) as $key => $regexp) {
+	if ($key != '' && strpos($regexp, '(?=') === false) {
+		foreach (entry_phrases($regexp) as $phrase) {
+			if (preg_match('~^\w+$~', $phrase)) {
+				$covered[] = strtoupper($phrase);
+			}
+		}
+	}
+}
+$keywords = array_values(array_unique(array_diff($keywords, $covered)));
+sort($keywords);
+$jush = set_list($jush, "'': /(", ")/,", $keywords, 'keywords');
 
 $url = "https://docs.oracle.com/en/database/oracle/oracle-database/$version/sqlrf/\$key";
 $jush = set_list($jush, "jush.build_links2('oracle', '", "'", [$url], 'URL');
