@@ -11,7 +11,9 @@
 
 <table cellspacing="0">
 <tr><th>MySQL</th><td id="sql"></td></tr>
+<tr><th>MariaDB</th><td id="maria"></td></tr>
 <tr><th>PostgreSQL</th><td id="pgsql"></td></tr>
+<tr><th>CockroachDB</th><td id="cockroach"></td></tr>
 <tr><th>SQLite</th><td id="sqlite"></td></tr>
 <tr><th>MS SQL</th><td id="mssql"></td></tr>
 <tr><th>Oracle</th><td id="oracle"></td></tr>
@@ -30,9 +32,24 @@
 <script src="modules/jush-firebird.js"></script>
 <script src="modules/jush-simpledb.js"></script>
 <script>
+const flavors = { // highlighted as the state, Adminer's syntaxHighlighting() replaces the base URLs
+	maria: ['sql', url => url.replace('dev.mysql.com/doc/mysql', 'mariadb.com/kb')],
+	cockroach: ['pgsql', (url, state) => (state == 'pgsql' ? 'https://docs.cockroachlabs.com/docs/stable/$key' : url)],
+};
+
 function highlight(source) {
-	for (const lang of ['sql', 'pgsql', 'sqlite', 'mssql', 'oracle', 'clickhouse', 'firebird', 'simpledb']) {
-		document.getElementById(lang).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
+	for (const id of ['sql', 'maria', 'pgsql', 'cockroach', 'sqlite', 'mssql', 'oracle', 'clickhouse', 'firebird', 'simpledb']) {
+		const [lang, replace] = flavors[id] || [id];
+		const urls = JSON.stringify(jush.urls);
+		if (replace) {
+			for (const state in jush.urls) {
+				const obj = (typeof jush.urls[state] == 'string' ? jush.urls : jush.urls[state]);
+				const key = (obj == jush.urls ? state : 0);
+				obj[key] = replace(obj[key], state);
+			}
+		}
+		document.getElementById(id).innerHTML = '<code class="jush-' + lang + '">' + jush.highlight(lang, source) + '</code>';
+		jush.urls = JSON.parse(urls);
 	}
 	location.hash = encodeURIComponent(source);
 }
