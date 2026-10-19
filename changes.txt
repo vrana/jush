@@ -1,6 +1,7 @@
 JUSH 3.2.3:
 Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
 Textarea: Keep the selection outside the textarea when highlighting it
+PHP: Link true and false to the boolean type
 PostgreSQL: Color the /* */ comments
 Oracle: Link the conditions and query clauses, highlight the reserved words
 
