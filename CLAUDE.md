@@ -15,6 +15,8 @@ This repo is used as a Git submodule by Adminer (and other projects by the same 
 php compile.php
 ```
 Concatenates `modules/jush.js` (core) plus every `modules/jush-*.js` (glob order) into the single root `jush.js`.
+`php compile.php php sql txt` includes only the listed modules (`modules/jush-<module>.js`, in that order) and records the command in the first line, for sites which need only some languages; an unknown module fails with the list of the available ones.
+A language whose module is left out isn't highlighted where another one switches to it (e.g. a `pg_query()` string without `pgsql`), it stays a plain string.
 **`jush.js` is gitignored – it is a generated build artifact, not source.**
 Always edit files under `modules/`, never `jush.js` directly.
 

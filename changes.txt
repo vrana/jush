@@ -6,6 +6,7 @@ PHP: Link true and false to the boolean type
 PHP: Highlight attributes like #[\ReturnTypeWillChange] instead of treating them as comments
 PostgreSQL: Color the /* */ comments
 Oracle: Link the conditions and query clauses, highlight the reserved words
+Allow compiling only some modules: php compile.php php sql txt
 
 JUSH 3.2.2:
 PostgreSQL: Link the extension names to the documentation, also in CREATE, ALTER and DROP EXTENSION
