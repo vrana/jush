@@ -7,6 +7,7 @@ Oracle: Link the conditions and query clauses, highlight the reserved words
 Textarea: Keep the indentation on Enter, option to indent by Tab
 Textarea: Keep the selection outside the textarea when highlighting it
 Textarea: Fire the input event after undo, redo and deleting all the text
+Textarea: Undo a change not started by a key separately, e.g. a text set by a script
 Allow compiling only some modules: php compile.php php sql txt
 
 JUSH 3.2.2:

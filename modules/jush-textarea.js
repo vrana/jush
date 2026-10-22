@@ -397,12 +397,12 @@ jush.textarea = (function () {
 
 	/** Save the text to the undo history, typing continuing at the previous end extends the last step
 	* @param {HTMLPreElement} pre
-	* @param {number} [start] caret position before the change
+	* @param {number} [start] caret position before the change, undefined if no key started it, e.g. a script setting pre.textContent
 	* @param {number} [end] caret position after the change
 	*/
 	function addUndo(pre, start, end) {
 		pre.jushUndo.length = pre.jushUndoPos + 1;
-		if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
+		if (forceNewUndo || start === undefined || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
 			pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
 			pre.jushUndoPos++;
 			forceNewUndo = false;
