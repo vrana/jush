@@ -1,11 +1,11 @@
 JUSH 3.2.3:
 Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
-Textarea: Keep the selection outside the textarea when highlighting it
-Textarea: Fire the input event after undo, redo and deleting all the text
 PHP: Link true and false to the boolean type
 PHP: Highlight attributes like #[\ReturnTypeWillChange] instead of treating them as comments
 PostgreSQL: Color the /* */ comments
 Oracle: Link the conditions and query clauses, highlight the reserved words
+Textarea: Keep the selection outside the textarea when highlighting it
+Textarea: Fire the input event after undo, redo and deleting all the text
 Allow compiling only some modules: php compile.php php sql txt
 
 JUSH 3.2.2:
@@ -27,10 +27,10 @@ Textarea: Update the value after deleting all the text at once
 JUSH 3.2.0:
 Autocomplete: Allow restricting the statements offered at the beginning of a query
 Autocomplete: Fix strings, comments and offered words
-Textarea: Style the border by CSS, the inset one was barely visible on two sides
 JS: Highlight true, false and null
 JS: Fix links to MDN
 Highlight Elasticsearch queries
+Textarea: Style the border by CSS, the inset one was barely visible on two sides
 
 JUSH 3.1.0:
 Require ES6
