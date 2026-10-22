@@ -110,6 +110,13 @@ jush.textarea = (function () {
 		setSelPos(pre, pos);
 	}
 
+	/** Notify the input listeners about a change made by the script, like the browser does after typing
+	* @param {HTMLPreElement} pre
+	*/
+	function fireInput(pre) {
+		pre.dispatchEvent(new Event('input', { bubbles: true })); // also runs pre.oninput, which does nothing if setText() highlighted the text already
+	}
+
 	function keydown(event) {
 		const ctrl = (event.ctrlKey || event.metaKey);
 		if (!event.altKey) {
@@ -134,7 +141,7 @@ jush.textarea = (function () {
 			if (!event.shiftKey && /^(Delete|Backspace)$/.test(event.key) && getSelection().toString().length >= this.innerText.replace(/\n$/, '').length) { // native delete of long text is slow in Chrome 150
 				this.innerText = '';
 				forceNewUndo = true; // undo the whole deletion at once
-				this.oninput(); // the assignment fires no input event, so the <textarea> and the undo history would keep the deleted text
+				fireInput(this); // the assignment fires no input event, so the <textarea> and the undo history would keep the deleted text
 				return false;
 			}
 
@@ -157,12 +164,14 @@ jush.textarea = (function () {
 					if (this.jushUndoPos + 1 < this.jushUndo.length) {
 						this.jushUndoPos++;
 						const undo = this.jushUndo[this.jushUndoPos];
-						setText(this, undo.text, undo.end)
+						setText(this, undo.text, undo.end);
+						fireInput(this);
 					}
 				} else if (this.jushUndoPos >= 0) {
 					this.jushUndoPos--;
 					const undo = this.jushUndo[this.jushUndoPos] || { html: '', text: '' };
 					setText(this, undo.text, this.jushUndo[this.jushUndoPos + 1].start);
+					fireInput(this);
 				}
 				return false;
 			}

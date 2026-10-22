@@ -1,6 +1,7 @@
 JUSH 3.2.3:
 Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
 Textarea: Keep the selection outside the textarea when highlighting it
+Textarea: Fire the input event after undo, redo and deleting all the text
 PHP: Link true and false to the boolean type
 PHP: Highlight attributes like #[\ReturnTypeWillChange] instead of treating them as comments
 PostgreSQL: Color the /* */ comments
