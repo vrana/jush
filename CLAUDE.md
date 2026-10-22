@@ -57,6 +57,7 @@ No package.json, Makefile, or lint config exists in this repo – don't invent l
 Small, declarative files that each (a) extend `jush.tr` with new states/sub-states, (b) set `jush.urls.<state>` doc-link templates, and (c) set `jush.links`/`jush.links2` keyword regexps. See `modules/jush-css.js` for a concise example; `modules/jush-php.js` is the largest, enumerating the entire PHP function reference. Trivial modules like `jush-txt.js` are a single line.
 
 `jush-textarea.js` and `jush-autocomplete-sql.js` are a different layer built on top of the core: a live, syntax-highlighted, editable `<textarea>` widget and SQL autocomplete, rather than a new language.
+The widget keeps its own undo history; edits made by the script (Tab with the `tab` option, Enter keeping the indentation) go through `replaceText()` and `addUndo()`, each as its own undo step, and they, undo and redo fire an `input` event like typing does. The `indent` option is on by default, `tab` is off because it would trap the keyboard focus in the editor.
 
 **Update scripts – `update/*.php`:**
 Maintenance tooling, not part of the compiled `jush.js`. Shared helpers (`set_list`, `set_block`, `mdn_section`, …) live in `update/functions.inc.php`; each script parses its documentation source and rewrites the keyword lists between fixed markers in the module file.

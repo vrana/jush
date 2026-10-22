@@ -1,9 +1,10 @@
-JUSH 3.2.3:
+JUSH 3.3.0:
 Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
 PHP: Link true and false to the boolean type
 PHP: Highlight attributes like #[\ReturnTypeWillChange] instead of treating them as comments
 PostgreSQL: Color the /* */ comments
 Oracle: Link the conditions and query clauses, highlight the reserved words
+Textarea: Keep the indentation on Enter, option to indent by Tab
 Textarea: Keep the selection outside the textarea when highlighting it
 Textarea: Fire the input event after undo, redo and deleting all the text
 Allow compiling only some modules: php compile.php php sql txt

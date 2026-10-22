@@ -35,6 +35,8 @@ Highlights the full stack of PHP application starting with HTML, PHP, SQL and Ja
 
 Alternatively call `jush.highlight(language, text)` to syntax highlight single text.
 
+`jush.textarea(textarea, autocompleter, options)` replaces a `<textarea>` by a highlighted editor which keeps the `<textarea>` value updated. Enter keeps the indentation of the line, `{ indent: false }` in `options` turns it off. `{ tab: true }` makes Tab insert a tab or indent the selected lines (Shift+Tab unindents, Escape and Tab moves the focus).
+
 ## Command-line help reference
 
 It is also possible to use JUSH for opening the appropriate documentation in a browser:

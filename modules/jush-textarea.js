@@ -74,12 +74,33 @@ jush.textarea = (function () {
 		}
 	}
 
-	function setSelPos(pre, pos) {
+	/** Get the selection as positions in the text
+	* @param {HTMLPreElement} pre
+	* @return {number[]|undefined} [start, end]
+	*/
+	function findSelRange(pre) {
+		const sel = getSelection();
+		if (sel.rangeCount) {
+			const range = sel.getRangeAt(0);
+			if (pre.contains(range.startContainer) && pre.contains(range.endContainer)) {
+				return [ findPosition(pre, range.startContainer, range.startOffset), findPosition(pre, range.endContainer, range.endOffset) ];
+			}
+		}
+	}
+
+	/** Place the caret
+	* @param {HTMLPreElement} pre
+	* @param {number} pos
+	* @param {number} [from] select the text from this position to pos
+	*/
+	function setSelPos(pre, pos, from = pos) {
 		if (pos) {
-			const start = findOffset(pre, pos);
-			if (start) {
+			const end = findOffset(pre, pos);
+			const start = (from == pos ? end : findOffset(pre, from));
+			if (start && end) {
 				const range = document.createRange();
 				range.setStart(start.container, start.offset);
+				range.setEnd(end.container, end.offset);
 				const sel = getSelection();
 				sel.removeAllRanges();
 				sel.addRange(range);
@@ -87,14 +108,14 @@ jush.textarea = (function () {
 		}
 	}
 
-	function setText(pre, text, end) {
+	function setText(pre, text, end, from) {
 		let lang = 'txt';
 		if (text.length < 1e4) { // highlighting is slow with most languages
 			const match = /(^|\s)(?:jush|language)-(\S+)/.exec(pre.jushTextarea.className);
 			lang = (match ? match[2] : 'htm');
 		}
 		const html = jush.highlight(lang, text).replace(/\n/g, '<br>');
-		setHTML(pre, html, text, end);
+		setHTML(pre, html, text, end, from);
 		if (openAc) {
 			openAutocomplete(pre);
 			openAc = false;
@@ -103,11 +124,61 @@ jush.textarea = (function () {
 		}
 	}
 
-	function setHTML(pre, html, text, pos) {
+	function setHTML(pre, html, text, pos, from) {
 		pre.innerHTML = html;
 		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
 		pre.jushTextarea.value = text;
-		setSelPos(pre, pos);
+		setSelPos(pre, pos, from);
+	}
+
+	/** Replace a part of the text as if it was typed
+	* @param {HTMLPreElement} pre
+	* @param {number} from
+	* @param {number} to
+	* @param {string} insert
+	* @param {boolean} [select] select the inserted text instead of placing the caret after it
+	*/
+	function replaceText(pre, from, to, insert, select) {
+		const text = pre.jushTextarea.value;
+		const start = findSelPos(pre);
+		const end = from + insert.length;
+		let replaced = text.substring(0, from) + insert + text.substring(to);
+		if (end == replaced.length && /\n$/.test(replaced)) {
+			replaced += '\n'; // the last <br> is invisible, the browser also adds another one after Enter at the end
+		}
+		forceNewUndo = true; // undo each replacement separately
+		setText(pre, replaced, end, (select ? from : end));
+		addUndo(pre, start, end);
+		fireInput(pre);
+	}
+
+	/** Insert a tab or indent the selected lines
+	* @param {HTMLPreElement} pre
+	* @param {boolean} unindent unindent the selected lines or the line with the caret
+	*/
+	function indent(pre, unindent) {
+		const [ start, end ] = findSelRange(pre) || [ 0, 0 ];
+		const text = pre.jushTextarea.value;
+		if (!unindent && start == end) {
+			replaceText(pre, start, end, '\t');
+			return;
+		}
+		const lineStart = text.lastIndexOf('\n', start - 1) + 1;
+		const lineEnd = (end > start && text[end - 1] == '\n' ? end - 1 : end); // a selection ending at the start of a line doesn't include that line
+		const lines = text.substring(lineStart, lineEnd).split('\n')
+			.map(line => (unindent ? line.replace(/^(\t| {1,4})/, '') : (line ? '\t' + line : line)))
+		;
+		replaceText(pre, lineStart, lineEnd, lines.join('\n'), start != end);
+	}
+
+	/** Start a new line with the indentation of the current line
+	* @param {HTMLPreElement} pre
+	*/
+	function newLine(pre) {
+		const [ start, end ] = findSelRange(pre) || [ 0, 0 ];
+		const text = pre.jushTextarea.value;
+		const lineStart = text.lastIndexOf('\n', start - 1) + 1;
+		replaceText(pre, start, end, '\n' + /^[ \t]*/.exec(text.substring(lineStart, start))[0]);
 	}
 
 	/** Notify the input listeners about a change made by the script, like the browser does after typing
@@ -142,6 +213,21 @@ jush.textarea = (function () {
 				this.innerText = '';
 				forceNewUndo = true; // undo the whole deletion at once
 				fireInput(this); // the assignment fires no input event, so the <textarea> and the undo history would keep the deleted text
+				return false;
+			}
+
+			const escaped = this.jushEscaped;
+			if (!/^(Shift|Control|Alt|Meta)$/.test(event.key)) { // Shift+Tab after Escape also moves the focus
+				this.jushEscaped = (event.key == 'Escape');
+			}
+			if (!ctrl && ((event.key == 'Tab' && this.jushOptions.tab && !escaped) || (event.key == 'Enter' && !event.shiftKey && this.jushOptions.indent))) { // Escape and Tab moves the focus
+				highlight(this); // a change typed before may not be highlighted yet
+				if (event.key == 'Tab') {
+					indent(this, event.shiftKey);
+				} else {
+					newLine(this);
+				}
+				closeAutocomplete();
 				return false;
 			}
 
@@ -305,15 +391,24 @@ jush.textarea = (function () {
 				.replace(/(&nbsp;)+$/gm, '') // Chrome for some users
 			;
 			setText(pre, parsed.textContent.replace(/\u00A0/g, ' '), end);
-			pre.jushUndo.length = pre.jushUndoPos + 1;
-			if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
-				pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
-				pre.jushUndoPos++;
-				forceNewUndo = false;
-			} else {
-				pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
-				pre.jushUndo[pre.jushUndoPos].end = end;
-			}
+			addUndo(pre, start, end);
+		}
+	}
+
+	/** Save the text to the undo history, typing continuing at the previous end extends the last step
+	* @param {HTMLPreElement} pre
+	* @param {number} [start] caret position before the change
+	* @param {number} [end] caret position after the change
+	*/
+	function addUndo(pre, start, end) {
+		pre.jushUndo.length = pre.jushUndoPos + 1;
+		if (forceNewUndo || !pre.jushUndo.length || pre.jushUndo[pre.jushUndoPos].end !== start) {
+			pre.jushUndo.push({ text: pre.jushTextarea.value, start: start, end: (forceNewUndo ? undefined : end) });
+			pre.jushUndoPos++;
+			forceNewUndo = false;
+		} else {
+			pre.jushUndo[pre.jushUndoPos].text = pre.jushTextarea.value;
+			pre.jushUndo[pre.jushUndoPos].end = end;
 		}
 	}
 
@@ -342,7 +437,13 @@ jush.textarea = (function () {
 	let autocomplete = () => ({});
 	addEventListener('resize', positionAutocomplete);
 
-	return function textarea(el, autocompleter) {
+	/** Replace a <textarea> by an editable highlighted <pre>
+	* @param {HTMLTextAreaElement} el
+	* @param {Function} [autocompleter] function (state, before, after) returning { word: number of characters to replace }
+	* @param {{tab?: boolean, indent?: boolean}} [options] tab: Tab indents (Escape and Tab moves the focus), indent: Enter keeps the indentation of the line (default)
+	* @return {HTMLPreElement|undefined}
+	*/
+	return function textarea(el, autocompleter, options = {}) {
 		if (!window.getSelection) {
 			return;
 		}
@@ -361,6 +462,7 @@ jush.textarea = (function () {
 			pre.style.whiteSpace = 'pre-wrap';
 		}
 		pre.jushTextarea = el;
+		pre.jushOptions = Object.assign({ indent: true }, options);
 		pre.jushUndo = [ ];
 		pre.jushUndoPos = -1;
 		pre.onkeydown = keydown;
