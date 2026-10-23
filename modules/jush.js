@@ -39,6 +39,72 @@ var jush = {
 		document.getElementsByTagName('head')[0].appendChild(link);
 	},
 
+	/** Mark a line of the code, e.g. with an error; jush.textarea() removes the mark when the text changes
+	* @param {HTMLElement} el block with the code, e.g. <pre> or the editor returned by jush.textarea()
+	* @param {number} [line] counted from 1, the mark is removed without it
+	*/
+	mark_line: function (el, line) {
+		el.classList.remove('jush-marked');
+		const start = (line ? this.line_position(el, line) : null);
+		if (!start) {
+			return;
+		}
+		const end = this.line_position(el, line + 1, true) || { container: el, offset: el.childNodes.length };
+		// measure the line by empty <span>s inserted at its start and end, the text is the same after removing them
+		const marks = [ end, start ].map(position => {
+			const range = document.createRange();
+			range.setStart(position.container, position.offset);
+			const span = document.createElement('span');
+			span.textContent = '\u200B'; // zero-width space
+			range.insertNode(span);
+			return span;
+		});
+		const top = marks[1].getBoundingClientRect().top;
+		const bottom = marks[0].getBoundingClientRect().bottom;
+		for (const span of marks) {
+			span.remove();
+		}
+		const elTop = el.getBoundingClientRect().top + el.clientTop - el.scrollTop;
+		el.style.setProperty('--jush-mark-top', (top - elTop) + 'px');
+		el.style.setProperty('--jush-mark-height', (bottom - top) + 'px');
+		// the width of wider code, 100% otherwise - scrollWidth is rounded, a fraction of a pixel over the block would add a horizontal scrollbar
+		el.style.setProperty('--jush-mark-width', (el.scrollWidth > el.clientWidth ? el.scrollWidth : 0) + 'px');
+		el.classList.add('jush-marked'); // jush.css draws the mark by ::after
+		if (top - elTop < el.scrollTop || bottom - elTop > el.scrollTop + el.clientHeight) {
+			el.scrollTop = top - elTop - el.clientHeight / 3; // scroll only the block, not the page
+		}
+	},
+
+	/** Find the start of a line in highlighted code with \n or <br>
+	* @param {HTMLElement} el
+	* @param {number} line counted from 1
+	* @param {boolean} [before] the position before the line break, i.e. the end of the previous line
+	* @return {{container: Node, offset: number}|undefined}
+	*/
+	line_position: function (el, line, before) {
+		if (line == 1) {
+			return { container: el, offset: 0 };
+		}
+		let current = 1;
+		const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+		for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+			if (node.nodeType == 3) { // 3 - TEXT_NODE
+				for (let i = node.data.indexOf('\n'); i != -1; i = node.data.indexOf('\n', i + 1)) {
+					current++;
+					if (current == line) {
+						return { container: node, offset: (before ? i : i + 1) };
+					}
+				}
+			} else if (/^br$/i.test(node.tagName)) {
+				current++;
+				if (current == line) {
+					const index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
+					return { container: node.parentNode, offset: (before ? index : index + 1) };
+				}
+			}
+		}
+	},
+
 	/** Highlight text
 	* @param {string} language
 	* @param {string} text

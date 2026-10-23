@@ -1,5 +1,6 @@
 JUSH 3.3.0:
 Nest an HTML tag starting at the beginning of a token properly, e.g. <mark>
+Mark a line, e.g. with an error: jush.mark_line()
 PHP: Link true and false to the boolean type
 PHP: Highlight attributes like #[\ReturnTypeWillChange] instead of treating them as comments
 PostgreSQL: Color the /* */ comments

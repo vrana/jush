@@ -37,6 +37,8 @@ Alternatively call `jush.highlight(language, text)` to syntax highlight single t
 
 `jush.textarea(textarea, autocompleter, options)` replaces a `<textarea>` by a highlighted editor which keeps the `<textarea>` value updated. Enter keeps the indentation of the line, `{ indent: false }` in `options` turns it off. `{ tab: true }` makes Tab insert a tab or indent the selected lines (Shift+Tab unindents, Escape and Tab moves the focus).
 
+`jush.mark_line(el, line)` marks a line (counted from 1) of the highlighted code in `el`, e.g. a `<pre>` or the editor returned by `jush.textarea()`, which removes the mark when its text changes. If the line is scrolled out of `el`, it scrolls `el` (not the page) to it. `jush.mark_line(el)` removes it. The color is `--mark-bg-color` in [jush.css](jush.css).
+
 ## Command-line help reference
 
 It is also possible to use JUSH for opening the appropriate documentation in a browser:

@@ -241,4 +241,72 @@ for (const test of autocompleteTests) {
 	html.push('<p><b class="lang">' + test[0] + ' (autocomplete)</b> <code class="jush-' + test[0] + '">' + jush.highlight(test[0], test[1] + '\u2038' + test[2]) + '\n' + jush.highlight('json', completed) + '</code></p>');
 }
 
+// jush.mark_line() - the top and the height of the mark in lines, the first line's mark is the unit as it depends on the font
+const markPre = document.createElement('pre');
+markPre.className = 'mark-test';
+markPre.style.cssText = 'font: 16px/20px monospace; width: 300.35px; margin: 0; padding: 0; border: 0; overflow: auto;'; // Chrome adds a horizontal scrollbar for a mark as wide as the rounded scrollWidth
+document.body.append(markPre);
+markPre.textContent = 'a';
+jush.mark_line(markPre, 1);
+const markFirst = [ 'top', 'height' ].map(name => parseFloat(markPre.style.getPropertyValue('--jush-mark-' + name)));
+const markTests = [ // SQL to highlight or HTML, the marked line, the expected top and height in lines or '' for no mark, the height of the block
+	['SELECT 1;\nSELECT 2;\nSELECT 3', 2, '1 1'], // a line in the middle
+	['SELECT 1;\nSELECT 2', 2, '1 1'], // the last line ends at the end of the block
+	['SELECT /* a\nb */ 1;\nSELECT 2', 2, '1 1'], // the line starts in a comment
+	['SELECT /* a\nb */ 1;\nSELECT 2', 3, '2 1'], // the line break in a comment counts
+	['<span class="jush">SELECT 1;<br>SELECT 2;<br>SELECT 3</span>', 3, '2 1'], // <br> as in the editor of jush.textarea()
+	['SELECT 1', 2, ''], // a line after the end removes the previous mark
+	['SELECT 1', 0, ''], // no line removes the previous mark
+	['1\n2\n3\n4\n5\n6\n7\n8\n9\n10', 8, '7 1', '40px'], // the block scrolls to a line out of it
+	['1\n2\n3\n4\n5\n6\n7\n8\n9\n10', 1, '0 1', '40px'], // and back
+];
+
+for (const test of markTests) {
+	markPre.innerHTML = (/^</.test(test[0]) ? test[0] : jush.highlight('sql', test[0]));
+	markPre.style.height = test[3] || '';
+	const innerHTML = markPre.innerHTML;
+	const clientHeight = markPre.clientHeight;
+	if (test[1] != 1) {
+		jush.mark_line(markPre, 1); // the mark to remove or move
+	}
+	jush.mark_line(markPre, test[1]);
+	let marked = '';
+	if (markPre.classList.contains('jush-marked')) {
+		const [ top, height ] = [ 'top', 'height' ].map(name => parseFloat(markPre.style.getPropertyValue('--jush-mark-' + name)));
+		marked = Math.round((top - markFirst[0]) / 20 * 100) / 100 + ' ' + Math.round((height - markFirst[1] + 20) / 20 * 100) / 100;
+		if (top < markPre.scrollTop || top + height > markPre.scrollTop + markPre.clientHeight) {
+			marked += ' out of view';
+		}
+	}
+	if (markPre.clientHeight != clientHeight) {
+		marked += ' scrollbar added';
+	}
+	if (markPre.innerHTML !== innerHTML) {
+		marked += ' changed ' + markPre.innerHTML;
+	}
+	if (marked !== test[2]) {
+		console.log(marked);
+		html.push('<b class="error">error:</b>');
+	}
+	html.push('<p><b class="lang">mark_line(' + test[1] + ')</b> <code>' + jush.htmlspecialchars(test[0]).replace(/\n/g, '\\n') + '</code> ' + marked + '</p>');
+}
+markPre.remove();
+
 document.getElementById('result').innerHTML = html.join('\n');
+
+// jush.textarea() removes the mark when the text changes, it highlights the text asynchronously
+const markTextarea = document.createElement('textarea');
+markTextarea.className = 'jush-sql';
+markTextarea.value = 'SELECT 1;\nSELECT 2';
+document.body.append(markTextarea);
+const markEditor = jush.textarea(markTextarea);
+jush.mark_line(markEditor, 2);
+const markedEditor = (markEditor.classList.contains('jush-marked') ? 'marked' : 'not marked');
+markEditor.append('x');
+markEditor.dispatchEvent(new Event('input'));
+setTimeout(() => { // after the highlighting
+	const marked = markedEditor + (markEditor.classList.contains('jush-marked') ? ', kept after typing' : ', removed after typing');
+	document.getElementById('result').insertAdjacentHTML('beforeend', (marked != 'marked, removed after typing' ? '<b class="error">error:</b>' : '') + '<p><b class="lang">mark_line (textarea)</b> ' + marked + '</p>');
+	markEditor.remove();
+	markTextarea.remove();
+});

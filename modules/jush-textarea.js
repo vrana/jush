@@ -125,6 +125,7 @@ jush.textarea = (function () {
 	}
 
 	function setHTML(pre, html, text, pos, from) {
+		jush.mark_line(pre); // the marked line could move
 		pre.innerHTML = html;
 		pre.lastHTML = pre.innerHTML; // not html because IE reformats the string
 		pre.jushTextarea.value = text;

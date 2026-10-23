@@ -14,10 +14,13 @@
 	--css-bg-color: #ffffe0;
 	--php-bg-color: #fff0f0;
 	--php-sql-bg-color: #ffbbb0;
+	--mark-bg-color: #fc05;
 }
 
 .jush { color: var(--text-color); white-space: pre; }
 [contenteditable].jush { border: 1px solid var(--border-color); } /* the editable <pre> created by jush.textarea() */
+.jush-marked { position: relative; } /* jush.mark_line() */
+.jush-marked::after { content: ''; position: absolute; left: 0; top: var(--jush-mark-top); width: max(100%, var(--jush-mark-width)); height: var(--jush-mark-height); background: var(--mark-bg-color, #fc05); pointer-events: none; } /* the fallback for a block without .jush */
 .jush-htm_com, .jush-com, .jush-com_code, .jush-com_nest, .jush-one, .jush-php_doc, .jush-php_com, .jush-php_one, .jush-js_one, .jush-js_doc { color: gray; }
 .jush-php, .jush-php_new, .jush-php_fun { color: var(--php-color); background-color: var(--php-bg-color); }
 .jush-php_quo, .jush-php_eot, .jush-js_bac { color: var(--string-color); }

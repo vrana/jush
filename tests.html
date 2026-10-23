@@ -9,6 +9,7 @@
 code { white-space: pre; }
 .lang { font-weight: bold; background: #ddd; padding: 0 3px; }
 .error { background: #e00; color: #fee; }
+.mark-test::-webkit-scrollbar { width: 17px; height: 17px; } /* classic scrollbars instead of the overlay ones, the mark mustn't add one */
 @media (prefers-color-scheme: dark) {
     body { background: #111; color: #ccc; }
     .lang { background: #333; }
@@ -40,6 +41,7 @@ code { white-space: pre; }
 <script src="modules/jush-sql.js"></script>
 <script src="modules/jush-sqlite.js"></script>
 <script src="modules/jush-txt.js"></script>
+<script src="modules/jush-textarea.js"></script>
 
 <script src="tests.js"></script>
 
